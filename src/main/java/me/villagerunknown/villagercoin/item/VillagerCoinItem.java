@@ -8,11 +8,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
+import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -25,6 +27,8 @@ public class VillagerCoinItem extends Item {
 	
 	public static int COOLDOWN_TIME = 100;
 	
+	public static SoundEvent SOUND = SoundEvents.BLOCK_CHAIN_STEP;
+	
 	public VillagerCoinItem(Settings settings) {
 		super(settings.maxCount( coinFeature.MAX_COUNT ));
 	}
@@ -35,7 +39,7 @@ public class VillagerCoinItem extends Item {
 		
 		if( !world.isClient() && !user.isSpectator() ) {
 			if( null != itemStack && 1 == itemStack.getCount() ) {
-				EntityUtil.playSound(user, SoundEvents.BLOCK_CHAIN_STEP, SoundCategory.PLAYERS, 1F, 1F, false);
+				playCoinSound( user );
 				
 				boolean flip = MathUtil.hasChance(0.5F);
 				Text result;
@@ -51,7 +55,7 @@ public class VillagerCoinItem extends Item {
 					sound = SoundEvents.ENTITY_VILLAGER_NO;
 				} // if, else
 				
-				EntityUtil.playSound( user, sound, SoundCategory.PLAYERS, 1F, 1F, false );
+				EntityUtil.playSound( user, sound, SoundCategory.PLAYERS, 0.33F, 1F, false );
 				
 				MessageUtil.sendChatMessage( user, result.getString());
 				
@@ -74,4 +78,31 @@ public class VillagerCoinItem extends Item {
 		
 		return TypedActionResult.pass(itemStack);
 	}
+	
+	@Override
+	public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
+		if( !player.getWorld().isClient() ) {
+			playCoinSound(player);
+		} // if
+		
+		return super.onStackClicked(stack, slot, clickType, player);
+	}
+	
+	@Override
+	public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
+		if( !player.getWorld().isClient() ) {
+			playCoinSound(player);
+		} // if
+		
+		super.onCraftByPlayer(stack, world, player);
+	}
+	
+	public static void playCoinSound( PlayerEntity player ) {
+		if( player.getWorld().isClient() ) {
+			return;
+		} // if
+		
+		EntityUtil.playSound(player, SOUND, SoundCategory.PLAYERS, 1F, 1F, false);
+	}
+	
 }
