@@ -7,6 +7,7 @@
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToStructureLootTables": "Add Coins to Structure Loot Tables",
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToMobDrops": "Add Coins to Mob Drops",
   "text.autoconfig.villagerunknown-villagercoin.option.enableTradeModifications": "Enable Trade Modifications",
+  "text.autoconfig.villagerunknown-villagercoin.option.lootingBonusPerLevel": "Looting Bonus per Level",
 
   "tag.item.villagerunknown-villagercoin.villager_coin": "Villager Coin",
 
