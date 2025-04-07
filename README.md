@@ -3,15 +3,15 @@
 Adds a custom currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades.
 
 Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
-Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can be converted between types through the crafting table.
+Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can be converted between the different coins through the crafting table.
 
 **Features**
 
 * Adds 5 custom coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
-* Convert between coins with the crafting table.
-* Optionally find coins in structures.
-* Optionally earn coins by killing mobs.
-* Optionally change trades for Villagers, and Wandering Traders, and replace Emerald trades with Coin trades.
+* Convert between the different coins with the crafting table.
+* Optionally find coins in vanilla structures.
+* Optionally earn coins by killing vanilla mobs.
+* Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 
 **Currency Values**
 
@@ -56,7 +56,7 @@ The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Ske
 **Trade Modifications**
 
 Coins can optionally be used for trading with Villagers and Wandering Traders by replacing Emerald trades with Coin trades. 
-_This will not change any villager trades in existing worlds. Only new villager trades will use the coins, if enabled._
+_This will not change any existing villager trades in worlds. Only new villager trades will use the coins, if enabled._
 
 With the trade modifications enabled:
 
@@ -69,11 +69,15 @@ With the trade modifications enabled:
 * Gold trades reward Gold Villager Coins.
 * Diamond trades have a 50% chance of being an Emerald trade for 10 Gold Villager Coins. This is the most rewarding trade available.
 
+**Additional Notes**
+
+* Bundles have been changed to display their progress as "N/5000" in addition to the vanilla "N/64". 1 stack of coins essentially equals 1 item in the bundle.
+
 **Options**
 
 * addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
 * addCoinsToMobDrops - Adds Coins to Mob drops. (Default: true)
-* enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades.
+* enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
 * lootingBonusPerLevel - Bonus chance per level of looting (Default: 0.1)
 
 ## Support
