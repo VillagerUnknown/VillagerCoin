@@ -50,13 +50,13 @@ public class TradeOfferMixin {
 		Item coin = coinFeature.COPPER_COIN;
 		
 		if(
-				(
-					merchantExperience >= VillagerUtil.JOURNEYMAN_BUY_XP
-					&& (priceMultiplier == VillagerUtil.HIGH_PRICE_MULTIPLIER || maxUses == VillagerUtil.RARE_MAX_USES)
-				)
-				|| this.sellItem.getItem().equals( Items.ENCHANTED_BOOK )
-				|| this.firstBuyItem.itemStack().getItem().equals( Items.GOLD_INGOT )
-				|| this.sellItem.getItem().equals( Items.GLOWSTONE )
+			(
+				merchantExperience >= VillagerUtil.JOURNEYMAN_BUY_XP
+				&& (priceMultiplier == VillagerUtil.HIGH_PRICE_MULTIPLIER || maxUses == VillagerUtil.RARE_MAX_USES)
+			)
+			|| this.sellItem.getItem().equals( Items.ENCHANTED_BOOK )
+			|| this.firstBuyItem.itemStack().getItem().equals( Items.GOLD_INGOT )
+			|| this.sellItem.getItem().equals( Items.GLOWSTONE )
 		) {
 			coin = coinFeature.GOLD_COIN;
 		} else if( merchantExperience > VillagerUtil.NOVICE_BUY_XP || this.sellItem.hasEnchantments() ) {
