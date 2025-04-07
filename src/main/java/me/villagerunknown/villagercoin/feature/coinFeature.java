@@ -279,16 +279,19 @@ public class coinFeature {
 						maximums.put( IRON_COIN, 5 );
 						maximums.put( GOLD_COIN, 3 );
 						
-						if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
+						int multiplier = 2;
+						
+						if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
+							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
+						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) ) );
 						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
-							int multiplier = 2;
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
 						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
-							int multiplier = 3;
+							multiplier = 3;
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
