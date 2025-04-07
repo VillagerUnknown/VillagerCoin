@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "villagerunknown-villagercoin:item/edible_netherite_villager_coin"
+  }
+}

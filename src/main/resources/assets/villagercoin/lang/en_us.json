@@ -13,12 +13,17 @@
   "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",
 
   "tag.item.villagerunknown-villagercoin.villager_coin": "Villager Coin",
+  "tag.item.villagerunknown-villagercoin.edible_villager_coin": "Edible Villager Coin",
   "tag.item.villagerunknown-villagercoin.vcoin": "vCoin",
 
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",
   "item.villagerunknown-villagercoin.gold_villager_coin": "Gold Villager Coin",
   "item.villagerunknown-villagercoin.emerald_villager_coin": "Emerald Villager Coin",
-  "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin"
+  "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin",
+
+  "item.villagerunknown-villagercoin.edible_gold_villager_coin": "Chocolate Gold Villager Coin",
+  "item.villagerunknown-villagercoin.edible_emerald_villager_coin": "Chocolate Emerald Villager Coin",
+  "item.villagerunknown-villagercoin.edible_netherite_villager_coin": "Chocolate Netherite Villager Coin"
 
 }

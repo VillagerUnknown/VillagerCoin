@@ -4,6 +4,7 @@ import me.villagerunknown.platform.Platform;
 import me.villagerunknown.platform.PlatformMod;
 import me.villagerunknown.platform.manager.featureManager;
 import me.villagerunknown.villagercoin.feature.coinFeature;
+import me.villagerunknown.villagercoin.feature.edibleCoinFeature;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 
@@ -31,6 +32,7 @@ public class Villagercoin implements ModInitializer {
 		Platform.init_mod( MOD );
 		
 		// # Activate Features
+		featureManager.addFeature( "edibleCoin", edibleCoinFeature::execute );
 		featureManager.addFeature( "coin", coinFeature::execute );
 	}
 	

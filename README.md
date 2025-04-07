@@ -8,6 +8,7 @@ Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can b
 **Features**
 
 * Adds 5 custom coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
+* Adds 3 edible coin items with no currency values: Gold, Emerald, and Netherite.
 * Convert between the different coins with the crafting table.
 * Optionally find coins in vanilla structures.
 * Optionally earn coins by killing vanilla mobs.
@@ -33,13 +34,18 @@ These coins are mostly here to help players who amass a large wealth in their wo
 
 **Currency Conversion Crafting**
 
-Convert between currencies using the crafting table.
+Convert between currencies using the crafting table and auto-crafter.
 
 * Insert 99 or fewer of the same coin in a crafting table to convert down.
 * Insert 100 or more of the same coin in a crafting table to convert up.
 
 You can also sum up your coins by placing them all in the crafting table together. 
-The crafting table will calculate the value of the coins and allow you to craft the highest value coin while leaving the remainder.
+The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder.
+
+**Edible Coins**
+
+Edible coins trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
+They're only available in Gold, Emerald, and Netherite. They cannot be crafted and have the same food values as cookies. 
 
 **Loot Tables**
 

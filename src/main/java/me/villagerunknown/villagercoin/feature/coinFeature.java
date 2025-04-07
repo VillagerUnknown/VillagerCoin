@@ -1,6 +1,7 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.item.EdibleVillagerCoinItem;
 import me.villagerunknown.villagercoin.item.VillagerCoinItem;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
 import me.villagerunknown.platform.util.MathUtil;
@@ -16,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
@@ -25,15 +27,13 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static net.minecraft.loot.LootTables.*;
@@ -51,34 +51,6 @@ public class coinFeature {
 	);
 	
 	public static final int MAX_COUNT = 5000;
-	
-	public static final Set<RegistryKey<LootTable>> COMMON_LOOT_TABLES = Set.of(
-			SPAWN_BONUS_CHEST,
-			VILLAGE_WEAPONSMITH_CHEST,
-			VILLAGE_TOOLSMITH_CHEST,
-			VILLAGE_ARMORER_CHEST,
-			VILLAGE_CARTOGRAPHER_CHEST,
-			VILLAGE_MASON_CHEST,
-			VILLAGE_SHEPARD_CHEST,
-			VILLAGE_BUTCHER_CHEST,
-			VILLAGE_FLETCHER_CHEST,
-			VILLAGE_FISHER_CHEST,
-			VILLAGE_TANNERY_CHEST,
-			VILLAGE_TEMPLE_CHEST,
-			VILLAGE_DESERT_HOUSE_CHEST,
-			VILLAGE_PLAINS_CHEST,
-			VILLAGE_TAIGA_HOUSE_CHEST,
-			VILLAGE_SNOWY_HOUSE_CHEST,
-			VILLAGE_SAVANNA_HOUSE_CHEST,
-			SHIPWRECK_MAP_CHEST,
-			TRIAL_CHAMBERS_REWARD_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_CHEST,
-			TRIAL_CHAMBERS_SUPPLY_CHEST,
-			TRIAL_CHAMBERS_CORRIDOR_CHEST,
-			TRIAL_CHAMBERS_INTERSECTION_CHEST,
-			TRIAL_CHAMBERS_INTERSECTION_BARREL_CHEST,
-			TRIAL_CHAMBERS_ENTRANCE_CHEST
-	);
 	
 	public static final Set<RegistryKey<LootTable>> UNCOMMON_LOOT_TABLES = Set.of(
 			SIMPLE_DUNGEON_CHEST,
@@ -141,7 +113,8 @@ public class coinFeature {
 			ANCIENT_CITY_ICE_BOX_CHEST,
 			TRIAL_CHAMBERS_REWARD_UNIQUE_CHEST,
 			TRIAL_CHAMBERS_REWARD_OMINOUS_UNIQUE_CHEST,
-			TRIAL_CHAMBER_ITEMS_TO_DROP_WHEN_OMINOUS_SPAWNER
+			TRIAL_CHAMBER_ITEMS_TO_DROP_WHEN_OMINOUS_SPAWNER,
+			END_CITY_TREASURE_CHEST
 	);
 	
 	public static final Set<EntityType<?>> COMMON_MOB_DROPS = Set.of(
@@ -212,21 +185,12 @@ public class coinFeature {
 	
 	private static void registerVillagerCoinItems() {
 		for (String coinType : COIN_TYPES) {
-			registerVillagerCoinItem( coinType );
+			coinType = coinType + "_" + COIN_STRING;
+			Item item = RegistryUtil.registerItem( coinType, new VillagerCoinItem( new Item.Settings() ), MOD_ID );
+			
+			COIN_ITEMS.put( coinType, item );
+			RegistryUtil.addItemToGroup( ItemGroups.INGREDIENTS, item );
 		} // for
-	}
-	
-	private static void registerVillagerCoinItem( String coinType ) {
-		String coin_type_string = coinType + "_" + COIN_STRING;
-		
-		Item item = RegistryUtil.registerItem(
-				coin_type_string,
-				new VillagerCoinItem( new Item.Settings() ),
-				MOD_ID
-		);
-		
-		COIN_ITEMS.put( coin_type_string, item);
-		RegistryUtil.addItemToGroup( ItemGroups.INGREDIENTS, item );
 	}
 	
 	private static void addCoinsToLootTables() {
@@ -234,11 +198,7 @@ public class coinFeature {
 			if( Villagercoin.CONFIG.addCoinsToStructureLootTables ) {
 				LootPool.Builder poolBuilder = LootPool.builder();
 				
-				if( COMMON_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(COPPER_COIN).weight(10))
-							.with(ItemEntry.builder(IRON_COIN).weight(7));
-				} else if( UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
+				if( UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
 							.with(ItemEntry.builder(COPPER_COIN).weight(10))
 							.with(ItemEntry.builder(IRON_COIN).weight(7))
@@ -250,10 +210,19 @@ public class coinFeature {
 				} else if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
 							.with(ItemEntry.builder(GOLD_COIN).weight(5));
+				} else {
+					poolBuilder
+							.with(ItemEntry.builder(COPPER_COIN).weight(10))
+							.with(ItemEntry.builder(IRON_COIN).weight(7));
 				} // if, else if ...
 				
+				poolBuilder
+						.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(5))
+						.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(3))
+						.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1));
+				
 				if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder.rolls(UniformLootNumberProvider.create(0, 2));
+					poolBuilder.rolls(UniformLootNumberProvider.create(0, 5));
 				} else {
 					poolBuilder.rolls(UniformLootNumberProvider.create(0, 3));
 				} // if, else
@@ -284,18 +253,26 @@ public class coinFeature {
 						
 						if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
 						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
 						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get( GOLD_COIN ) / 2, 0, maximums.get( GOLD_COIN ) ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get( GOLD_COIN ) / 4, 0, maximums.get( GOLD_COIN ) ) );
 						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
 							multiplier = 3;
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get( GOLD_COIN ) / 2, 0, maximums.get( GOLD_COIN ) ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get( GOLD_COIN ) / 4, 0, maximums.get( GOLD_COIN ) ) );
 						} // if, else if ...
 						
 						dropCoins( entity, damageSource, coins );
@@ -378,17 +355,42 @@ public class coinFeature {
 		return result;
 	}
 	
+	public static TreeMap<Integer, CoinIngredient> getCoinIngredientsMap( RecipeInputInventory input ) {
+		CraftingRecipeInput.Positioned positioned = input.createPositionedRecipeInput();
+		CraftingRecipeInput craftingRecipeInput = positioned.input();
+		int left = positioned.left();
+		int top = positioned.top();
+		
+		TreeMap<Integer, coinFeature.CoinIngredient> ingredientsMap = new TreeMap<>(coinFeature.reverseSort);
+		
+		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
+			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
+				int m = x + left + (y + top) * input.getWidth();
+				
+				int valueKey = coinFeature.getCoinValue(input.getStack(m).getItem());
+				
+				if( ingredientsMap.containsKey( valueKey ) ) {
+					valueKey = valueKey + ingredientsMap.size();
+				} // if, else
+				
+				ingredientsMap.put(valueKey, new coinFeature.CoinIngredient(m, input.getStack(m), y, x));
+			} // for
+		} // for
+		
+		return ingredientsMap;
+	}
+	
 	public static class CoinIngredient {
 		
 		public int slot;
-		public int k;
-		public int l;
+		public int y;
+		public int x;
 		public ItemStack stack;
 		
-		public CoinIngredient(int slot, ItemStack stack, int k, int l) {
+		public CoinIngredient(int slot, ItemStack stack, int y, int x) {
 			this.slot = slot;
-			this.k = k;
-			this.l = l;
+			this.y = y;
+			this.x = x;
 			this.stack = stack;
 		}
 		
