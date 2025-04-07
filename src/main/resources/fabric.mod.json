@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "villagerunknown-villagercoin",
+  "version": "${version}",
+  "name": "VillagerUnknown's Villager Coin",
+  "description": "Adds a custom currency and optionally adds the currency to loot tables, mob drops, and merchant trades.",
+  "authors": ["VillagerUnknown"],
+  "contact": {
+    "homepage":"https://github.com/VillagerUnknown",
+    "sources":"https://github.com/VillagerUnknown/VillagerCoin",
+    "issues":"https://github.com/VillagerUnknown/VillagerCoin/issues"
+  },
+  "license": "CC-BY-4.0",
+  "icon": "assets/villagercoin/villagerunknown-villager-coin.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "me.villagerunknown.villagercoin.client.VillagercoinClient"
+    ],
+    "main": [
+      "me.villagerunknown.villagercoin.Villagercoin"
+    ],
+    "modmenu": [
+      "me.villagerunknown.villagercoin.client.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "villagercoin.mixins.json",
+    {
+      "config": "villagercoin.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

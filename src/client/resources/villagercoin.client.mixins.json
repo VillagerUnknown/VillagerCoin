@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.villagerunknown.villagercoin.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "DrawContextMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

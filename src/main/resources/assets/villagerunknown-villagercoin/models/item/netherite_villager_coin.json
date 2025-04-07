@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "villagerunknown-villagercoin:item/netherite_villager_coin"
+  }
+}

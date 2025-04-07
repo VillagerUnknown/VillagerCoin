@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "villagerunknown-villagercoin:item/copper_villager_coin"
+  }
+}

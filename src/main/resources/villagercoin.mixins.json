@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.villagerunknown.villagercoin.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "CraftingInventoryMixin",
+    "CraftingResultInventoryMixin",
+    "CraftingResultSlotMixin",
+    "DoubleInventoryMixin",
+    "ItemMixin",
+    "ItemStackMixin",
+    "LootableContainerBlockEntityMixin",
+    "MerchantInventoryMixin",
+    "PlayerInventoryMixin",
+    "SimpleInventoryMixin",
+    "SlotMixin",
+    "TradeOfferMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
