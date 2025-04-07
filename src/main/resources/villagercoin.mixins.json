@@ -4,6 +4,7 @@
   "package": "me.villagerunknown.villagercoin.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BundleItemMixin",
     "CraftingInventoryMixin",
     "CraftingResultInventoryMixin",
     "CraftingResultSlotMixin",
