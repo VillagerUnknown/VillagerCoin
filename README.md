@@ -21,7 +21,7 @@ Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can b
 * Emerald Coin = 1,000,000 Copper Coins
 * Netherite Coin = 100,000,000 Copper Coins
 
-Emerald and Netherite coins are only available through currency conversion crafting due to their insane values. 
+Emerald and Netherite coins are only available through currency conversion crafting due to their high values. 
 These coins are mostly here to help players who amass a large wealth in their world.
 
 **Currency Conversions**
@@ -71,7 +71,11 @@ With the trade modifications enabled:
 
 **Additional Notes**
 
+* Trades are modified for both vanilla and modded Villagers.
 * Bundles have been changed to display their progress as "N/5000" in addition to the vanilla "N/64". 1 stack of coins essentially equals 1 item in the bundle.
+* This mod will change the significance of farms. Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin farm.
+* Manually mining for diamonds and emeralds, or exploring through structures, may be more profitable than any farm.
+* Piglins might try to steal your Gold Villager Coins.
 
 **Options**
 
