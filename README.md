@@ -55,7 +55,8 @@ The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Ske
 
 **Trade Modifications**
 
-Coins can optionally be used for trading with Villagers by replacing Emerald trades with Coin trades. 
+Coins can optionally be used for trading with Villagers and Wandering Traders by replacing Emerald trades with Coin trades. 
+_This will not change any villager trades in existing worlds. Only new villager trades will use the coins, if enabled._
 
 With the trade modifications enabled:
 
