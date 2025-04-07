@@ -71,6 +71,7 @@ With the trade modifications enabled:
 
 **Additional Notes**
 
+* You can flip a coin, for a heads or tails result, if you have a single coin in your hand and interact (right-click).
 * Trades are modified for both vanilla and modded Villagers.
 * Bundles have been changed to display their progress as "N/5000" in addition to the vanilla "N/64". 1 stack of coins essentially equals 1 item in the bundle.
 * This mod will change the significance of farms. Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin farm.

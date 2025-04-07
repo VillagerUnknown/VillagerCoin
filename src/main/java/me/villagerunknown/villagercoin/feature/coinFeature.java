@@ -1,10 +1,12 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.item.VillagerCoinItem;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -206,7 +208,6 @@ public class coinFeature {
 		
 		addCoinsToLootTables();
 		addCoinsToMobDrops();
-		
 	}
 	
 	private static void registerVillagerCoinItems() {
@@ -220,7 +221,7 @@ public class coinFeature {
 		
 		Item item = RegistryUtil.registerItem(
 				coin_type_string,
-				new Item( new Item.Settings().maxCount( MAX_COUNT ) ),
+				new VillagerCoinItem( new Item.Settings() ),
 				MOD_ID
 		);
 		
