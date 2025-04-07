@@ -52,28 +52,14 @@ public class CraftingResultSlotMixin {
 			
 			AtomicInteger totalCost = new AtomicInteger(stack.getCount() * coinFeature.getCoinValue(stack.getItem()));
 			
-			TreeMap<Integer, coinFeature.CoinIngredient> ingredientsMap = new TreeMap<>(coinFeature.reverseSort);
-			
-			for(int k = 0; k < craftingRecipeInput.getHeight(); ++k) {
-				for (int l = 0; l < craftingRecipeInput.getWidth(); ++l) {
-					int m = l + i + (k + j) * this.input.getWidth();
-					
-					int valueKey = coinFeature.getCoinValue(this.input.getStack(m).getItem());
-					
-					if( ingredientsMap.containsKey( valueKey ) ) {
-						valueKey = valueKey + ingredientsMap.size();
-					} // if, else
-					
-					ingredientsMap.put(valueKey, new coinFeature.CoinIngredient(m, this.input.getStack(m), k, l));
-				} // for
-			} // for
+			TreeMap<Integer, coinFeature.CoinIngredient> ingredientsMap = coinFeature.getCoinIngredientsMap( this.input );
 			
 			ingredientsMap.forEach( ( order, coinIngredient ) -> {
 				int slot = coinIngredient.slot;
 				ItemStack ingredient = coinIngredient.stack;
-				ItemStack itemStack2 = (ItemStack)defaultedList.get(coinIngredient.l + coinIngredient.k * craftingRecipeInput.getWidth());
+				ItemStack itemStack2 = (ItemStack)defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.getWidth());
 				
-				if( coins.contains( ingredient.getItem() ) || ingredient.isOf( Items.EMERALD ) ) {
+				if( coins.contains( ingredient.getItem() ) ) {
 					int ingredientCoinValue = coinFeature.getCoinValue(ingredient.getItem());
 					int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
 					
