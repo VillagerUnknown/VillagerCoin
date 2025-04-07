@@ -75,6 +75,7 @@ With the trade modifications enabled:
 * Bundles have been changed to display their progress as "N/5000" in addition to the vanilla "N/64". 1 stack of coins essentially equals 1 item in the bundle.
 * This mod will change the significance of farms. Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin farm.
 * Manually mining for diamonds and emeralds, or exploring through structures, may be more profitable than any farm.
+* Nether mobs (Piglins and Wither Skeletons) and structures are more likely to reward Gold Villager Coins.
 * Piglins might try to steal your Gold Villager Coins.
 
 **Options**
