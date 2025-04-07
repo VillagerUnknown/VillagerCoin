@@ -50,11 +50,6 @@ public class TradeOfferMixin {
 		Item coin = coinFeature.COPPER_COIN;
 		
 		if(
-				merchantExperience >= VillagerUtil.MASTER_TRADE_XP
-				&& (priceMultiplier == VillagerUtil.HIGH_PRICE_MULTIPLIER && maxUses == VillagerUtil.RARE_MAX_USES)
-		) {
-			coin = coinFeature.EMERALD_COIN;
-		} else if(
 				(
 					merchantExperience >= VillagerUtil.JOURNEYMAN_BUY_XP
 					&& (priceMultiplier == VillagerUtil.HIGH_PRICE_MULTIPLIER || maxUses == VillagerUtil.RARE_MAX_USES)
