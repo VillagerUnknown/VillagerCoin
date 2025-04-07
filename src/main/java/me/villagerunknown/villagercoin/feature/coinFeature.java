@@ -265,7 +265,7 @@ public class coinFeature {
 	private static void addCoinsToMobDrops() {
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
 			if( Villagercoin.CONFIG.addCoinsToMobDrops ) {
-				if( null != damageSource ) {
+				if( null != damageSource && null != damageSource.getAttacker() ) {
 					if( damageSource.getAttacker().isPlayer() ) {
 						Set<CoinDrop> coins = new HashSet<>();
 						
