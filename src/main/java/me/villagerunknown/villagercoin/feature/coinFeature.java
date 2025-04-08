@@ -52,6 +52,34 @@ public class coinFeature {
 	
 	public static final int MAX_COUNT = 5000;
 	
+	public static final Set<RegistryKey<LootTable>> COMMON_LOOT_TABLES = Set.of(
+			SPAWN_BONUS_CHEST,
+			VILLAGE_WEAPONSMITH_CHEST,
+			VILLAGE_TOOLSMITH_CHEST,
+			VILLAGE_ARMORER_CHEST,
+			VILLAGE_CARTOGRAPHER_CHEST,
+			VILLAGE_MASON_CHEST,
+			VILLAGE_SHEPARD_CHEST,
+			VILLAGE_BUTCHER_CHEST,
+			VILLAGE_FLETCHER_CHEST,
+			VILLAGE_FISHER_CHEST,
+			VILLAGE_TANNERY_CHEST,
+			VILLAGE_TEMPLE_CHEST,
+			VILLAGE_DESERT_HOUSE_CHEST,
+			VILLAGE_PLAINS_CHEST,
+			VILLAGE_TAIGA_HOUSE_CHEST,
+			VILLAGE_SNOWY_HOUSE_CHEST,
+			VILLAGE_SAVANNA_HOUSE_CHEST,
+			SHIPWRECK_MAP_CHEST,
+			TRIAL_CHAMBERS_REWARD_CHEST,
+			TRIAL_CHAMBERS_REWARD_OMINOUS_CHEST,
+			TRIAL_CHAMBERS_SUPPLY_CHEST,
+			TRIAL_CHAMBERS_CORRIDOR_CHEST,
+			TRIAL_CHAMBERS_INTERSECTION_CHEST,
+			TRIAL_CHAMBERS_INTERSECTION_BARREL_CHEST,
+			TRIAL_CHAMBERS_ENTRANCE_CHEST
+	);
+	
 	public static final Set<RegistryKey<LootTable>> UNCOMMON_LOOT_TABLES = Set.of(
 			SIMPLE_DUNGEON_CHEST,
 			ABANDONED_MINESHAFT_CHEST,
@@ -195,37 +223,38 @@ public class coinFeature {
 	
 	private static void addCoinsToLootTables() {
 		LootTableEvents.MODIFY.register((registryKey, lootBuilder, lootTableSource, registryWrapper) -> {
-			if( Villagercoin.CONFIG.addCoinsToStructureLootTables ) {
+			if( lootTableSource.isBuiltin() && Villagercoin.CONFIG.addCoinsToStructureLootTables ) {
 				LootPool.Builder poolBuilder = LootPool.builder();
+				
+				if( COMMON_LOOT_TABLES.contains( registryKey ) || UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
+					poolBuilder
+							.with(ItemEntry.builder(COPPER_COIN).weight(10))
+							.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(1))
+							.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(1))
+							.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1))
+							.rolls(UniformLootNumberProvider.create(0, 5));
+				} // if
 				
 				if( UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
-							.with(ItemEntry.builder(COPPER_COIN).weight(10))
-							.with(ItemEntry.builder(IRON_COIN).weight(7))
-							.with(ItemEntry.builder(GOLD_COIN).weight(5));
-				} else if( RARE_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(IRON_COIN).weight(7))
-							.with(ItemEntry.builder(GOLD_COIN).weight(5));
-				} else if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(GOLD_COIN).weight(5));
-				} else {
-					poolBuilder
-							.with(ItemEntry.builder(COPPER_COIN).weight(10))
 							.with(ItemEntry.builder(IRON_COIN).weight(7));
-				} // if, else if ...
+				} // if
 				
-				poolBuilder
-						.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(5))
-						.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(3))
-						.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1));
+				if( RARE_LOOT_TABLES.contains( registryKey ) ) {
+					poolBuilder
+							.with(ItemEntry.builder(IRON_COIN).weight(7))
+							.rolls(UniformLootNumberProvider.create(0, 7));
+				}  // if
+				
+				if( RARE_LOOT_TABLES.contains( registryKey ) || EPIC_LOOT_TABLES.contains( registryKey ) ) {
+					poolBuilder
+							.with(ItemEntry.builder(GOLD_COIN).weight(5));
+				}  // if
 				
 				if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder.rolls(UniformLootNumberProvider.create(0, 5));
-				} else {
-					poolBuilder.rolls(UniformLootNumberProvider.create(0, 3));
-				} // if, else
+					poolBuilder
+							.rolls(UniformLootNumberProvider.create(0, 10));
+				} // if
 				
 				lootBuilder.pool(poolBuilder);
 			} // if
@@ -258,21 +287,14 @@ public class coinFeature {
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) ) );
 							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
+							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
 						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get( GOLD_COIN ) / 2, 0, maximums.get( GOLD_COIN ) ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get( GOLD_COIN ) / 4, 0, maximums.get( GOLD_COIN ) ) );
 						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
 							multiplier = 3;
-							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) * multiplier ) );
-							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get( GOLD_COIN ) / 2, 0, maximums.get( GOLD_COIN ) ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get( GOLD_COIN ) / 4, 0, maximums.get( GOLD_COIN ) ) );
 						} // if, else if ...
 						
 						dropCoins( entity, damageSource, coins );
