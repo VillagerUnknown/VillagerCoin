@@ -49,9 +49,9 @@ They're only available in Gold, Emerald, and Netherite. They cannot be crafted a
 
 **Loot Tables**
 
-Coins can be optionally included in the loot tables of structures. 
-The value of the coins will vary depending on the difficulty of the structure. 
-Trial Chambers, Ancient Cities, Strongholds, and Nether Fortresses will reward players more than a Village or Mineshaft.
+Coins can be optionally included in the loot tables. 
+The value of the coins will vary depending on the loot table rarity. 
+Trial Chambers, Ancient Cities, Strongholds, and Nether Fortresses will reward players more than a Village, Mineshaft, or Fishing.
 
 **Mob Drops**
 
