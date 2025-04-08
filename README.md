@@ -44,7 +44,7 @@ The crafting table will calculate the total value of the coins and allow you to 
 
 **Edible Coins**
 
-Edible coins trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
+Edible coins, found in common structures and dropped by common mobs, trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
 They're only available in Gold, Emerald, and Netherite. They cannot be crafted and have the same food values as cookies. 
 
 **Loot Tables**
