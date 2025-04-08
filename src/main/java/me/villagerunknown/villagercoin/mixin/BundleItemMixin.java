@@ -24,7 +24,7 @@ public class BundleItemMixin {
 	
 	@Final
 	@Shadow
-	private static int field_51352 = coinFeature.MAX_COUNT;
+	private final static int field_51352 = coinFeature.MAX_COUNT;
 	
 	@Inject( method = "appendTooltip", at = @At("HEAD"), cancellable = true)
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type, CallbackInfo ci) {
