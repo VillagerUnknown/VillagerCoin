@@ -1,0 +1,55 @@
+{
+  "parent": "villagerunknown-villagercoin:root",
+  "criteria": {
+    "all_villager_coins": {
+      "conditions": {
+        "items": [
+          {
+            "items": "villagerunknown-villagercoin:copper_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:iron_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:gold_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:emerald_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:netherite_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:edible_gold_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:edible_emerald_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:edible_netherite_villager_coin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.villagercoin.all_villager_coins.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "villagerunknown-villagercoin:netherite_villager_coin"
+    },
+    "title": {
+      "translate": "advancements.villagercoin.all_villager_coins.title"
+    }
+  },
+  "requirements": [
+    [
+      "all_villager_coins"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,36 @@
+{
+  "parent": "villagerunknown-villagercoin:pickup_emerald_coin",
+  "criteria": {
+    "netherite_villager_coin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "villagerunknown-villagercoin:netherite_villager_coin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.villagercoin.pickup_netherite_coin.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "villagerunknown-villagercoin:netherite_villager_coin"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.villagercoin.pickup_netherite_coin.title"
+    }
+  },
+  "requirements": [
+    [
+      "netherite_villager_coin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

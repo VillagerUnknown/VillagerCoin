@@ -1,0 +1,46 @@
+{
+  "parent": "villagerunknown-villagercoin:pickup_netherite_coin",
+  "criteria": {
+    "villager_coins": {
+      "conditions": {
+        "items": [
+          {
+            "items": "villagerunknown-villagercoin:copper_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:iron_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:gold_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:emerald_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:netherite_villager_coin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.villagercoin.villager_coins.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "villagerunknown-villagercoin:emerald_villager_coin"
+    },
+    "title": {
+      "translate": "advancements.villagercoin.villager_coins.title"
+    }
+  },
+  "requirements": [
+    [
+      "villager_coins"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,36 @@
+{
+  "parent": "villagerunknown-villagercoin:root",
+  "criteria": {
+    "copper_villager_coin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "villagerunknown-villagercoin:copper_villager_coin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.villagercoin.pickup_copper_coin.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "villagerunknown-villagercoin:copper_villager_coin"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.villagercoin.pickup_copper_coin.title"
+    }
+  },
+  "requirements": [
+    [
+      "copper_villager_coin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

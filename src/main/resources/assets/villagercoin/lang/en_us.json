@@ -28,6 +28,42 @@
 
   "item.villagerunknown-villagercoin.edible_gold_villager_coin": "Chocolate Gold Villager Coin",
   "item.villagerunknown-villagercoin.edible_emerald_villager_coin": "Chocolate Emerald Villager Coin",
-  "item.villagerunknown-villagercoin.edible_netherite_villager_coin": "Chocolate Netherite Villager Coin"
+  "item.villagerunknown-villagercoin.edible_netherite_villager_coin": "Chocolate Netherite Villager Coin",
+
+  "advancements.villagercoin.root.title": "Villager Coin",
+  "advancements.villagercoin.root.description": "Accepted by Villagers everywhere",
+
+  "advancements.villagercoin.pickup_copper_coin.title": "Don't Spend It All In One Place",
+  "advancements.villagercoin.pickup_copper_coin.description": "Acquire your first Copper Villager Coin",
+
+  "advancements.villagercoin.pickup_iron_coin.title": "Hard Work Pays Off",
+  "advancements.villagercoin.pickup_iron_coin.description": "Acquire your first Iron Villager Coin",
+
+  "advancements.villagercoin.pickup_gold_coin.title": "This Doesn't Make You A Pirate",
+  "advancements.villagercoin.pickup_gold_coin.description": "Acquire your first Gold Villager Coin",
+
+  "advancements.villagercoin.pickup_emerald_coin.title": "Hrm.. Shiny",
+  "advancements.villagercoin.pickup_emerald_coin.description": "Acquire your first Emerald Villager Coin",
+
+  "advancements.villagercoin.pickup_netherite_coin.title": "Slashing The Coin Age",
+  "advancements.villagercoin.pickup_netherite_coin.description": "Acquire your first Netherite Villager Coin",
+
+  "advancements.villagercoin.villager_coins.title": "Count de Monet",
+  "advancements.villagercoin.villager_coins.description": "Acquire all of the valuable Villager Coins",
+
+  "advancements.villagercoin.pickup_edible_gold_coin.title": "Don't Feel Gelty",
+  "advancements.villagercoin.pickup_edible_gold_coin.description": "Acquire your first Edible Gold Villager Coin",
+
+  "advancements.villagercoin.pickup_edible_emerald_coin.title": "Hrm.. It Melts In Your Pocket",
+  "advancements.villagercoin.pickup_edible_emerald_coin.description": "Acquire your first Edible Emerald Villager Coin",
+
+  "advancements.villagercoin.pickup_edible_netherite_coin.title": "It Feels A Bit Stale",
+  "advancements.villagercoin.pickup_edible_netherite_coin.description": "Acquire your first Edible Netherite Villager Coin",
+
+  "advancements.villagercoin.edible_villager_coins.title": "The Cost Of Groceries",
+  "advancements.villagercoin.edible_villager_coins.description": "Acquire all of the edible Villager Coins",
+
+  "advancements.villagercoin.all_villager_coins.title": "We Know Who To Rob Now",
+  "advancements.villagercoin.all_villager_coins.description": "Acquire all of the different types of Villager Coins"
 
 }

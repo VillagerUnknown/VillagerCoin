@@ -1,0 +1,40 @@
+{
+  "parent": "villagerunknown-villagercoin:pickup_edible_netherite_coin",
+  "criteria": {
+    "edible_villager_coins": {
+      "conditions": {
+        "items": [
+          {
+            "items": "villagerunknown-villagercoin:edible_gold_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:edible_emerald_villager_coin"
+          },
+          {
+            "items": "villagerunknown-villagercoin:edible_netherite_villager_coin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.villagercoin.edible_villager_coins.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "villagerunknown-villagercoin:gold_villager_coin"
+    },
+    "title": {
+      "translate": "advancements.villagercoin.edible_villager_coins.title"
+    }
+  },
+  "requirements": [
+    [
+      "edible_villager_coins"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

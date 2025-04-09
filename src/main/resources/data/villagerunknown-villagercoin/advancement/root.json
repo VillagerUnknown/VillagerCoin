@@ -1,0 +1,44 @@
+{
+  "criteria": {
+    "pickup_copper_coin": {
+      "trigger": "minecraft:inventory_changed"
+    },
+    "pickup_iron_coin": {
+      "trigger": "minecraft:inventory_changed"
+    },
+    "pickup_gold_coin": {
+      "trigger": "minecraft:inventory_changed"
+    },
+    "pickup_emerald_coin": {
+      "trigger": "minecraft:inventory_changed"
+    },
+    "pickup_netherite_coin": {
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.villagercoin.root.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "villagerunknown-villagercoin:emerald_villager_coin"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.villagercoin.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "pickup_copper_coin",
+      "pickup_iron_coin",
+      "pickup_gold_coin",
+      "pickup_emerald_coin",
+      "pickup_netherite_coin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
