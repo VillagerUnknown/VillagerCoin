@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "copper_ingot",
+  "ingredient": [
+    {
+      "item": "minecraft:raw_copper"
+    },
+    {
+      "item": "villagerunknown-villagercoin:copper_villager_coin"
+    }
+  ],
+  "result": {
+    "id": "minecraft:copper_ingot"
+  }
+}
