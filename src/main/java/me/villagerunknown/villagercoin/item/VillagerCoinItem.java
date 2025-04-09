@@ -103,7 +103,7 @@ public class VillagerCoinItem extends Item {
 			return;
 		} // if
 		
-		EntityUtil.playSound(player, SOUND, SoundCategory.PLAYERS, 1F, 1F, false);
+		EntityUtil.playSound(player, SOUND, SoundCategory.PLAYERS, 0.5F, 1F, false);
 	}
 	
 }
