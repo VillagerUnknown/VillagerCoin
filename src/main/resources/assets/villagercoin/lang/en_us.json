@@ -5,7 +5,11 @@
   "text.autoconfig.villagerunknown-villagercoin.category.General": "General",
 
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToStructureLootTables": "Add Coins to Structure Loot Tables",
+  "text.autoconfig.villagerunknown-villagercoin.option.addEdibleCoinsToStructureLootTables": "Add Edible Coins to Structure Loot Tables",
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToMobDrops": "Add Coins to Mob Drops",
+  "text.autoconfig.villagerunknown-villagercoin.option.enablePigCoinDrops": "Enable Pig Coin Drops",
+  "text.autoconfig.villagerunknown-villagercoin.option.addEdibleCoinsToMobDrops": "Add Edible Coins to Mob Drops",
+  "text.autoconfig.villagerunknown-villagercoin.option.enableCoinFlipping": "Enable Coin Flipping",
   "text.autoconfig.villagerunknown-villagercoin.option.enableTradeModifications": "Enable Trade Modifications",
   "text.autoconfig.villagerunknown-villagercoin.option.lootingBonusPerLevel": "Looting Bonus per Level",
 

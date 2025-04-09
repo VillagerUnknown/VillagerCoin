@@ -20,6 +20,9 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public boolean addCoinsToMobDrops = true;
 	
 	@ConfigEntry.Category("General")
+	public boolean enablePigCoinDrops = false;
+	
+	@ConfigEntry.Category("General")
 	public boolean addEdibleCoinsToMobDrops = true;
 	
 	@ConfigEntry.Category("General")

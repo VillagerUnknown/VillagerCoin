@@ -31,6 +31,7 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -212,8 +213,28 @@ public class coinFeature {
 	
 	private static void registerVillagerCoinItems() {
 		for (String coinType : COIN_TYPES) {
+			Item.Settings settings = new Item.Settings();
+			
+			switch( coinType ) {
+				case "copper":
+					settings = settings.rarity(Rarity.COMMON);
+					break;
+				case "iron":
+					settings = settings.rarity(Rarity.UNCOMMON);
+					break;
+				case "gold":
+					settings = settings.rarity(Rarity.RARE);
+					break;
+				case "emerald":
+					settings = settings.rarity(Rarity.EPIC);
+					break;
+				case "netherite":
+					settings = settings.rarity(Rarity.EPIC).fireproof();
+			}
+			
 			coinType = coinType + "_" + COIN_STRING;
-			Item item = RegistryUtil.registerItem( coinType, new VillagerCoinItem( new Item.Settings() ), MOD_ID );
+			
+			Item item = RegistryUtil.registerItem( coinType, new VillagerCoinItem( settings ), MOD_ID );
 			
 			COIN_ITEMS.put( coinType, item );
 			RegistryUtil.addItemToGroup( ItemGroups.INGREDIENTS, item );
@@ -228,8 +249,8 @@ public class coinFeature {
 				if( COMMON_LOOT_TABLES.contains( registryKey ) || UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
 					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
 						poolBuilder
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(1))
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(1))
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(5))
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(2))
 								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1));
 					} // if
 					poolBuilder
@@ -282,7 +303,13 @@ public class coinFeature {
 						
 						int multiplier = 2;
 						
-						if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
+						if( Villagercoin.CONFIG.enablePigCoinDrops ) {
+							if( entity.getType().equals( EntityType.PIG ) ) {
+								coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) ) );
+							} else if( entity.getType().equals( EntityType.HOGLIN ) || entity.getType().equals( EntityType.ZOGLIN ) ) {
+								coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) ) );
+							} // if, else if
+						} else if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
 						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
