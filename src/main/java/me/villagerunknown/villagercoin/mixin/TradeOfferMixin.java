@@ -84,7 +84,11 @@ public class TradeOfferMixin {
 			
 			if( this.secondBuyItem.isPresent() ) {
 				if( this.secondBuyItem.get().itemStack().getItem().equals(Items.EMERALD) ) {
-					this.secondBuyItem = Optional.of( new TradedItem( coin, this.secondBuyItem.get().itemStack().getCount() ) );
+					if( this.firstBuyItem.itemStack().getItem().equals( coinFeature.IRON_COIN ) ) {
+						this.secondBuyItem = Optional.of(new TradedItem(coinFeature.COPPER_COIN, this.secondBuyItem.get().itemStack().getCount()));
+					} else if( this.firstBuyItem.itemStack().getItem().equals( coinFeature.GOLD_COIN ) ) {
+						this.secondBuyItem = Optional.of(new TradedItem(coinFeature.IRON_COIN, this.secondBuyItem.get().itemStack().getCount()));
+					} // if, else if
 				} // if
 			} // if
 			

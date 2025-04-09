@@ -226,11 +226,14 @@ public class coinFeature {
 				LootPool.Builder poolBuilder = LootPool.builder();
 				
 				if( COMMON_LOOT_TABLES.contains( registryKey ) || UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
+					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
+						poolBuilder
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(1))
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(1))
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1));
+					} // if
 					poolBuilder
 							.with(ItemEntry.builder(COPPER_COIN).weight(10))
-							.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(1))
-							.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(1))
-							.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1))
 							.rolls(UniformLootNumberProvider.create(0, 5));
 				} // if
 				
@@ -285,9 +288,12 @@ public class coinFeature {
 						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) ) );
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
+							
+							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
+								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
+								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
+								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
+							} // if
 						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );

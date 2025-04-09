@@ -14,7 +14,16 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public boolean addCoinsToStructureLootTables = true;
 	
 	@ConfigEntry.Category("General")
+	public boolean addEdibleCoinsToStructureLootTables = true;
+	
+	@ConfigEntry.Category("General")
 	public boolean addCoinsToMobDrops = true;
+	
+	@ConfigEntry.Category("General")
+	public boolean addEdibleCoinsToMobDrops = true;
+	
+	@ConfigEntry.Category("General")
+	public boolean enableCoinFlipping = true;
 	
 	@ConfigEntry.Category("General")
 	public boolean enableTradeModifications = true;

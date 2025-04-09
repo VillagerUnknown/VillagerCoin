@@ -3,15 +3,17 @@
 Adds a custom currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades.
 
 Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
+It also includes 3 types of edible coins to trick players: Gold, Emerald, and Netherite. 
+
 Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can be converted between the different coins through the crafting table.
 
 **Features**
 
 * Adds 5 custom coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
 * Adds 3 edible coin items with no currency values: Gold, Emerald, and Netherite.
-* Convert between the different coins with the crafting table.
+* Convert between the different coins with the crafting tables.
 * Optionally find coins in vanilla structures.
-* Optionally earn coins by killing vanilla mobs.
+* Optionally earn coins by killing some vanilla mobs.
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 
 **Currency Values**
@@ -42,13 +44,13 @@ Convert between currencies using the crafting table and auto-crafter.
 You can also sum up your coins by placing them all in the crafting table together. 
 The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder.
 
-Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) 
+_Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) 
 will still automatically stack with the same items in your inventory, but it will only craft once. 
-Use the auto-crafter to convert large amounts of coins.
+Use the auto-crafter to convert large amounts of coins._
 
 **Edible Coins**
 
-Edible coins, found in common structures and dropped by common mobs, trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
+Edible coins, optionally found in common structures and dropped by common mobs, trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
 They're only available in Gold, Emerald, and Netherite. They cannot be crafted and have the same food values as cookies. 
 
 **Loot Tables**
@@ -56,6 +58,7 @@ They're only available in Gold, Emerald, and Netherite. They cannot be crafted a
 Coins can be optionally included in the loot tables. 
 The value of the coins will vary depending on the loot table rarity. 
 Trial Chambers, Ancient Cities, Strongholds, and Nether Fortresses will reward players more than a Village, Mineshaft, or Fishing.
+Nether and End structures are more likely to reward Iron and Gold Villager Coins.
 
 **Mob Drops**
 
@@ -81,7 +84,7 @@ With the trade modifications enabled:
 
 **Additional Notes**
 
-* You can flip a coin, for a heads or tails result, if you have a single coin in your hand and interact (right-click).
+* If you have a single coin in your hand and interact (right-click) you can optionally flip a coin, for a heads or tails result in chat.
 * Trades are modified for both vanilla and modded Villagers.
 * Bundles have been changed to display their progress as "N/5000" in addition to the vanilla "N/64". 1 stack of coins essentially equals 1 item in the bundle.
 * This mod will change the significance of farms. Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin farm.
@@ -92,9 +95,12 @@ With the trade modifications enabled:
 **Options**
 
 * addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
+* addEdibleCoinsToStructureLootTables - If this option and addCoinsToStructureLootTables are enabled: Adds Edible Coins to Structure loot tables. (Default: true)
 * addCoinsToMobDrops - Adds Coins to Mob drops. (Default: true)
+* addEdibleCoinsToMobDrops - If this option and addCoinsToMobDrops are enabled: Adds Edible Coins to Mob drops. (Default: true)
+* enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
 * enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
-* lootingBonusPerLevel - Bonus chance per level of looting (Default: 0.1)
+* lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
 
 ## Support
 

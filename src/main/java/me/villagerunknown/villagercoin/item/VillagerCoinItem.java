@@ -3,6 +3,7 @@ package me.villagerunknown.villagercoin.item;
 import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.MessageUtil;
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.feature.coinFeature;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,7 +38,7 @@ public class VillagerCoinItem extends Item {
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand( hand );
 		
-		if( !world.isClient() && !user.isSpectator() ) {
+		if( !world.isClient() && !user.isSpectator() && Villagercoin.CONFIG.enableCoinFlipping ) {
 			if( null != itemStack && 1 == itemStack.getCount() ) {
 				playCoinSound( user );
 				
