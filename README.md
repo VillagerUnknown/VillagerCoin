@@ -12,9 +12,13 @@ Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can b
 * Adds 5 custom coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
 * Adds 3 edible coin items with no currency values: Gold, Emerald, and Netherite.
 * Convert between the different coins with the crafting tables.
+* Smelt down Copper, Iron, and Gold coins for their respective resources.
 * Optionally find coins in vanilla structures.
 * Optionally earn coins by killing some vanilla mobs.
+* Optionally earn coins by killing pigs, hoglins, and zoglins. (For easier coins.)
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
+* Optionally allow players to flip individual coins for a heads or tails result in chat.
+* Configurable loot bonus per level chance for coins from mobs.
 
 **Currency Values**
 
@@ -41,8 +45,10 @@ Convert between currencies using the crafting table and auto-crafter.
 * Insert 99 or fewer of the same coin in a crafting table to convert down.
 * Insert 100 or more of the same coin in a crafting table to convert up.
 
-You can also sum up your coins by placing them all in the crafting table together. 
-The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder.
+You can sum up your coins by placing them all in the crafting table together. 
+The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder. 
+
+Copper, Iron, and Gold Villager Coins can be smelted down to their respective resources.
 
 _Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) 
 will still automatically stack with the same items in your inventory, but it will only craft once. 
@@ -62,7 +68,10 @@ Nether and End structures are more likely to reward Iron and Gold Villager Coins
 
 **Mob Drops**
 
-Coins can optionally drop when a player kills Humanoid mobs, Bosses, and Shulkers.
+Coins can optionally drop when a player kills Humanoid mobs, Bosses, and Shulkers. 
+
+A separate option exists to drop coins from Pigs, Hoglins, and Zoglins if you want coins to be more common.
+
 The value of the coins will vary depending on the difficulty of the mob. 
 The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Skeleton, or Piglin.
 
@@ -91,12 +100,14 @@ With the trade modifications enabled:
 * Manually mining for diamonds and emeralds, or exploring through structures, may be more profitable than any farm.
 * Nether mobs (Piglins and Wither Skeletons) and structures are more likely to reward Gold Villager Coins.
 * Piglins might try to steal your Gold Villager Coins.
+* Netherite Villager Coins, like Netherite, are immune to fire damage making them the best way to secure large fortunes.
 
 **Options**
 
 * addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
 * addEdibleCoinsToStructureLootTables - If this option and addCoinsToStructureLootTables are enabled: Adds Edible Coins to Structure loot tables. (Default: true)
 * addCoinsToMobDrops - Adds Coins to Mob drops. (Default: true)
+* enablePigCoinDrops - Allows Copper Coins to drop from Pigs and Iron coins from Hoglins, and Zoglins. (Default: false)
 * addEdibleCoinsToMobDrops - If this option and addCoinsToMobDrops are enabled: Adds Edible Coins to Mob drops. (Default: true)
 * enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
 * enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
