@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.screen.slot.CraftingResultSlot;
@@ -49,20 +48,20 @@ public class CraftingResultSlotMixin {
 			int i = positioned.left();
 			int j = positioned.top();
 			DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());
-			
+
 			AtomicInteger totalCost = new AtomicInteger(stack.getCount() * coinFeature.getCoinValue(stack.getItem()));
-			
+
 			TreeMap<Integer, coinFeature.CoinIngredient> ingredientsMap = coinFeature.getCoinIngredientsMap( this.input );
-			
+
 			ingredientsMap.forEach( ( order, coinIngredient ) -> {
 				int slot = coinIngredient.slot;
 				ItemStack ingredient = coinIngredient.stack;
 				ItemStack itemStack2 = (ItemStack)defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.getWidth());
-				
+
 				if( coins.contains( ingredient.getItem() ) ) {
 					int ingredientCoinValue = coinFeature.getCoinValue(ingredient.getItem());
 					int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
-					
+
 					if( ingredientCoinValue == totalCost.get()) {
 						this.input.removeStack( slot, 1 );
 						totalCost.addAndGet(-ingredientCoinValue);
@@ -71,7 +70,7 @@ public class CraftingResultSlotMixin {
 						totalCost.addAndGet(-ingredientCoinStackValue);
 					} else if( ingredientCoinValue < totalCost.get()) {
 						int amount = totalCost.get() / ingredientCoinValue;
-						
+
 						if( amount >= ingredient.getCount() ) {
 							this.input.removeStack(slot, ingredient.getCount());
 							totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
@@ -82,7 +81,7 @@ public class CraftingResultSlotMixin {
 					} // if, else
 					ingredient = this.input.getStack(slot);
 				} // if
-				
+
 				if (!itemStack2.isEmpty()) {
 					if (ingredient.isEmpty()) {
 						this.input.setStack(slot, itemStack2);
