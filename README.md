@@ -42,6 +42,10 @@ Convert between currencies using the crafting table and auto-crafter.
 You can also sum up your coins by placing them all in the crafting table together. 
 The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder.
 
+Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) 
+will still automatically stack with the same items in your inventory, but it will only craft once. 
+Use the auto-crafter to convert large amounts of coins.
+
 **Edible Coins**
 
 Edible coins, found in common structures and dropped by common mobs, trick players into thinking they've struck rich when they've really just found a bit of chocolate. 

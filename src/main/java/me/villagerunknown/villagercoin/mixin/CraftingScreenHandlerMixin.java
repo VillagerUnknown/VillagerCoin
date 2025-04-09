@@ -2,6 +2,7 @@ package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.feature.coinFeature;
+import me.villagerunknown.villagercoin.item.VillagerCoinItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -52,7 +53,6 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 	@Inject(method = "quickMove", at = @At("HEAD"), cancellable = true)
 	public void quickMove(PlayerEntity player, int slot, CallbackInfoReturnable<ItemStack> cir) {
 		if( 0 == slot ) {
-			
 			ItemStack craftedItemStack = this.result.getStack( slot );
 			
 			if( coinFeature.COIN_ITEMS.containsValue( craftedItemStack.getItem() ) ) {
@@ -112,9 +112,12 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 					} // if
 				} );
 				
+				if( !craftedItemStack.isEmpty() ) {
+					cir.setReturnValue( craftedItemStack );
+				} // if
+				
 				cir.setReturnValue( ItemStack.EMPTY );
 			} // if
-			
 		} // if
 	}
 	
