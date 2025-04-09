@@ -249,10 +249,9 @@ public class coinFeature {
 				if( COMMON_LOOT_TABLES.contains( registryKey ) || UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
 					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
 						poolBuilder
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(5))
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(2))
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1));
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(5));
 					} // if
+					
 					poolBuilder
 							.with(ItemEntry.builder(COPPER_COIN).weight(10))
 							.rolls(UniformLootNumberProvider.create(0, 5));
@@ -264,6 +263,11 @@ public class coinFeature {
 				} // if
 				
 				if( RARE_LOOT_TABLES.contains( registryKey ) ) {
+					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
+						poolBuilder
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(3));
+					} // if
+					
 					poolBuilder
 							.with(ItemEntry.builder(IRON_COIN).weight(7))
 							.rolls(UniformLootNumberProvider.create(0, 7));
@@ -275,6 +279,11 @@ public class coinFeature {
 				}  // if
 				
 				if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
+					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
+						poolBuilder
+								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1));
+					} // if
+					
 					poolBuilder
 							.rolls(UniformLootNumberProvider.create(0, 10));
 				} // if
@@ -318,15 +327,21 @@ public class coinFeature {
 							
 							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
 								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
-								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
-								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
 							} // if
 						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
+							
+							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
+								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
+							} // if
 						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
 							multiplier = 3;
 							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
+							
+							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
+								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
+							} // if
 						} // if, else if ...
 						
 						dropCoins( entity, damageSource, coins );

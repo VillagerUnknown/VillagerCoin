@@ -11,6 +11,7 @@ Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can b
 
 * Adds 5 custom coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
 * Adds 3 edible coin items with no currency values: Gold, Emerald, and Netherite.
+* Adds advancements for obtaining coins.
 * Convert between the different coins with the crafting tables.
 * Smelt down Copper, Iron, and Gold coins for their respective resources.
 * Optionally find coins in vanilla structures.
@@ -48,7 +49,7 @@ Convert between currencies using the crafting table and auto-crafter.
 You can sum up your coins by placing them all in the crafting table together. 
 The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder. 
 
-Copper, Iron, and Gold Villager Coins can be smelted down to their respective resources.
+Copper, Iron, and Gold Villager Coins can be smelted down to their respective resources using the Furnace or Blast Furnace.
 
 _Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) 
 will still automatically stack with the same items in your inventory, but it will only craft once. 
@@ -56,7 +57,7 @@ Use the auto-crafter to convert large amounts of coins._
 
 **Edible Coins**
 
-Edible coins, optionally found in common structures and dropped by common mobs, trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
+Edible coins, optionally found in structures and dropped by mobs, trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
 They're only available in Gold, Emerald, and Netherite. They cannot be crafted and have the same food values as cookies. 
 
 **Loot Tables**
@@ -85,18 +86,19 @@ With the trade modifications enabled:
 * Apprentice Villager trades typically trade in Copper Villager Coins.
 * Novice to Expert Villager trades typically trade in Iron Villager Coins.
 * Master Villager trades typically trade in Gold Villager Coins.
-* Most trades rewarding Coins will reward Copper Villager Coins.
-* Most enchanted books, armor, tools, and weapons will cost Gold Villager Coins.
+* Most enchanted books, armor, tools, and weapons will cost Gold Villager Coins. This is intentional to slow down progression.
 * Iron trades reward Iron Villager Coins.
 * Gold trades reward Gold Villager Coins.
+* Trades with Nether items typically trade in Gold Villager Coins.
 * Diamond trades have a 50% chance of being an Emerald trade for 10 Gold Villager Coins. This is the most rewarding trade available.
 
 **Additional Notes**
 
 * If you have a single coin in your hand and interact (right-click) you can optionally flip a coin, for a heads or tails result in chat.
 * Trades are modified for both vanilla and modded Villagers.
-* This mod will change the significance of farms. Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin farm.
-* Manually mining for diamonds and emeralds, or exploring through structures, may be more profitable than any farm.
+* This mod will change the significance of farms and general pacing of the game. 
+Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin farm.
+* Exploring through structures is an easy way to find coins with rarer structures offering higher value coins.
 * Nether mobs (Piglins and Wither Skeletons) and structures are more likely to reward Gold Villager Coins.
 * Piglins might try to steal your Gold Villager Coins.
 * Netherite Villager Coins, like Netherite, are immune to fire damage making them the best way to secure large fortunes.
