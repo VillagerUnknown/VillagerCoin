@@ -86,11 +86,13 @@ With the trade modifications enabled:
 * Apprentice Villager trades typically trade in Copper Villager Coins.
 * Novice to Expert Villager trades typically trade in Iron Villager Coins.
 * Master Villager trades typically trade in Gold Villager Coins.
-* Most enchanted books, armor, tools, and weapons will cost Gold Villager Coins. This is intentional to slow down progression.
+* Most enchanted books, armor, tools, and weapons will cost Gold Villager Coins, 
+but at half of the original emerald amount.
 * Iron trades reward Iron Villager Coins.
 * Gold trades reward Gold Villager Coins.
 * Trades with Nether items typically trade in Gold Villager Coins.
-* Diamond trades have a 50% chance of being an Emerald trade for 10 Gold Villager Coins. This is the most rewarding trade available.
+* Diamond trades, giving 16 Gold Villager Coins, have a 50% chance of being an Emerald trade giving 8 Gold Villager Coins. 
+These are the most rewarding trades available.
 
 **Additional Notes**
 
