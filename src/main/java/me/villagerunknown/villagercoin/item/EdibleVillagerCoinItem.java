@@ -35,16 +35,16 @@ public class EdibleVillagerCoinItem extends Item {
 				settings
 						.food(FoodComponents.COOKIE)
 						.maxCount( Villagercoin.MAX_COUNT )
-						.component( COIN_COMPONENT, new CoinComponent( Rarity.COMMON, 0, 5, 0.1F ) )
+						.component( COIN_COMPONENT, new CoinComponent( Rarity.COMMON, 0, 5, 0.1F, 0.5F ) )
 		);
 	}
 	
-	public EdibleVillagerCoinItem(Settings settings, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance) {
+	public EdibleVillagerCoinItem(Settings settings, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance) {
 		super(
 				settings
 						.food(FoodComponents.COOKIE)
 						.maxCount( Villagercoin.MAX_COUNT )
-						.component( COIN_COMPONENT, new CoinComponent( rarity, dropMinimum, dropMaximum, dropChance ) )
+						.component( COIN_COMPONENT, new CoinComponent( rarity, dropMinimum, dropMaximum, dropChance, flipChance ) )
 		);
 	}
 	

@@ -77,12 +77,12 @@ public class Villagercoin implements ModInitializer {
 		return (ComponentType) Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MOD.getModId(), id), ((ComponentType.Builder)builderOperator.apply(ComponentType.builder())).build());
 	}
 	
-	public static Item registerCoin(String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance ) {
-		return registerCoin( id, value, rarity, dropMinimum, dropMaximum, dropChance, new Item.Settings() );
+	public static Item registerCoin(String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance ) {
+		return registerCoin( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, new Item.Settings() );
 	}
 	
-	public static Item registerCoin(String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, Item.Settings settings ) {
-		return coinFeature.registerVillagerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, settings );
+	public static Item registerCoin(String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Item.Settings settings ) {
+		return coinFeature.registerVillagerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, settings );
 	}
 	
 	static{

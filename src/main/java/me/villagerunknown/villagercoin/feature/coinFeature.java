@@ -52,12 +52,12 @@ public class coinFeature {
 		Registry.register(Registries.ITEM_GROUP, CUSTOM_ITEM_GROUP_KEY, CUSTOM_ITEM_GROUP);
 	}
 	
-	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance ) {
-		return registerVillagerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, new Item.Settings() );
+	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance ) {
+		return registerVillagerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, new Item.Settings() );
 	}
 	
-	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new VillagerCoinItem( settings, value, rarity, dropMinimum, dropMaximum, dropChance ), MOD_ID );
+	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Item.Settings settings ) {
+		Item item = RegistryUtil.registerItem( id, new VillagerCoinItem( settings, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance ), MOD_ID );
 		
 		COINS.put( value, item );
 		
@@ -256,11 +256,11 @@ public class coinFeature {
 	
 	static {
 		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_villager_coin" ), new SpecialRecipeSerializer(VillagerCoinRecipe::new));
-		COPPER_COIN = registerVillagerCoinItem( "copper_" + coinFeature.COIN_STRING, 1, Rarity.COMMON, 0, 10, 0.5F );
-		IRON_COIN = registerVillagerCoinItem( "iron_" + coinFeature.COIN_STRING, 100, Rarity.UNCOMMON, 0, 5, 0.25F );
-		GOLD_COIN = registerVillagerCoinItem( "gold_" + coinFeature.COIN_STRING, 10000, Rarity.RARE, 0, 3, 0.1F );
-		EMERALD_COIN = registerVillagerCoinItem( "emerald_" + coinFeature.COIN_STRING, 1000000, Rarity.EPIC, 0, 0, 0 );
-		NETHERITE_COIN = registerVillagerCoinItem( "netherite_" + coinFeature.COIN_STRING, 100000000, Rarity.EPIC, 0, 0, 0, new Item.Settings().fireproof() );
+		COPPER_COIN = registerVillagerCoinItem( "copper_" + coinFeature.COIN_STRING, 1, Rarity.COMMON, 0, 10, 0.5F, 0.4F );
+		IRON_COIN = registerVillagerCoinItem( "iron_" + coinFeature.COIN_STRING, 100, Rarity.UNCOMMON, 0, 5, 0.25F, 0.5F );
+		GOLD_COIN = registerVillagerCoinItem( "gold_" + coinFeature.COIN_STRING, 10000, Rarity.RARE, 0, 3, 0.1F, 0.6F );
+		EMERALD_COIN = registerVillagerCoinItem( "emerald_" + coinFeature.COIN_STRING, 1000000, Rarity.EPIC, 0, 0, 0, 0.75F );
+		NETHERITE_COIN = registerVillagerCoinItem( "netherite_" + coinFeature.COIN_STRING, 100000000, Rarity.EPIC, 0, 0, 0, 0.25F, new Item.Settings().fireproof() );
 	}
 	
 	public static class CoinIngredient {

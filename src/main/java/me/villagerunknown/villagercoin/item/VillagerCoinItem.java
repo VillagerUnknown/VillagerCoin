@@ -37,16 +37,16 @@ public class VillagerCoinItem extends Item {
 		super(
 				settings
 						.maxCount( Villagercoin.MAX_COUNT )
-						.component( COIN_COMPONENT, new CoinComponent( Rarity.COMMON, 0, 10, 0.5F ) )
+						.component( COIN_COMPONENT, new CoinComponent( Rarity.COMMON, 0, 10, 0.5F, 0.5F ) )
 						.component( CURRENCY_COMPONENT, new CurrencyComponent( 1 ) )
 		);
 	}
 	
-	public VillagerCoinItem(Settings settings, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance) {
+	public VillagerCoinItem(Settings settings, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance) {
 		super(
 				settings
 						.maxCount( Villagercoin.MAX_COUNT )
-						.component( COIN_COMPONENT, new CoinComponent( rarity, dropMinimum, dropMaximum, dropChance ) )
+						.component( COIN_COMPONENT, new CoinComponent( rarity, dropMinimum, dropMaximum, dropChance, flipChance ) )
 						.component( CURRENCY_COMPONENT, new CurrencyComponent( value ) )
 		);
 	}
@@ -59,7 +59,15 @@ public class VillagerCoinItem extends Item {
 			if( null != itemStack && 1 == itemStack.getCount() ) {
 				playCoinSound( user );
 				
-				boolean flip = MathUtil.hasChance(0.5F);
+				CoinComponent coinComponent = itemStack.get( COIN_COMPONENT );
+				
+				float flipChance = 0.5F;
+				
+				if( null != coinComponent ) {
+					flipChance = coinComponent.flipChance();
+				} // if
+				
+				boolean flip = MathUtil.hasChance( flipChance );
 				Text result;
 				SoundEvent sound;
 				
