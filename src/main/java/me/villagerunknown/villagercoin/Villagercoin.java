@@ -24,13 +24,12 @@ import java.util.function.UnaryOperator;
 public class Villagercoin implements ModInitializer {
 	
 	public static PlatformMod<VillagercoinConfigData> MOD = Platform.register( "villagercoin", Villagercoin.class, VillagercoinConfigData.class );
-	
-	public static final int MAX_COUNT_CAP = 1073741822;
-	public static int MAX_COUNT = 5000;
-	
 	public static String MOD_ID = null;
 	public static Logger LOGGER = null;
 	public static VillagercoinConfigData CONFIG = null;
+	
+	public static final int MAX_COUNT_CAP = 1073741822;
+	public static int MAX_COUNT = 5000;
 	
 	public static final ComponentType<CoinComponent> COIN_COMPONENT;
 	
