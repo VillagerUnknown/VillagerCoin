@@ -6,7 +6,6 @@ import me.villagerunknown.platform.manager.featureManager;
 import me.villagerunknown.villagercoin.data.type.CoinComponent;
 import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.coinFeature;
-import me.villagerunknown.villagercoin.feature.edibleCoinFeature;
 import me.villagerunknown.villagercoin.feature.mobsDropCoinsFeature;
 import me.villagerunknown.villagercoin.feature.structuresIncludeCoinsFeature;
 import net.fabricmc.api.ModInitializer;
@@ -24,9 +23,9 @@ import java.util.function.UnaryOperator;
 public class Villagercoin implements ModInitializer {
 	
 	public static PlatformMod<VillagercoinConfigData> MOD = Platform.register( "villagercoin", Villagercoin.class, VillagercoinConfigData.class );
-	public static String MOD_ID = null;
-	public static Logger LOGGER = null;
-	public static VillagercoinConfigData CONFIG = null;
+	public static String MOD_ID = MOD.getModId();
+	public static Logger LOGGER = MOD.getLogger();
+	public static VillagercoinConfigData CONFIG = MOD.getConfig();
 	
 	public static final int MAX_COUNT_CAP = 1073741822;
 	public static int MAX_COUNT = 5000;
@@ -44,11 +43,6 @@ public class Villagercoin implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		// # Register Mod w/ Platform
-		MOD_ID = MOD.getModId();
-		LOGGER = MOD.getLogger();
-		CONFIG = MOD.getConfig();
-		
 		MAX_COUNT = CONFIG.maximumCoinStackSize;
 		
 		if( CONFIG.maximumCoinStackSize > MAX_COUNT_CAP ) {
@@ -67,7 +61,6 @@ public class Villagercoin implements ModInitializer {
 		
 		// # Activate Features
 		featureManager.addFeature( "coin", coinFeature::execute );
-		featureManager.addFeature( "edibleCoin", edibleCoinFeature::execute );
 		
 		featureManager.addFeature( "structuresIncludeCoins", structuresIncludeCoinsFeature::execute );
 		featureManager.addFeature( "mobsDropCoins", mobsDropCoinsFeature::execute );

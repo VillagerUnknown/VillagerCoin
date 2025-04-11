@@ -10,7 +10,12 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Changed the code to make it friendlier for addon developers.
 - Changed item group for Villager Coin items.
+
+### Removed
+
+- Removed edible coins and moved them to an addon mod for Villager Coin.
 
 ## [1.0.0]
 

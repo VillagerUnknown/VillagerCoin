@@ -84,31 +84,15 @@ public class mobsDropCoinsFeature {
 						
 						if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
 							coins.put( GOLD_COIN, multiplier );
-							
-							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
-								coins.put( edibleCoinFeature.EDIBLE_GOLD_COIN, 1 );
-							} // if
 						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.put( COPPER_COIN, 1 );
 							coins.put( IRON_COIN, 1 );
-							
-							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
-								coins.put( edibleCoinFeature.EDIBLE_GOLD_COIN, 1 );
-							} // if
 						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
 							coins.put( IRON_COIN, 1 );
 							coins.put( GOLD_COIN, 1 );
-							
-							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
-								coins.put( edibleCoinFeature.EDIBLE_EMERALD_COIN, 1 );
-							} // if
 						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
 							multiplier = 3;
 							coins.put( GOLD_COIN, multiplier );
-							
-							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
-								coins.put( edibleCoinFeature.EDIBLE_NETHERITE_COIN, 1 );
-							} // if
 						} // if, else if ...
 						
 						dropCoins( entity, damageSource, coins );

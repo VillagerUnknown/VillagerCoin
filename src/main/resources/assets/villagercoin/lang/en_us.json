@@ -5,10 +5,8 @@
   "text.autoconfig.villagerunknown-villagercoin.category.General": "General",
 
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToStructureLootTables": "Add Coins to Structure Loot Tables",
-  "text.autoconfig.villagerunknown-villagercoin.option.addEdibleCoinsToStructureLootTables": "Add Edible Coins to Structure Loot Tables",
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToMobDrops": "Add Coins to Mob Drops",
   "text.autoconfig.villagerunknown-villagercoin.option.enablePigCoinDrops": "Enable Pig Coin Drops",
-  "text.autoconfig.villagerunknown-villagercoin.option.addEdibleCoinsToMobDrops": "Add Edible Coins to Mob Drops",
   "text.autoconfig.villagerunknown-villagercoin.option.enableCoinFlipping": "Enable Coin Flipping",
   "text.autoconfig.villagerunknown-villagercoin.option.enableTradeModifications": "Enable Trade Modifications",
   "text.autoconfig.villagerunknown-villagercoin.option.lootingBonusPerLevel": "Looting Bonus per Level",
@@ -18,7 +16,6 @@
   "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",
 
   "tag.item.villagerunknown-villagercoin.villager_coin": "Villager Coin",
-  "tag.item.villagerunknown-villagercoin.edible_villager_coin": "Edible Villager Coin",
   "tag.item.villagerunknown-villagercoin.vcoin": "vCoin",
 
   "itemGroup.villagerunknown-villagercoin": "Villager Coin",
@@ -28,10 +25,6 @@
   "item.villagerunknown-villagercoin.gold_villager_coin": "Gold Villager Coin",
   "item.villagerunknown-villagercoin.emerald_villager_coin": "Emerald Villager Coin",
   "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin",
-
-  "item.villagerunknown-villagercoin.edible_gold_villager_coin": "Chocolate Gold Villager Coin",
-  "item.villagerunknown-villagercoin.edible_emerald_villager_coin": "Chocolate Emerald Villager Coin",
-  "item.villagerunknown-villagercoin.edible_netherite_villager_coin": "Chocolate Netherite Villager Coin",
 
   "advancements.villagercoin.root.title": "Villager Coin",
   "advancements.villagercoin.root.description": "Accepted by Villagers everywhere",
@@ -50,21 +43,6 @@
 
   "advancements.villagercoin.pickup_netherite_coin.title": "Slashing The Coin Age",
   "advancements.villagercoin.pickup_netherite_coin.description": "Acquire your first Netherite Villager Coin",
-
-  "advancements.villagercoin.villager_coins.title": "Count de Monet",
-  "advancements.villagercoin.villager_coins.description": "Acquire all of the valuable Villager Coins",
-
-  "advancements.villagercoin.pickup_edible_gold_coin.title": "Feeling A Little Gelty",
-  "advancements.villagercoin.pickup_edible_gold_coin.description": "Acquire your first Edible Gold Villager Coin",
-
-  "advancements.villagercoin.pickup_edible_emerald_coin.title": "Hrm.. A Taste of Wealth",
-  "advancements.villagercoin.pickup_edible_emerald_coin.description": "Acquire your first Edible Emerald Villager Coin",
-
-  "advancements.villagercoin.pickup_edible_netherite_coin.title": "It Feels A Bit Stale",
-  "advancements.villagercoin.pickup_edible_netherite_coin.description": "Acquire your first Edible Netherite Villager Coin",
-
-  "advancements.villagercoin.edible_villager_coins.title": "The Cost Of Groceries",
-  "advancements.villagercoin.edible_villager_coins.description": "Acquire all of the edible Villager Coins",
 
   "advancements.villagercoin.all_villager_coins.title": "We Know Who To Rob Now",
   "advancements.villagercoin.all_villager_coins.description": "Acquire all of the different types of Villager Coins"
