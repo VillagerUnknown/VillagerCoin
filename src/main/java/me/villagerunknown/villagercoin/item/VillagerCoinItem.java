@@ -6,7 +6,6 @@ import me.villagerunknown.platform.util.MessageUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.type.CoinComponent;
 import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
-import me.villagerunknown.villagercoin.feature.coinFeature;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
