@@ -2,8 +2,7 @@
 
 Adds a custom currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades.
 
-Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
-It also includes 3 types of edible coins to trick players: Gold, Emerald, and Netherite. 
+Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite.
 
 Each type of coin stacks up to 5,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
 The stack size can be configured, but it's limited to a maximum of 1073741822.
@@ -11,7 +10,6 @@ The stack size can be configured, but it's limited to a maximum of 1073741822.
 **Features**
 
 * Adds 5 custom coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
-* Adds 3 edible coin items with no currency values: Gold, Emerald, and Netherite.
 * Adds advancements for obtaining coins.
 * Convert between the different coins with the crafting tables.
 * Smelt down Copper, Iron, and Gold coins for their respective resources.
@@ -55,11 +53,6 @@ Copper, Iron, and Gold Villager Coins can be smelted down to their respective re
 _Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) 
 will still automatically stack with the same items in your inventory, but it will only craft once. 
 Use the auto-crafter to convert large amounts of coins._
-
-**Edible Coins**
-
-Edible coins, optionally found in structures and dropped by mobs, trick players into thinking they've struck rich when they've really just found a bit of chocolate. 
-They're only available in Gold, Emerald, and Netherite. They cannot be crafted and have the same food values as cookies. 
 
 **Loot Tables**
 
@@ -109,10 +102,8 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 **Options**
 
 * addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
-* addEdibleCoinsToStructureLootTables - If this option and addCoinsToStructureLootTables are enabled: Adds Edible Coins to Structure loot tables. (Default: true)
 * addCoinsToMobDrops - Adds Coins to Mob drops. (Default: true)
 * enablePigCoinDrops - Allows Copper Coins to drop from Pigs and Iron coins from Hoglins, and Zoglins. (Default: false)
-* addEdibleCoinsToMobDrops - If this option and addCoinsToMobDrops are enabled: Adds Edible Coins to Mob drops. (Default: true)
 * enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
 * enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
 * lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
