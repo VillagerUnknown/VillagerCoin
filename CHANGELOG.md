@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 
-- Removed edible coins and moved them to an addon mod for Villager Coin.
+- Removed edible coins and moved them to an addon mod: Edible Coins for Villager Coin.
 
 ## [1.0.0]
 
