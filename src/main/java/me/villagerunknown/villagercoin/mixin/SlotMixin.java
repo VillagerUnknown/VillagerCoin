@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.mixin;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.feature.coinFeature;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.slot.Slot;
@@ -10,7 +11,7 @@ public abstract class SlotMixin implements Inventory {
 	
 	@Override
 	public int getMaxCountPerStack() {
-		return coinFeature.MAX_COUNT;
+		return Villagercoin.MAX_COUNT;
 	}
 	
 }

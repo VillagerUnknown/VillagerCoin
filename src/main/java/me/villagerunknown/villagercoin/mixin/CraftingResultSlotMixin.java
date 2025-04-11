@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.mixin;
 
+import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.coinFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -19,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Collection;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
 @Mixin(CraftingResultSlot.class)
 public class CraftingResultSlotMixin {
@@ -40,61 +43,38 @@ public class CraftingResultSlotMixin {
 			return;
 		} // if
 		
-		Collection<Item> coins = coinFeature.COIN_ITEMS.values();
-		
-		if( coins.contains( stack.getItem() ) ) {
+		if( coinFeature.COINS.containsValue( stack.getItem() ) ) {
 			CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
 			CraftingRecipeInput craftingRecipeInput = positioned.input();
-			int i = positioned.left();
-			int j = positioned.top();
 			DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());
-
-			AtomicInteger totalCost = new AtomicInteger(stack.getCount() * coinFeature.getCoinValue(stack.getItem()));
-
-			TreeMap<Integer, coinFeature.CoinIngredient> ingredientsMap = coinFeature.getCoinIngredientsMap( this.input );
-
-			ingredientsMap.forEach( ( order, coinIngredient ) -> {
-				int slot = coinIngredient.slot;
-				ItemStack ingredient = coinIngredient.stack;
-				ItemStack itemStack2 = (ItemStack)defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.getWidth());
-
-				if( coins.contains( ingredient.getItem() ) ) {
-					int ingredientCoinValue = coinFeature.getCoinValue(ingredient.getItem());
-					int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
-
-					if( ingredientCoinValue == totalCost.get()) {
-						this.input.removeStack( slot, 1 );
-						totalCost.addAndGet(-ingredientCoinValue);
-					} else if( ingredientCoinStackValue <= totalCost.get()) {
-						this.input.removeStack(slot, ingredient.getCount());
-						totalCost.addAndGet(-ingredientCoinStackValue);
-					} else if( ingredientCoinValue < totalCost.get()) {
-						int amount = totalCost.get() / ingredientCoinValue;
-
-						if( amount >= ingredient.getCount() ) {
-							this.input.removeStack(slot, ingredient.getCount());
-							totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
-						} else {
-							this.input.removeStack(slot, amount);
-							totalCost.addAndGet(-(ingredientCoinValue * amount));
-						} // if, else
-					} // if, else
-					ingredient = this.input.getStack(slot);
-				} // if
-
-				if (!itemStack2.isEmpty()) {
-					if (ingredient.isEmpty()) {
-						this.input.setStack(slot, itemStack2);
-					} else if (ItemStack.areItemsAndComponentsEqual(ingredient, itemStack2)) {
-						itemStack2.increment(ingredient.getCount());
-						this.input.setStack(slot, itemStack2);
-					} else if (!this.player.getInventory().insertStack(itemStack2)) {
-						this.player.dropItem(itemStack2, false);
-					}
-				}
-			} );
 			
-			ci.cancel();
+			CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
+			
+			if( null != currencyComponent ) {
+				AtomicInteger totalCost = new AtomicInteger(stack.getCount() * currencyComponent.value());
+				TreeMap<Integer, coinFeature.CoinIngredient> ingredientsMap = coinFeature.getCoinIngredientsMap( this.input );
+				
+				ingredientsMap.forEach(( order, coinIngredient ) -> {
+					int ingredientSlot = coinIngredient.slot;
+					ItemStack ingredient = coinIngredient.stack;
+					ItemStack itemStack2 = (ItemStack)defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.getWidth());
+					
+					totalCost.set( coinFeature.subtractCoinValueFromTotalCost( ingredient, totalCost, this.input, ingredientSlot ) );
+					
+					if (!itemStack2.isEmpty()) {
+						if (ingredient.isEmpty()) {
+							this.input.setStack(ingredientSlot, itemStack2);
+						} else if (ItemStack.areItemsAndComponentsEqual(ingredient, itemStack2)) {
+							itemStack2.increment(ingredient.getCount());
+							this.input.setStack(ingredientSlot, itemStack2);
+						} else if (!this.player.getInventory().insertStack(itemStack2)) {
+							this.player.dropItem(itemStack2, false);
+						}
+					}
+				});
+				
+				ci.cancel();
+			} // if
 		} // if
 	}
 	

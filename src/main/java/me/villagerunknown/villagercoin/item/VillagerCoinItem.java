@@ -4,6 +4,8 @@ import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.MessageUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.data.type.CoinComponent;
+import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.coinFeature;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,12 +19,13 @@ import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.Villagercoin.*;
 
 public class VillagerCoinItem extends Item {
 	
@@ -31,7 +34,21 @@ public class VillagerCoinItem extends Item {
 	public static SoundEvent SOUND = SoundEvents.BLOCK_CHAIN_STEP;
 	
 	public VillagerCoinItem(Settings settings) {
-		super(settings.maxCount( coinFeature.MAX_COUNT ));
+		super(
+				settings
+						.maxCount( Villagercoin.MAX_COUNT )
+						.component( COIN_COMPONENT, new CoinComponent( Rarity.COMMON, 0, 10, 0.5F ) )
+						.component( CURRENCY_COMPONENT, new CurrencyComponent( 1 ) )
+		);
+	}
+	
+	public VillagerCoinItem(Settings settings, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance) {
+		super(
+				settings
+						.maxCount( Villagercoin.MAX_COUNT )
+						.component( COIN_COMPONENT, new CoinComponent( rarity, dropMinimum, dropMaximum, dropChance ) )
+						.component( CURRENCY_COMPONENT, new CurrencyComponent( value ) )
+		);
 	}
 	
 	@Override

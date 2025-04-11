@@ -21,12 +21,29 @@ public abstract class DrawContextMixin {
 	@Inject(method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"), cancellable = true)
 	private void drawItemInSlot(TextRenderer textRenderer, ItemStack stack, int x, int y, String countOverride, CallbackInfo ci) {
 		if( null == countOverride && !stack.isEmpty() && stack.getMaxCount() > 99 && stack.getCount() > 99 ) {
-			int digits = Integer.toString( stack.getCount() ).length();
+			int stackCount = stack.getCount();
+			String text = Integer.toString(stackCount);
+			int digits = text.length();
+			
+			if (digits > 9) {
+				// >999,999,999
+				text = stackCount / 1000000000 + "b+";
+			} else if (digits > 6) {
+				// >999,999
+				text = stackCount / 1000000 + "m+";
+			} else if (digits > 4) {
+				// >9999 prints >10k
+				text = stackCount / 1000 + "k+";
+			} // if, else if ...
+			
+			digits = text.length();
 			float scale = 0.8F;
 			
-			if( digits > 3 ) {
+			if( digits > 4 ) {
+				scale = 0.5F;
+			} else if( digits > 3 ) {
 				scale = 0.6F;
-			} // if
+			}
 			
 			this.matrices.push();
 			
@@ -35,7 +52,7 @@ public abstract class DrawContextMixin {
 			
 			this.matrices.translate(0.0F, 0.0F, 200.0F);
 			DrawContext drawContext = (DrawContext) (Object) this;
-			drawContext.drawText(textRenderer, Integer.toString( stack.getCount() ), x + 19 - 2 - textRenderer.getWidth( Integer.toString( stack.getCount() ) ), y + 6 + 3, 16777215, true);
+			drawContext.drawText(textRenderer, text, x + 19 - 2 - textRenderer.getWidth( text ), y + 6 + 3, 16777215, true);
 			
 			this.matrices.pop();
 			

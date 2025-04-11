@@ -41,8 +41,8 @@ public class TradeOfferMixin {
 	private void TradeOffer(TradedItem firstBuyItem, Optional secondBuyItem, ItemStack sellItem, int _uses, int maxUses, boolean rewardingPlayerExperience, int specialPrice, int demandBonus, float priceMultiplier, int merchantExperience, CallbackInfo ci) {
 		if(
 			!Villagercoin.CONFIG.enableTradeModifications
-			|| coinFeature.COIN_ITEMS.containsValue( this.firstBuyItem.itemStack().getItem() )
-			|| coinFeature.COIN_ITEMS.containsValue( this.sellItem.getItem() )
+			|| coinFeature.COINS.containsValue( this.firstBuyItem.itemStack().getItem() )
+			|| coinFeature.COINS.containsValue( this.sellItem.getItem() )
 		) {
 			return;
 		} // if

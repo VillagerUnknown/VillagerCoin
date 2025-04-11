@@ -1,426 +1,136 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.item.EdibleVillagerCoinItem;
+import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
 import me.villagerunknown.villagercoin.item.VillagerCoinItem;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
-import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.item.*;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
-import net.minecraft.world.World;
+import net.minecraft.util.collection.DefaultedList;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
-import static net.minecraft.loot.LootTables.*;
 
 public class coinFeature {
 	
 	public static String COIN_STRING = "villager_coin";
 	
-	public static Set<String> COIN_TYPES = Set.of(
-			"copper",
-			"iron",
-			"gold",
-			"emerald",
-			"netherite"
-	);
+	public static Item COPPER_COIN;
+	public static Item IRON_COIN;
+	public static Item GOLD_COIN;
+	public static Item EMERALD_COIN;
+	public static Item NETHERITE_COIN;
 	
-	public static final int MAX_COUNT = 5000;
+	public static TreeMap<Integer, Item> COINS = new TreeMap<>();
 	
-	public static final Set<RegistryKey<LootTable>> COMMON_LOOT_TABLES = Set.of(
-			FISHING_JUNK_GAMEPLAY,
-			VILLAGE_WEAPONSMITH_CHEST,
-			VILLAGE_TOOLSMITH_CHEST,
-			VILLAGE_ARMORER_CHEST,
-			VILLAGE_CARTOGRAPHER_CHEST,
-			VILLAGE_MASON_CHEST,
-			VILLAGE_SHEPARD_CHEST,
-			VILLAGE_BUTCHER_CHEST,
-			VILLAGE_FLETCHER_CHEST,
-			VILLAGE_FISHER_CHEST,
-			VILLAGE_TANNERY_CHEST,
-			VILLAGE_TEMPLE_CHEST,
-			VILLAGE_DESERT_HOUSE_CHEST,
-			VILLAGE_PLAINS_CHEST,
-			VILLAGE_TAIGA_HOUSE_CHEST,
-			VILLAGE_SNOWY_HOUSE_CHEST,
-			VILLAGE_SAVANNA_HOUSE_CHEST
-	);
+	public static RecipeSerializer<VillagerCoinRecipe> RECIPE_SERIALIZER;
 	
-	public static final Set<RegistryKey<LootTable>> UNCOMMON_LOOT_TABLES = Set.of(
-			SPAWN_BONUS_CHEST,
-			SIMPLE_DUNGEON_CHEST,
-			ABANDONED_MINESHAFT_CHEST,
-			JUNGLE_TEMPLE_DISPENSER_CHEST,
-			IGLOO_CHEST_CHEST,
-			SHIPWRECK_SUPPLY_CHEST,
-			SHIPWRECK_MAP_CHEST,
-			TRIAL_CHAMBERS_REWARD_COMMON_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_COMMON_CHEST,
-			HERO_OF_THE_VILLAGE_ARMORER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_BUTCHER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_CARTOGRAPHER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_CLERIC_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_FARMER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_FISHERMAN_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_FLETCHER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_LEATHERWORKER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_LIBRARIAN_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_MASON_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_SHEPHERD_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_TOOLSMITH_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_WEAPONSMITH_GIFT_GAMEPLAY,
-			FISHING_TREASURE_GAMEPLAY,
-			DESERT_WELL_ARCHAEOLOGY,
-			DESERT_PYRAMID_ARCHAEOLOGY,
-			TRAIL_RUINS_COMMON_ARCHAEOLOGY,
-			OCEAN_RUIN_WARM_ARCHAEOLOGY,
-			OCEAN_RUIN_COLD_ARCHAEOLOGY,
-			TRIAL_CHAMBERS_CORRIDOR_POT,
-			TRIAL_CHAMBERS_SUPPLY_CHEST,
-			TRIAL_CHAMBERS_CORRIDOR_CHEST,
-			TRIAL_CHAMBERS_INTERSECTION_CHEST,
-			TRIAL_CHAMBERS_INTERSECTION_BARREL_CHEST,
-			TRIAL_CHAMBERS_ENTRANCE_CHEST,
-			SHIPWRECK_TREASURE_CHEST,
-			DESERT_PYRAMID_CHEST,
-			UNDERWATER_RUIN_SMALL_CHEST,
-			UNDERWATER_RUIN_BIG_CHEST,
-			RUINED_PORTAL_CHEST,
-			PILLAGER_OUTPOST_CHEST
-	);
-	
-	public static final Set<RegistryKey<LootTable>> RARE_LOOT_TABLES = Set.of(
-			JUNGLE_TEMPLE_CHEST,
-			TRAIL_RUINS_RARE_ARCHAEOLOGY,
-			TRIAL_CHAMBER_KEY_SPAWNER,
-			NETHER_BRIDGE_CHEST,
-			WOODLAND_MANSION_CHEST,
-			ANCIENT_CITY_CHEST,
-			TRIAL_CHAMBERS_REWARD_RARE_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_RARE_CHEST,
-			TRIAL_CHAMBERS_REWARD_UNIQUE_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_UNIQUE_CHEST,
-			TRIAL_CHAMBER_ITEMS_TO_DROP_WHEN_OMINOUS_SPAWNER,
-			TRIAL_CHAMBERS_REWARD_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_CHEST,
-			OMINOUS_TRIAL_CHAMBER_KEY_SPAWNER,
-			END_CITY_TREASURE_CHEST,
-			STRONGHOLD_LIBRARY_CHEST,
-			STRONGHOLD_CROSSING_CHEST,
-			STRONGHOLD_CORRIDOR_CHEST,
-			ANCIENT_CITY_ICE_BOX_CHEST,
-			BURIED_TREASURE_CHEST
-	);
-	
-	public static final Set<RegistryKey<LootTable>> EPIC_LOOT_TABLES = Set.of(
-			BASTION_TREASURE_CHEST,
-			BASTION_HOGLIN_STABLE_CHEST,
-			BASTION_OTHER_CHEST,
-			BASTION_BRIDGE_CHEST
-	);
-	
-	public static final Set<EntityType<?>> COMMON_MOB_DROPS = Set.of(
-			EntityType.DROWNED,
-			EntityType.ENDERMAN,
-			EntityType.PILLAGER,
-			EntityType.SKELETON,
-			EntityType.BOGGED,
-			EntityType.STRAY,
-			EntityType.WITCH,
-			EntityType.VILLAGER,
-			EntityType.WANDERING_TRADER,
-			EntityType.ZOMBIFIED_PIGLIN,
-			EntityType.HUSK,
-			EntityType.ZOMBIE,
-			EntityType.ZOMBIE_VILLAGER
-	);
-	
-	public static final Set<EntityType<?>> RARE_MOB_DROPS = Set.of(
-			EntityType.ELDER_GUARDIAN,
-			EntityType.ILLUSIONER,
-			EntityType.PIGLIN,
-			EntityType.PIGLIN_BRUTE,
-			EntityType.SHULKER,
-			EntityType.EVOKER,
-			EntityType.VINDICATOR,
-			EntityType.WITHER_SKELETON
-	);
-	
-	public static final Set<EntityType<?>> EPIC_MOB_DROPS = Set.of(
-			EntityType.ENDER_DRAGON,
-			EntityType.WARDEN,
-			EntityType.WITHER
-	);
-	
-	public static HashMap<String, Item> COIN_ITEMS = new HashMap<>();
-	
-	public static Item COPPER_COIN = null;
-	public static Item IRON_COIN = null;
-	public static Item GOLD_COIN = null;
-	public static Item EMERALD_COIN = null;
-	public static Item NETHERITE_COIN = null;
-	
-	public static RecipeSerializer<VillagerCoinRecipe> RECIPE_SERIALIZER = null;
-	
-	public static Comparator<Integer> reverseSort = new Comparator<Integer>() {
-		@Override
-		public int compare(Integer num1, Integer num2) {
-			return num2.compareTo(num1);
-		}
-	};
+	public static final RegistryKey<ItemGroup> CUSTOM_ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
+	public static final ItemGroup CUSTOM_ITEM_GROUP = FabricItemGroup.builder()
+			.icon(() -> new ItemStack(EMERALD_COIN))
+			.displayName(Text.translatable("itemGroup." + MOD_ID))
+			.build();
 	
 	public static void execute() {
-		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_villager_coin" ), new SpecialRecipeSerializer(VillagerCoinRecipe::new));
-		
-		registerVillagerCoinItems();
-		
-		COPPER_COIN = coinFeature.COIN_ITEMS.get( "copper_villager_coin" );
-		IRON_COIN = coinFeature.COIN_ITEMS.get( "iron_villager_coin" );
-		GOLD_COIN = coinFeature.COIN_ITEMS.get( "gold_villager_coin" );
-		EMERALD_COIN = coinFeature.COIN_ITEMS.get( "emerald_villager_coin" );
-		NETHERITE_COIN = coinFeature.COIN_ITEMS.get( "netherite_villager_coin" );
-		
-		addCoinsToLootTables();
-		addCoinsToMobDrops();
+		registerItemGroup();
 	}
 	
-	private static void registerVillagerCoinItems() {
-		for (String coinType : COIN_TYPES) {
-			Item.Settings settings = new Item.Settings();
-			
-			switch( coinType ) {
-				case "copper":
-					settings = settings.rarity(Rarity.COMMON);
-					break;
-				case "iron":
-					settings = settings.rarity(Rarity.UNCOMMON);
-					break;
-				case "gold":
-					settings = settings.rarity(Rarity.RARE);
-					break;
-				case "emerald":
-					settings = settings.rarity(Rarity.EPIC);
-					break;
-				case "netherite":
-					settings = settings.rarity(Rarity.EPIC).fireproof();
-			}
-			
-			coinType = coinType + "_" + COIN_STRING;
-			
-			Item item = RegistryUtil.registerItem( coinType, new VillagerCoinItem( settings ), MOD_ID );
-			
-			COIN_ITEMS.put( coinType, item );
-			RegistryUtil.addItemToGroup( ItemGroups.INGREDIENTS, item );
+	private static void registerItemGroup() {
+		Registry.register(Registries.ITEM_GROUP, CUSTOM_ITEM_GROUP_KEY, CUSTOM_ITEM_GROUP);
+	}
+	
+	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance ) {
+		return registerVillagerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, new Item.Settings() );
+	}
+	
+	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, Item.Settings settings ) {
+		Item item = RegistryUtil.registerItem( id, new VillagerCoinItem( settings, value, rarity, dropMinimum, dropMaximum, dropChance ), MOD_ID );
+		
+		COINS.put( value, item );
+		
+		RegistryUtil.addItemToGroup( CUSTOM_ITEM_GROUP_KEY, item );
+		
+		return item;
+	}
+	
+	public static ItemStack getLargestCoin( int coinValue ) {
+		ItemStack returnStack = ItemStack.EMPTY;
+		Item coin = null;
+		
+		for (Integer value : COINS.keySet()) {
+			if( coinValue >= value ) {
+				coin = COINS.get( value );
+			} // if
 		} // for
-	}
-	
-	private static void addCoinsToLootTables() {
-		LootTableEvents.MODIFY.register((registryKey, lootBuilder, lootTableSource, registryWrapper) -> {
-			if( lootTableSource.isBuiltin() && Villagercoin.CONFIG.addCoinsToStructureLootTables ) {
-				LootPool.Builder poolBuilder = LootPool.builder();
-				
-				if( COMMON_LOOT_TABLES.contains( registryKey ) || UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
-					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
-						poolBuilder
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_GOLD_COIN).weight(5));
-					} // if
-					
-					poolBuilder
-							.with(ItemEntry.builder(COPPER_COIN).weight(10))
-							.rolls(UniformLootNumberProvider.create(0, 5));
-				} // if
-				
-				if( UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(IRON_COIN).weight(7));
-				} // if
-				
-				if( RARE_LOOT_TABLES.contains( registryKey ) ) {
-					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
-						poolBuilder
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_EMERALD_COIN).weight(3));
-					} // if
-					
-					poolBuilder
-							.with(ItemEntry.builder(IRON_COIN).weight(7))
-							.rolls(UniformLootNumberProvider.create(0, 7));
-				}  // if
-				
-				if( RARE_LOOT_TABLES.contains( registryKey ) || EPIC_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(GOLD_COIN).weight(5));
-				}  // if
-				
-				if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
-					if( Villagercoin.CONFIG.addEdibleCoinsToStructureLootTables ) {
-						poolBuilder
-								.with(ItemEntry.builder(edibleCoinFeature.EDIBLE_NETHERITE_COIN).weight(1));
-					} // if
-					
-					poolBuilder
-							.rolls(UniformLootNumberProvider.create(0, 10));
-				} // if
-				
-				lootBuilder.pool(poolBuilder);
-			} // if
-		});
-	}
-	
-	private static void addCoinsToMobDrops() {
-		ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
-			if( Villagercoin.CONFIG.addCoinsToMobDrops ) {
-				if( null != damageSource && null != damageSource.getAttacker() ) {
-					if( damageSource.getAttacker().isPlayer() ) {
-						Set<CoinDrop> coins = new HashSet<>();
-						
-						HashMap<Item, Float> dropChances = new HashMap<>();
-						dropChances.put( COPPER_COIN, 0.5F );
-						dropChances.put( IRON_COIN, 0.25F );
-						dropChances.put( GOLD_COIN, 0.1F );
-						
-						HashMap<Item, Integer> maximums = new HashMap<>();
-						maximums.put( COPPER_COIN, 10 );
-						maximums.put( IRON_COIN, 5 );
-						maximums.put( GOLD_COIN, 3 );
-						
-						int multiplier = 2;
-						
-						if( Villagercoin.CONFIG.enablePigCoinDrops ) {
-							if( entity.getType().equals( EntityType.PIG ) ) {
-								coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) ) );
-							} else if( entity.getType().equals( EntityType.HOGLIN ) || entity.getType().equals( EntityType.ZOGLIN ) ) {
-								coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) ) );
-							} // if, else if
-						}
-						
-						if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
-							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
-							coins.add( new CoinDrop( edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) ) );
-						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.add( new CoinDrop( COPPER_COIN, dropChances.get( COPPER_COIN ), 0, maximums.get( COPPER_COIN ) ) );
-							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) ) );
-							
-							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
-								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_GOLD_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
-							} // if
-						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.add( new CoinDrop( IRON_COIN, dropChances.get( IRON_COIN ), 0, maximums.get( IRON_COIN ) * multiplier ) );
-							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
-							
-							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
-								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_EMERALD_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
-							} // if
-						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
-							multiplier = 3;
-							coins.add( new CoinDrop( GOLD_COIN, dropChances.get( GOLD_COIN ), 0, maximums.get( GOLD_COIN ) * multiplier ) );
-							
-							if( Villagercoin.CONFIG.addEdibleCoinsToMobDrops ) {
-								coins.add(new CoinDrop(edibleCoinFeature.EDIBLE_NETHERITE_COIN, dropChances.get(GOLD_COIN), 0, maximums.get(GOLD_COIN)));
-							} // if
-						} // if, else if ...
-						
-						dropCoins( entity, damageSource, coins );
-					} // if
-				} // if
-			} // if
-		});
-	}
-	
-	public static void dropCoins( LivingEntity entity, DamageSource damageSource, Set<CoinDrop> coins ) {
-		if( null == damageSource ) {
-			return;
+		
+		if( null != coin ) {
+			returnStack = new ItemStack( coin, 1 );
 		} // if
 		
-		World world = entity.getWorld();
-		Entity source = damageSource.getSource();
+		return returnStack;
+	}
+	
+	public static ItemStack getLargerCoin( int coinValue ) {
+		ItemStack returnStack = ItemStack.EMPTY;
+		Item coin = null;
 		
-		float modifier = 1;
+		for (Integer value : COINS.keySet()) {
+			if( value > coinValue ) {
+				coin = COINS.get( value );
+				break;
+			} // if
+		} // for
 		
-		if( null != source ) {
-			ItemStack weapon = damageSource.getWeaponStack();
+		if( null != coin ) {
+			returnStack = new ItemStack( coin, 1 );
+		} // if
+		
+		return returnStack;
+	}
+	
+	public static ItemStack getSmallerCoin( int coinValue ) {
+		ItemStack returnStack = ItemStack.EMPTY;
+		Item coin = null;
+		
+		for (Integer value : COINS.keySet()) {
+			if( value < coinValue ) {
+				coin = COINS.get( value );
+			} // if
+		} // for
+		
+		if( null != coin ) {
+			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
 			
-			if (null != weapon) {
-				ItemEnchantmentsComponent enchantments = EnchantmentHelper.getEnchantments(weapon);
-				DynamicRegistryManager drm = world.getRegistryManager();
-				
-				if (null != drm) {
-					Registry<Enchantment> registry = drm.get(RegistryKeys.ENCHANTMENT);
-					Enchantment lootingEnchantment = registry.get(Enchantments.LOOTING);
-					RegistryEntry<Enchantment> lootingEntry = registry.getEntry(lootingEnchantment);
-					
-					int enchantmentLevel = enchantments.getLevel(lootingEntry);
-					
-					if (enchantmentLevel > 0) {
-						modifier = (1 + (Villagercoin.CONFIG.lootingBonusPerLevel * enchantmentLevel));
-					} // if
+			if( null != currencyComponent ) {
+				if( getConversionValue( coinValue, currencyComponent.value() ) > 1 ) {
+					returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
 				} // if
 			} // if
 		} // if
 		
-		for (CoinDrop coinDrop : coins) {
-			if( MathUtil.hasChance( coinDrop.chance * modifier ) ) {
-				int amount = (int) MathUtil.getRandomWithinRange(coinDrop.min, coinDrop.max);
-				
-				entity.dropStack(new ItemStack(coinDrop.coin, amount));
-			} // if
-		} // for
+		return returnStack;
 	}
 	
-	public static int getCoinValue( Item item ) {
-		int value = 1; // Copper
+	public static int getConversionValue(int fromValue, int toValue) {
+		int result;
 		
-		if( item.equals( coinFeature.IRON_COIN ) ) {
-			value = 100;
-		}
-		else if( item.equals( coinFeature.GOLD_COIN ) ) {
-			value = 10000;
-		}
-		else if( item.equals( coinFeature.EMERALD_COIN ) ) {
-			value = 1000000;
-		}
-		else if( item.equals( coinFeature.NETHERITE_COIN ) ) {
-			value = 100000000;
-		} // if, else if ...
-		
-		return value;
-	}
-	
-	public static int getConversionValue( Item fromThis, Item toThis ) {
-		int from = coinFeature.getCoinValue( fromThis );
-		int to = coinFeature.getCoinValue( toThis );
-		int result = 1;
-		
-		if( from > to ) {
-			result = from / to;
+		if( fromValue > toValue ) {
+			result = fromValue / toValue;
 		} else {
-			result = to / from;
+			result = toValue / fromValue;
 		} // if, else
 		
 		return result;
@@ -432,23 +142,125 @@ public class coinFeature {
 		int left = positioned.left();
 		int top = positioned.top();
 		
-		TreeMap<Integer, coinFeature.CoinIngredient> ingredientsMap = new TreeMap<>(coinFeature.reverseSort);
+		TreeMap<Integer, CoinIngredient> ingredientsMap = new TreeMap<>(Villagercoin.reverseSort);
 		
 		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
 			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
 				int m = x + left + (y + top) * input.getWidth();
 				
-				int valueKey = coinFeature.getCoinValue(input.getStack(m).getItem());
-				
-				if( ingredientsMap.containsKey( valueKey ) ) {
-					valueKey = valueKey + ingredientsMap.size();
-				} // if, else
-				
-				ingredientsMap.put(valueKey, new coinFeature.CoinIngredient(m, input.getStack(m), y, x));
+				ingredientsMap = updateCoinIngredientsMap( ingredientsMap, input.getStack(m), m, x, y );
 			} // for
 		} // for
 		
 		return ingredientsMap;
+	}
+	
+	public static TreeMap<Integer, CoinIngredient> updateCoinIngredientsMap( TreeMap<Integer, CoinIngredient> ingredientsMap, ItemStack itemStack, int slot, int x, int y ) {
+		CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
+		
+		if( null != currencyComponent ) {
+			int valueKey = currencyComponent.value();
+			
+			if( ingredientsMap.containsKey( valueKey ) ) {
+				valueKey = valueKey + ingredientsMap.size();
+			} // if, else
+			
+			ingredientsMap.put(valueKey, new CoinIngredient(slot, itemStack, y, x));
+		} // if
+		
+		return ingredientsMap;
+	}
+	
+	public static TreeMap<Integer, ItemStack> updateCoinIngredientsMap(TreeMap<Integer, ItemStack> ingredientsMap, ItemStack coinItemStack ) {
+		if(!coinItemStack.isEmpty() && COINS.containsValue(coinItemStack.getItem())) {
+			CurrencyComponent currencyComponent = coinItemStack.get( CURRENCY_COMPONENT );
+			
+			if( null != currencyComponent ) {
+				int valueKey = currencyComponent.value();
+				
+				if (ingredientsMap.containsKey(valueKey)) {
+					valueKey = valueKey + ingredientsMap.size();
+				} // if, else
+				
+				ingredientsMap.put(valueKey, coinItemStack);
+			} // if
+		} // if
+		
+		return ingredientsMap;
+	}
+	
+	public static int subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicInteger totalCost, RecipeInputInventory craftingInput, int ingredientSlot ) {
+		if( COINS.containsValue( ingredient.getItem() ) ) {
+			CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
+			
+			if( null != currencyComponent ) {
+				int ingredientCoinValue = currencyComponent.value();
+				int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
+				
+				if( ingredientCoinValue == totalCost.get()) {
+					craftingInput.removeStack(ingredientSlot, 1 );
+					totalCost.addAndGet(-ingredientCoinValue);
+				} else if( ingredientCoinStackValue <= totalCost.get()) {
+					craftingInput.removeStack(ingredientSlot, ingredient.getCount());
+					totalCost.addAndGet(-ingredientCoinStackValue);
+				} else if( ingredientCoinValue < totalCost.get()) {
+					int amount = totalCost.get() / ingredientCoinValue;
+					
+					if( amount >= ingredient.getCount() ) {
+						craftingInput.removeStack(ingredientSlot, ingredient.getCount());
+						totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
+					} else {
+						craftingInput.removeStack(ingredientSlot, amount);
+						totalCost.addAndGet(-(ingredientCoinValue * amount));
+					} // if, else
+				} // if, else
+			} // if
+		} // if
+		
+		return totalCost.get();
+	}
+	
+	public static int subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicInteger totalCost, DefaultedList<ItemStack> ingredients ) {
+		for( ItemStack stack : ingredients ) {
+			if( stack.equals(ingredient) ) {
+				CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
+				
+				if( null != currencyComponent ) {
+					int ingredientCoinValue = currencyComponent.value();
+					int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
+					
+					if (ingredientCoinValue == totalCost.get()) {
+						stack.decrement(1);
+						totalCost.addAndGet(-ingredientCoinValue);
+					} else if (ingredientCoinStackValue <= totalCost.get()) {
+						stack.decrement(ingredient.getCount());
+						totalCost.addAndGet(-ingredientCoinStackValue);
+					} else if (ingredientCoinValue < totalCost.get()) {
+						int amount = totalCost.get() / ingredientCoinValue;
+						
+						if (amount >= ingredient.getCount()) {
+							stack.decrement(ingredient.getCount());
+							totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
+						} else {
+							stack.decrement(amount);
+							totalCost.addAndGet(-(ingredientCoinValue * amount));
+						} // if, else
+					} // if, else
+					break;
+				} // if
+			} // if
+		} // for
+		
+		return totalCost.get();
+	}
+	
+	static {
+		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_villager_coin" ), new SpecialRecipeSerializer(VillagerCoinRecipe::new));
+		COPPER_COIN = registerVillagerCoinItem( "copper_" + coinFeature.COIN_STRING, 1, Rarity.COMMON, 0, 10, 0.5F );
+		IRON_COIN = registerVillagerCoinItem( "iron_" + coinFeature.COIN_STRING, 100, Rarity.UNCOMMON, 0, 5, 0.25F );
+		GOLD_COIN = registerVillagerCoinItem( "gold_" + coinFeature.COIN_STRING, 10000, Rarity.RARE, 0, 3, 0.1F );
+		EMERALD_COIN = registerVillagerCoinItem( "emerald_" + coinFeature.COIN_STRING, 1000000, Rarity.EPIC, 0, 0, 0 );
+		NETHERITE_COIN = registerVillagerCoinItem( "netherite_" + coinFeature.COIN_STRING, 100000000, Rarity.EPIC, 0, 0, 0, new Item.Settings().fireproof() );
 	}
 	
 	public static class CoinIngredient {
@@ -463,22 +275,6 @@ public class coinFeature {
 			this.y = y;
 			this.x = x;
 			this.stack = stack;
-		}
-		
-	}
-	
-	public static class CoinDrop {
-		
-		public Item coin;
-		public float chance = 0.33F;
-		public int min = 1;
-		public int max = 5;
-		
-		public CoinDrop( Item coin, Float chance, int min, int max ) {
-			this.coin = coin;
-			this.chance = chance;
-			this.min = min;
-			this.max = max;
 		}
 		
 	}

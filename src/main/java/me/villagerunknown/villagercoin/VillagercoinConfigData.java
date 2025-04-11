@@ -34,4 +34,7 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	@ConfigEntry.Category("General")
 	public float lootingBonusPerLevel = 0.1F;
 	
+	@ConfigEntry.Category("General")
+	public int maximumCoinStackSize = 5000;
+	
 }

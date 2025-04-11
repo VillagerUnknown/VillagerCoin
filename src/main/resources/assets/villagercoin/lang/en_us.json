@@ -12,6 +12,7 @@
   "text.autoconfig.villagerunknown-villagercoin.option.enableCoinFlipping": "Enable Coin Flipping",
   "text.autoconfig.villagerunknown-villagercoin.option.enableTradeModifications": "Enable Trade Modifications",
   "text.autoconfig.villagerunknown-villagercoin.option.lootingBonusPerLevel": "Looting Bonus per Level",
+  "text.autoconfig.villagerunknown-villagercoin.option.maximumCoinStackSize": "Maximum Coin Stack Size",
 
   "item.villagerunknown-villagercoin.villager_coin.flip.heads": "%s flipped a coin and it landed heads up.",
   "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",
@@ -19,6 +20,8 @@
   "tag.item.villagerunknown-villagercoin.villager_coin": "Villager Coin",
   "tag.item.villagerunknown-villagercoin.edible_villager_coin": "Edible Villager Coin",
   "tag.item.villagerunknown-villagercoin.vcoin": "vCoin",
+
+  "itemGroup.villagerunknown-villagercoin": "Villager Coin",
 
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",
