@@ -5,7 +5,8 @@ Adds a custom currency, Villager Coin, and optionally adds the currency to loot 
 Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
 It also includes 3 types of edible coins to trick players: Gold, Emerald, and Netherite. 
 
-Each type of coin stacks up to 5,000 coins to reduce inventory clutter and can be converted between the different coins through the crafting table.
+Each type of coin stacks up to 5,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
+The stack size can be configured, but it's limited to a maximum of 1073741822.
 
 **Features**
 
@@ -115,6 +116,7 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 * enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
 * enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
 * lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
+* maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
 
 ## Support
 
