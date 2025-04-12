@@ -1,16 +1,24 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.data.type.CoinComponent;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
+import static me.villagerunknown.villagercoin.Villagercoin.COIN_COMPONENT;
 import static net.minecraft.loot.LootTables.*;
 
 public class StructuresIncludeCoinsFeature {
@@ -19,7 +27,11 @@ public class StructuresIncludeCoinsFeature {
 	public static final int RARE_LOOT_TABLE_ROLLS = 3;
 	public static final int EPIC_LOOT_TABLE_ROLLS = 1;
 	
-	public static Set<RegistryKey<LootTable>> COMMON_LOOT_TABLES = Set.of(
+	public static final int COMMON_LOOT_TABLE_WEIGHT = 5;
+	public static final int RARE_LOOT_TABLE_WEIGHT = 3;
+	public static final int EPIC_LOOT_TABLE_WEIGHT = 1;
+	
+	public static Set<RegistryKey<LootTable>> COMMON_LOOT_TABLES = new HashSet<>(Arrays.asList(
 			FISHING_JUNK_GAMEPLAY,
 			VILLAGE_WEAPONSMITH_CHEST,
 			VILLAGE_TOOLSMITH_CHEST,
@@ -37,9 +49,9 @@ public class StructuresIncludeCoinsFeature {
 			VILLAGE_TAIGA_HOUSE_CHEST,
 			VILLAGE_SNOWY_HOUSE_CHEST,
 			VILLAGE_SAVANNA_HOUSE_CHEST
-	);
+	));
 	
-	public static Set<RegistryKey<LootTable>> UNCOMMON_LOOT_TABLES = Set.of(
+	public static Set<RegistryKey<LootTable>> UNCOMMON_LOOT_TABLES = new HashSet<>(Arrays.asList(
 			SPAWN_BONUS_CHEST,
 			SIMPLE_DUNGEON_CHEST,
 			ABANDONED_MINESHAFT_CHEST,
@@ -80,9 +92,9 @@ public class StructuresIncludeCoinsFeature {
 			UNDERWATER_RUIN_BIG_CHEST,
 			RUINED_PORTAL_CHEST,
 			PILLAGER_OUTPOST_CHEST
-	);
+	));
 	
-	public static Set<RegistryKey<LootTable>> RARE_LOOT_TABLES = Set.of(
+	public static Set<RegistryKey<LootTable>> RARE_LOOT_TABLES = new HashSet<>(Arrays.asList(
 			JUNGLE_TEMPLE_CHEST,
 			TRAIL_RUINS_RARE_ARCHAEOLOGY,
 			TRIAL_CHAMBER_KEY_SPAWNER,
@@ -103,49 +115,62 @@ public class StructuresIncludeCoinsFeature {
 			STRONGHOLD_CORRIDOR_CHEST,
 			ANCIENT_CITY_ICE_BOX_CHEST,
 			BURIED_TREASURE_CHEST
-	);
+	));
 	
-	public static Set<RegistryKey<LootTable>> EPIC_LOOT_TABLES = Set.of(
+	public static Set<RegistryKey<LootTable>> EPIC_LOOT_TABLES = new HashSet<>(Arrays.asList(
 			BASTION_TREASURE_CHEST,
 			BASTION_HOGLIN_STABLE_CHEST,
 			BASTION_OTHER_CHEST,
 			BASTION_BRIDGE_CHEST
-	);
+	));
+	
+	public static HashMap<RegistryKey<LootTable>, Set<Item>> LOOT_TABLES = new HashMap<>();
 	
 	public static void execute(){
-		addCoinsToLootTables();
+		registerLootTableEvent();
 	}
 	
-	private static void addCoinsToLootTables() {
+	public static void addCoinToLootTable( Item coin, Set<RegistryKey<LootTable>> lootTables ) {
+		for (RegistryKey<LootTable> lootTable : lootTables) {
+			if( !LOOT_TABLES.containsKey( lootTable ) ) {
+				LOOT_TABLES.put( lootTable, new HashSet<>() );
+			} // if
+			
+			Set<Item> coins = LOOT_TABLES.get( lootTable );
+			coins.add( coin );
+			
+			LOOT_TABLES.replace( lootTable, coins );
+		} // for
+	}
+	
+	private static void registerLootTableEvent() {
 		LootTableEvents.MODIFY.register((registryKey, lootBuilder, lootTableSource, registryWrapper) -> {
 			if( lootTableSource.isBuiltin() && Villagercoin.CONFIG.addCoinsToStructureLootTables ) {
 				LootPool.Builder poolBuilder = LootPool.builder();
 				
-				if( COMMON_LOOT_TABLES.contains( registryKey ) || UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(CoinItems.COPPER_COIN).weight(CoinFeature.COPPER_LOOT_TABLE_WEIGHT))
-							.rolls(UniformLootNumberProvider.create(0, COMMON_LOOT_TABLE_ROLLS));
-				} // if
-				
-				if( UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(CoinItems.IRON_COIN).weight(CoinFeature.IRON_LOOT_TABLE_WEIGHT));
-				} // if
-				
-				if( RARE_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(CoinItems.IRON_COIN).weight(CoinFeature.IRON_LOOT_TABLE_WEIGHT))
-							.rolls(UniformLootNumberProvider.create(0, RARE_LOOT_TABLE_ROLLS));
-				}  // if
-				
-				if( RARE_LOOT_TABLES.contains( registryKey ) || EPIC_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.with(ItemEntry.builder(CoinItems.GOLD_COIN).weight(CoinFeature.GOLD_LOOT_TABLE_WEIGHT));
-				}  // if
-				
-				if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
-					poolBuilder
-							.rolls(UniformLootNumberProvider.create(0, EPIC_LOOT_TABLE_ROLLS));
+				if( LOOT_TABLES.containsKey( registryKey ) ) {
+					Set<Item> items = LOOT_TABLES.get( registryKey );
+					
+					int lootTableWeight = COMMON_LOOT_TABLE_WEIGHT;
+					int lootTableRolls = COMMON_LOOT_TABLE_ROLLS;
+					
+					if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
+						lootTableWeight = EPIC_LOOT_TABLE_WEIGHT;
+						lootTableRolls = EPIC_LOOT_TABLE_ROLLS;
+					} else if( RARE_LOOT_TABLES.contains( registryKey ) ) {
+						lootTableWeight = RARE_LOOT_TABLE_WEIGHT;
+						lootTableRolls = RARE_LOOT_TABLE_ROLLS;
+					} // if, else if ...
+					
+					for (Item item : items) {
+						CoinComponent coinComponent = item.getComponents().get( COIN_COMPONENT );
+						
+						if( null != coinComponent && MathUtil.hasChance( coinComponent.dropChance() ) ) {
+							poolBuilder.with( ItemEntry.builder( item ).weight( lootTableWeight ) );
+						} // if
+					} // for
+					
+					poolBuilder.rolls( UniformLootNumberProvider.create( 0, lootTableRolls ) );
 				} // if
 				
 				lootBuilder.pool(poolBuilder);

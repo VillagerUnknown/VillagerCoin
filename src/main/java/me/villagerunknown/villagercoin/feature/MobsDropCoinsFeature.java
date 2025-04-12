@@ -22,7 +22,9 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import static me.villagerunknown.villagercoin.Villagercoin.COIN_COMPONENT;
@@ -34,7 +36,7 @@ public class MobsDropCoinsFeature {
 	public static final int RARE_DROP_MULTIPLIER = 2;
 	public static final int EPIC_DROP_MULTIPLIER = 3;
 	
-	public static Set<EntityType<?>> COMMON_MOB_DROPS = Set.of(
+	public static Set<EntityType<?>> COMMON_MOB_DROPS = new HashSet<>(Arrays.asList(
 			EntityType.DROWNED,
 			EntityType.ENDERMAN,
 			EntityType.PILLAGER,
@@ -48,9 +50,9 @@ public class MobsDropCoinsFeature {
 			EntityType.HUSK,
 			EntityType.ZOMBIE,
 			EntityType.ZOMBIE_VILLAGER
-	);
+	));
 	
-	public static Set<EntityType<?>> RARE_MOB_DROPS = Set.of(
+	public static Set<EntityType<?>> RARE_MOB_DROPS = new HashSet<>(Arrays.asList(
 			EntityType.ELDER_GUARDIAN,
 			EntityType.ILLUSIONER,
 			EntityType.PIGLIN,
@@ -59,46 +61,65 @@ public class MobsDropCoinsFeature {
 			EntityType.EVOKER,
 			EntityType.VINDICATOR,
 			EntityType.WITHER_SKELETON
-	);
+	));
 	
-	public static Set<EntityType<?>> EPIC_MOB_DROPS = Set.of(
+	public static Set<EntityType<?>> EPIC_MOB_DROPS = new HashSet<>(Arrays.asList(
 			EntityType.ENDER_DRAGON,
 			EntityType.WARDEN,
 			EntityType.WITHER
-	);
+	));
+	
+	public static HashMap<EntityType<?>, Set<Item>> MOB_DROPS = new HashMap<>();
 	
 	public static void execute(){
-		addCoinsToMobDrops();
+		registerMobDropsEvent();
+		
+		if( Villagercoin.CONFIG.enablePigCoinDrops ) {
+			COMMON_MOB_DROPS.add( EntityType.PIG );
+			COMMON_MOB_DROPS.add( EntityType.HOGLIN );
+			COMMON_MOB_DROPS.add( EntityType.ZOGLIN );
+		} // if
 	}
 	
-	private static void addCoinsToMobDrops() {
+	public static void addCoinToMobDrops( Item coin, Set<EntityType<?>> entityTypes ) {
+		for (EntityType<?> entityType : entityTypes) {
+			if( !MOB_DROPS.containsKey( entityType ) ) {
+				MOB_DROPS.put( entityType, new HashSet<>() );
+			} // if
+			
+			Set<Item> coins = MOB_DROPS.get( entityType );
+			coins.add( coin );
+			
+			MOB_DROPS.replace( entityType, coins );
+		} // for
+	}
+	
+	private static void registerMobDropsEvent() {
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
 			if( Villagercoin.CONFIG.addCoinsToMobDrops ) {
 				if( null != damageSource && null != damageSource.getAttacker() ) {
 					if( damageSource.getAttacker().isPlayer() ) {
-						HashMap<Item, Integer> coins = new HashMap<>();
+						HashMap<Item, Integer> coinsToDrop = new HashMap<>();
 						
-						if( Villagercoin.CONFIG.enablePigCoinDrops ) {
-							if( entity.getType().equals( EntityType.PIG ) ) {
-								coins.put( CoinItems.COPPER_COIN, COMMON_DROP_MULTIPLIER );
-							} else if( entity.getType().equals( EntityType.HOGLIN ) || entity.getType().equals( EntityType.ZOGLIN ) ) {
-								coins.put( CoinItems.IRON_COIN, COMMON_DROP_MULTIPLIER );
-							} // if, else if
-						}
+						EntityType entityType = entity.getType();
 						
-						if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
-							coins.put( CoinItems.GOLD_COIN, RARE_DROP_MULTIPLIER );
-						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.put( CoinItems.COPPER_COIN, COMMON_DROP_MULTIPLIER );
-							coins.put( CoinItems.IRON_COIN, COMMON_DROP_MULTIPLIER );
-						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.put( CoinItems.IRON_COIN, COMMON_DROP_MULTIPLIER );
-							coins.put( CoinItems.GOLD_COIN, COMMON_DROP_MULTIPLIER );
-						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.put( CoinItems.GOLD_COIN, EPIC_DROP_MULTIPLIER );
-						} // if, else if ...
+						if( MOB_DROPS.containsKey( entityType ) ) {
+							Set<Item> items = MOB_DROPS.get( entityType );
+							
+							int dropMultiplier = COMMON_DROP_MULTIPLIER;
+							
+							if( EPIC_MOB_DROPS.contains( entityType ) ) {
+								dropMultiplier = EPIC_DROP_MULTIPLIER;
+							} else if( RARE_MOB_DROPS.contains( entityType ) ) {
+								dropMultiplier = RARE_DROP_MULTIPLIER;
+							} // if, else
+							
+							for (Item item : items) {
+								coinsToDrop.put( item, dropMultiplier );
+							} // for
+						} // if
 						
-						dropCoins( entity, damageSource, coins );
+						dropCoins( entity, damageSource, coinsToDrop );
 					} // if
 				} // if
 			} // if
