@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.recipe;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
@@ -11,6 +12,7 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
+import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
 public class VillagerCoinRecipe extends SpecialCraftingRecipe {
@@ -27,7 +29,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
 				if( !itemStack.isEmpty() ) {
-					if( CoinCraftingFeature.CRAFTABLE_COINS.containsValue( itemStack.getItem() ) ) {
+					if( CoinCraftingFeature.craftingAllowed( itemStack.getItem() ) ) {
 						containsOnlyCoins = true;
 					} else {
 						return false;
@@ -83,10 +85,17 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 						ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue );
 						CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
 						
-						if( null != smallerComponent && itemStack.getCount() < currencyComponent.getConversionValue( currencyComponent.value(), smallerComponent.value() ) ) {
+						if(
+							null != smallerComponent
+							&& itemStack.getCount() < currencyComponent.getConversionValue( currencyComponent.value(), smallerComponent.value() )
+						) {
 							// Convert to Lower
 							returnStack = smallerCoin;
-						} else if( largestCoin.getItem() != itemStack.getItem() && null != largestComponent && itemStack.getCount() >= currencyComponent.getConversionValue( currencyComponent.value(), largestComponent.value() ) ){
+						} else if(
+								largestCoin.getItem() != itemStack.getItem()
+								&& null != largestComponent
+								&& itemStack.getCount() >= currencyComponent.getConversionValue( currencyComponent.value(), largestComponent.value() )
+						){
 							// Convert to Higher
 							returnStack = largestCoin;
 						} // if

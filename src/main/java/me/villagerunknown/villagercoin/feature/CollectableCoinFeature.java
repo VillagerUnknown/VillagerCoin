@@ -14,13 +14,13 @@ public class CollectableCoinFeature {
 	
 	public static int COPPER_MAXIMUM_IN_CIRCULATION = 10;
 	public static int IRON_MAXIMUM_IN_CIRCULATION = 5;
-	public static int GOLD_MAXIMUM_IN_CIRCULATION = 3;
-	public static int EMERALD_MAXIMUM_IN_CIRCULATION = 2;
+	public static int GOLD_MAXIMUM_IN_CIRCULATION = 2;
+	public static int EMERALD_MAXIMUM_IN_CIRCULATION = 1;
 	public static int NETHERITE_MAXIMUM_IN_CIRCULATION = 1;
 	
 	public static int COPPER_VALUE = CoinFeature.IRON_VALUE;
-	public static int IRON_VALUE = CoinFeature.IRON_VALUE * 2;
-	public static int GOLD_VALUE = CoinFeature.GOLD_VALUE * 2;
+	public static int IRON_VALUE = CoinFeature.IRON_VALUE * 50;
+	public static int GOLD_VALUE = CoinFeature.GOLD_VALUE * 20;
 	public static int EMERALD_VALUE = CoinFeature.EMERALD_VALUE;
 	public static int NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
 	
@@ -40,7 +40,21 @@ public class CollectableCoinFeature {
 	
 	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
 		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, flipChance, maximumAllowedInServer ), MOD_ID );
+		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
+		return item;
+	}
+	
+	public static Item registerCraftableCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer ) {
+		return registerCraftableCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, new Item.Settings() );
+	}
+	
+	public static Item registerCraftableCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
+		Item item = registerCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer );
+		
+		CoinCraftingFeature.registerCoin( item, value );
+		
 		return item;
 	}
 	

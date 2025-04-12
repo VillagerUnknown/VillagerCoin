@@ -17,8 +17,7 @@ import net.minecraft.util.collection.DefaultedList;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
-import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.Villagercoin.*;
 
 public class CoinCraftingFeature {
 	
@@ -28,18 +27,36 @@ public class CoinCraftingFeature {
 	
 	public static void execute() {}
 	
+	public static void registerCoin( Item item, int value ) {
+		CRAFTABLE_COINS.put( value, item );
+	}
+	
+	public static boolean craftingAllowed( Item item ) {
+		return item.getComponents().contains( CURRENCY_COMPONENT );
+	}
+	
 	public static ItemStack getLargestCoin(int coinValue ) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
 		for (Integer value : CRAFTABLE_COINS.keySet()) {
 			if( coinValue >= value ) {
-				coin = CRAFTABLE_COINS.get( value );
+				Item item = CRAFTABLE_COINS.get( value );
+				
+				if( !item.getComponents().contains( COLLECTABLE_COMPONENT ) ) {
+					coin = item;
+				} // if
 			} // if
 		} // for
 		
 		if( null != coin ) {
-			returnStack = new ItemStack( coin, 1 );
+			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
+			
+			if( null != currencyComponent ) {
+				returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
+			} else {
+				returnStack = new ItemStack(coin, getConversionValue(coinValue, 1));
+			} // if, else
 		} // if
 		
 		return returnStack;
@@ -51,13 +68,23 @@ public class CoinCraftingFeature {
 		
 		for (Integer value : CRAFTABLE_COINS.keySet()) {
 			if( value > coinValue ) {
-				coin = CRAFTABLE_COINS.get( value );
-				break;
+				Item item = CRAFTABLE_COINS.get( value );
+				
+				if( !item.getComponents().contains( COLLECTABLE_COMPONENT ) ) {
+					coin = item;
+					break;
+				} // if
 			} // if
 		} // for
 		
 		if( null != coin ) {
-			returnStack = new ItemStack( coin, 1 );
+			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
+			
+			if( null != currencyComponent ) {
+				returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
+			} else {
+				returnStack = new ItemStack(coin, getConversionValue(coinValue, 1));
+			} // if, else
 		} // if
 		
 		return returnStack;
@@ -69,7 +96,11 @@ public class CoinCraftingFeature {
 		
 		for (Integer value : CRAFTABLE_COINS.keySet()) {
 			if( value < coinValue ) {
-				coin = CRAFTABLE_COINS.get( value );
+				Item item = CRAFTABLE_COINS.get( value );
+				
+				if( !item.getComponents().contains( COLLECTABLE_COMPONENT ) ) {
+					coin = item;
+				} // if
 			} // if
 		} // for
 		
@@ -151,37 +182,58 @@ public class CoinCraftingFeature {
 		return ingredientsMap;
 	}
 	
+	/**
+	 * Subtracts Coin Value From Total Cost
+	 * Used by:
+	 *  - mixin.CraftingResultSlotMixin
+	 *  - mixin.CraftingScreenHandlerMixin
+	 *  - mixin.PlayerScreenHandlerMixin
+	 *
+	 * @param ingredient
+	 * @param totalCost
+	 * @param craftingInput
+	 * @param ingredientSlot
+	 * @return int - Total Cost
+	 */
 	public static int subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicInteger totalCost, RecipeInputInventory craftingInput, int ingredientSlot ) {
-		if( CRAFTABLE_COINS.containsValue( ingredient.getItem() ) ) {
-			CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
+		CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
+		
+		if( null != currencyComponent ) {
+			int ingredientCoinValue = currencyComponent.value();
+			int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
 			
-			if( null != currencyComponent ) {
-				int ingredientCoinValue = currencyComponent.value();
-				int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
+			if( ingredientCoinValue == totalCost.get()) {
+				craftingInput.removeStack(ingredientSlot, 1 );
+				totalCost.addAndGet(-ingredientCoinValue);
+			} else if( ingredientCoinStackValue <= totalCost.get()) {
+				craftingInput.removeStack(ingredientSlot, ingredient.getCount());
+				totalCost.addAndGet(-ingredientCoinStackValue);
+			} else if( ingredientCoinValue < totalCost.get()) {
+				int amount = totalCost.get() / ingredientCoinValue;
 				
-				if( ingredientCoinValue == totalCost.get()) {
-					craftingInput.removeStack(ingredientSlot, 1 );
-					totalCost.addAndGet(-ingredientCoinValue);
-				} else if( ingredientCoinStackValue <= totalCost.get()) {
+				if( amount >= ingredient.getCount() ) {
 					craftingInput.removeStack(ingredientSlot, ingredient.getCount());
-					totalCost.addAndGet(-ingredientCoinStackValue);
-				} else if( ingredientCoinValue < totalCost.get()) {
-					int amount = totalCost.get() / ingredientCoinValue;
-					
-					if( amount >= ingredient.getCount() ) {
-						craftingInput.removeStack(ingredientSlot, ingredient.getCount());
-						totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
-					} else {
-						craftingInput.removeStack(ingredientSlot, amount);
-						totalCost.addAndGet(-(ingredientCoinValue * amount));
-					} // if, else
+					totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
+				} else {
+					craftingInput.removeStack(ingredientSlot, amount);
+					totalCost.addAndGet(-(ingredientCoinValue * amount));
 				} // if, else
-			} // if
+			} // if, else
 		} // if
 		
 		return totalCost.get();
 	}
 	
+	/**
+	 * Subtracts Coin Value From Total Cost
+	 * 	 * Used by:
+	 * 	 *  - mixin.CrafterBlockMixin
+	 *
+	 * @param ingredient
+	 * @param totalCost
+	 * @param ingredients
+	 * @return int - Total Cost
+	 */
 	public static int subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicInteger totalCost, DefaultedList<ItemStack> ingredients ) {
 		for( ItemStack stack : ingredients ) {
 			if( stack.equals(ingredient) ) {

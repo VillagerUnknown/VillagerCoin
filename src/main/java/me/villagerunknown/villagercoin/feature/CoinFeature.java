@@ -82,7 +82,7 @@ public class CoinFeature {
 	public static Item registerCraftableCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Item.Settings settings ) {
 		Item item = registerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, settings );
 		
-		CoinCraftingFeature.CRAFTABLE_COINS.put( value, item );
+		CoinCraftingFeature.registerCoin( item, value );
 		
 		return item;
 	}
