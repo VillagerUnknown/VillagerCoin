@@ -1,8 +1,8 @@
 package me.villagerunknown.villagercoin.recipe;
 
-import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
-import me.villagerunknown.villagercoin.feature.coinFeature;
+import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
@@ -27,7 +27,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
 				if( !itemStack.isEmpty() ) {
-					if( coinFeature.COINS.containsValue( itemStack.getItem() ) ) {
+					if( CoinCraftingFeature.CRAFTABLE_COINS.containsValue( itemStack.getItem() ) ) {
 						containsOnlyCoins = true;
 					} else {
 						return false;
@@ -59,7 +59,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 				} // if
 			} // for
 			
-			ItemStack largestCoin = coinFeature.getLargestCoin( totalValue );
+			ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue );
 			CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
 			
 			if( null != largestComponent && largestComponent.value() > 1 ) {
@@ -77,10 +77,10 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 					if (null != currencyComponent) {
 						totalValue = itemStack.getCount() * currencyComponent.value();
 						
-						ItemStack smallerCoin = coinFeature.getSmallerCoin( currencyComponent.value() );
+						ItemStack smallerCoin = CoinCraftingFeature.getSmallerCoin( currencyComponent.value() );
 						CurrencyComponent smallerComponent = smallerCoin.get( CURRENCY_COMPONENT );
 						
-						ItemStack largestCoin = coinFeature.getLargestCoin( totalValue );
+						ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue );
 						CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
 						
 						if( null != smallerComponent && itemStack.getCount() < currencyComponent.getConversionValue( currencyComponent.value(), smallerComponent.value() ) ) {
@@ -106,6 +106,6 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return coinFeature.RECIPE_SERIALIZER;
+		return CoinCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

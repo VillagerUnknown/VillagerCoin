@@ -1,7 +1,6 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.feature.coinFeature;
 import net.minecraft.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

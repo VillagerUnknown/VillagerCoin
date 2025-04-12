@@ -7,15 +7,17 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Added option to set maximum number of coins in a stack. The default remains 5,000.
+- Added the `EdibleCoinFeature` class to allow addon developers to easily add edible coins that players can eat.
+- Added the `CollectableCoinFeature` class to allow addon developers to easily add collectable coins with a limited number in existence.
 
 ### Changed
 
-- Changed the code to make it friendlier for addon developers.
+- Changed the code to make it friendlier for other developers.
 - Changed item group for Villager Coin items.
 
 ### Removed
 
-- Removed edible coins and moved them to an addon mod: Edible Coins for Villager Coin.
+- Removed edible coin items and moved them to an addon mod: Edible Coins for Villager Coin.
 
 ## [1.0.0]
 

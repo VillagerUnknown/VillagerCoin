@@ -4,17 +4,23 @@ import me.villagerunknown.platform.Platform;
 import me.villagerunknown.platform.PlatformMod;
 import me.villagerunknown.platform.manager.featureManager;
 import me.villagerunknown.villagercoin.data.type.CoinComponent;
+import me.villagerunknown.villagercoin.data.type.CollectableComponent;
 import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
-import me.villagerunknown.villagercoin.feature.coinFeature;
-import me.villagerunknown.villagercoin.feature.mobsDropCoinsFeature;
-import me.villagerunknown.villagercoin.feature.structuresIncludeCoinsFeature;
+import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinFeature;
+import me.villagerunknown.villagercoin.feature.MobsDropCoinsFeature;
+import me.villagerunknown.villagercoin.feature.StructuresIncludeCoinsFeature;
+import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.component.ComponentType;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 import org.slf4j.Logger;
 
 import java.util.Comparator;
@@ -33,6 +39,14 @@ public class Villagercoin implements ModInitializer {
 	public static final ComponentType<CoinComponent> COIN_COMPONENT;
 	
 	public static final ComponentType<CurrencyComponent> CURRENCY_COMPONENT;
+	
+	public static final ComponentType<CollectableComponent> COLLECTABLE_COMPONENT;
+	
+	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
+	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
+			.icon(() -> new ItemStack(CoinItems.EMERALD_COIN))
+			.displayName(Text.translatable("itemGroup." + MOD_ID))
+			.build();
 	
 	public static Comparator<Integer> reverseSort = new Comparator<Integer>() {
 		@Override
@@ -60,22 +74,15 @@ public class Villagercoin implements ModInitializer {
 		Platform.init_mod( MOD );
 		
 		// # Activate Features
-		featureManager.addFeature( "coin", coinFeature::execute );
+		featureManager.addFeature( "coinCrafting", CoinCraftingFeature::execute );
+		featureManager.addFeature( "coin", CoinFeature::execute );
 		
-		featureManager.addFeature( "structuresIncludeCoins", structuresIncludeCoinsFeature::execute );
-		featureManager.addFeature( "mobsDropCoins", mobsDropCoinsFeature::execute );
+		featureManager.addFeature( "structuresIncludeCoins", StructuresIncludeCoinsFeature::execute );
+		featureManager.addFeature( "mobsDropCoins", MobsDropCoinsFeature::execute );
 	}
 	
-	private static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
+	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
 		return (ComponentType) Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MOD.getModId(), id), ((ComponentType.Builder)builderOperator.apply(ComponentType.builder())).build());
-	}
-	
-	public static Item registerCoin(String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance ) {
-		return registerCoin( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, new Item.Settings() );
-	}
-	
-	public static Item registerCoin(String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Item.Settings settings ) {
-		return coinFeature.registerVillagerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, settings );
 	}
 	
 	static{
@@ -84,6 +91,9 @@ public class Villagercoin implements ModInitializer {
 		});
 		CURRENCY_COMPONENT = registerComponentType("currency", (builder) -> {
 			return builder.codec(CurrencyComponent.CODEC).packetCodec(CurrencyComponent.PACKET_CODEC).cache();
+		});
+		COLLECTABLE_COMPONENT = Villagercoin.registerComponentType("collectable", (builder) -> {
+			return builder.codec(CollectableComponent.CODEC).packetCodec(CollectableComponent.PACKET_CODEC).cache();
 		});
 	}
 	

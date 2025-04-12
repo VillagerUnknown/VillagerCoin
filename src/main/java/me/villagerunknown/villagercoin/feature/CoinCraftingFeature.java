@@ -2,76 +2,39 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
-import me.villagerunknown.villagercoin.item.VillagerCoinItem;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
-import me.villagerunknown.platform.util.RegistryUtil;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.*;
-import net.minecraft.text.Text;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.collection.DefaultedList;
 
-import java.util.*;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
-public class coinFeature {
+public class CoinCraftingFeature {
 	
-	public static String COIN_STRING = "villager_coin";
-	
-	public static Item COPPER_COIN;
-	public static Item IRON_COIN;
-	public static Item GOLD_COIN;
-	public static Item EMERALD_COIN;
-	public static Item NETHERITE_COIN;
-	
-	public static TreeMap<Integer, Item> COINS = new TreeMap<>();
+	public static TreeMap<Integer, Item> CRAFTABLE_COINS = new TreeMap<>();
 	
 	public static RecipeSerializer<VillagerCoinRecipe> RECIPE_SERIALIZER;
 	
-	public static final RegistryKey<ItemGroup> CUSTOM_ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
-	public static final ItemGroup CUSTOM_ITEM_GROUP = FabricItemGroup.builder()
-			.icon(() -> new ItemStack(EMERALD_COIN))
-			.displayName(Text.translatable("itemGroup." + MOD_ID))
-			.build();
+	public static void execute() {}
 	
-	public static void execute() {
-		registerItemGroup();
-	}
-	
-	private static void registerItemGroup() {
-		Registry.register(Registries.ITEM_GROUP, CUSTOM_ITEM_GROUP_KEY, CUSTOM_ITEM_GROUP);
-	}
-	
-	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance ) {
-		return registerVillagerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, new Item.Settings() );
-	}
-	
-	public static Item registerVillagerCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new VillagerCoinItem( settings, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance ), MOD_ID );
-		
-		COINS.put( value, item );
-		
-		RegistryUtil.addItemToGroup( CUSTOM_ITEM_GROUP_KEY, item );
-		
-		return item;
-	}
-	
-	public static ItemStack getLargestCoin( int coinValue ) {
+	public static ItemStack getLargestCoin(int coinValue ) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
-		for (Integer value : COINS.keySet()) {
+		for (Integer value : CRAFTABLE_COINS.keySet()) {
 			if( coinValue >= value ) {
-				coin = COINS.get( value );
+				coin = CRAFTABLE_COINS.get( value );
 			} // if
 		} // for
 		
@@ -86,9 +49,9 @@ public class coinFeature {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
-		for (Integer value : COINS.keySet()) {
+		for (Integer value : CRAFTABLE_COINS.keySet()) {
 			if( value > coinValue ) {
-				coin = COINS.get( value );
+				coin = CRAFTABLE_COINS.get( value );
 				break;
 			} // if
 		} // for
@@ -104,9 +67,9 @@ public class coinFeature {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
-		for (Integer value : COINS.keySet()) {
+		for (Integer value : CRAFTABLE_COINS.keySet()) {
 			if( value < coinValue ) {
-				coin = COINS.get( value );
+				coin = CRAFTABLE_COINS.get( value );
 			} // if
 		} // for
 		
@@ -171,7 +134,7 @@ public class coinFeature {
 	}
 	
 	public static TreeMap<Integer, ItemStack> updateCoinIngredientsMap(TreeMap<Integer, ItemStack> ingredientsMap, ItemStack coinItemStack ) {
-		if(!coinItemStack.isEmpty() && COINS.containsValue(coinItemStack.getItem())) {
+		if(!coinItemStack.isEmpty() && CRAFTABLE_COINS.containsValue(coinItemStack.getItem())) {
 			CurrencyComponent currencyComponent = coinItemStack.get( CURRENCY_COMPONENT );
 			
 			if( null != currencyComponent ) {
@@ -189,7 +152,7 @@ public class coinFeature {
 	}
 	
 	public static int subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicInteger totalCost, RecipeInputInventory craftingInput, int ingredientSlot ) {
-		if( COINS.containsValue( ingredient.getItem() ) ) {
+		if( CRAFTABLE_COINS.containsValue( ingredient.getItem() ) ) {
 			CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
 			
 			if( null != currencyComponent ) {
@@ -255,11 +218,6 @@ public class coinFeature {
 	
 	static {
 		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_villager_coin" ), new SpecialRecipeSerializer(VillagerCoinRecipe::new));
-		COPPER_COIN = registerVillagerCoinItem( "copper_" + coinFeature.COIN_STRING, 1, Rarity.COMMON, 0, 10, 0.5F, 0.4F );
-		IRON_COIN = registerVillagerCoinItem( "iron_" + coinFeature.COIN_STRING, 100, Rarity.UNCOMMON, 0, 5, 0.25F, 0.5F );
-		GOLD_COIN = registerVillagerCoinItem( "gold_" + coinFeature.COIN_STRING, 10000, Rarity.RARE, 0, 3, 0.1F, 0.6F );
-		EMERALD_COIN = registerVillagerCoinItem( "emerald_" + coinFeature.COIN_STRING, 1000000, Rarity.EPIC, 0, 0, 0, 0.75F );
-		NETHERITE_COIN = registerVillagerCoinItem( "netherite_" + coinFeature.COIN_STRING, 100000000, Rarity.EPIC, 0, 0, 0, 0.25F, new Item.Settings().fireproof() );
 	}
 	
 	public static class CoinIngredient {

@@ -3,6 +3,8 @@ package me.villagerunknown.villagercoin.feature;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.type.CoinComponent;
+import me.villagerunknown.villagercoin.data.type.CollectableComponent;
+import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -24,11 +26,15 @@ import java.util.HashMap;
 import java.util.Set;
 
 import static me.villagerunknown.villagercoin.Villagercoin.COIN_COMPONENT;
-import static me.villagerunknown.villagercoin.feature.coinFeature.*;
+import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;
 
-public class mobsDropCoinsFeature {
+public class MobsDropCoinsFeature {
 	
-	public static final Set<EntityType<?>> COMMON_MOB_DROPS = Set.of(
+	public static final int COMMON_DROP_MULTIPLIER = 1;
+	public static final int RARE_DROP_MULTIPLIER = 2;
+	public static final int EPIC_DROP_MULTIPLIER = 3;
+	
+	public static Set<EntityType<?>> COMMON_MOB_DROPS = Set.of(
 			EntityType.DROWNED,
 			EntityType.ENDERMAN,
 			EntityType.PILLAGER,
@@ -44,7 +50,7 @@ public class mobsDropCoinsFeature {
 			EntityType.ZOMBIE_VILLAGER
 	);
 	
-	public static final Set<EntityType<?>> RARE_MOB_DROPS = Set.of(
+	public static Set<EntityType<?>> RARE_MOB_DROPS = Set.of(
 			EntityType.ELDER_GUARDIAN,
 			EntityType.ILLUSIONER,
 			EntityType.PIGLIN,
@@ -55,7 +61,7 @@ public class mobsDropCoinsFeature {
 			EntityType.WITHER_SKELETON
 	);
 	
-	public static final Set<EntityType<?>> EPIC_MOB_DROPS = Set.of(
+	public static Set<EntityType<?>> EPIC_MOB_DROPS = Set.of(
 			EntityType.ENDER_DRAGON,
 			EntityType.WARDEN,
 			EntityType.WITHER
@@ -72,27 +78,24 @@ public class mobsDropCoinsFeature {
 					if( damageSource.getAttacker().isPlayer() ) {
 						HashMap<Item, Integer> coins = new HashMap<>();
 						
-						int multiplier = 2;
-						
 						if( Villagercoin.CONFIG.enablePigCoinDrops ) {
 							if( entity.getType().equals( EntityType.PIG ) ) {
-								coins.put( COPPER_COIN, 1 );
+								coins.put( CoinItems.COPPER_COIN, COMMON_DROP_MULTIPLIER );
 							} else if( entity.getType().equals( EntityType.HOGLIN ) || entity.getType().equals( EntityType.ZOGLIN ) ) {
-								coins.put( IRON_COIN, 1 );
+								coins.put( CoinItems.IRON_COIN, COMMON_DROP_MULTIPLIER );
 							} // if, else if
 						}
 						
 						if( entity.getType().equals( EntityType.PIGLIN ) || entity.getType().equals( EntityType.PIGLIN_BRUTE ) ) {
-							coins.put( GOLD_COIN, multiplier );
+							coins.put( CoinItems.GOLD_COIN, RARE_DROP_MULTIPLIER );
 						} else if( COMMON_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.put( COPPER_COIN, 1 );
-							coins.put( IRON_COIN, 1 );
+							coins.put( CoinItems.COPPER_COIN, COMMON_DROP_MULTIPLIER );
+							coins.put( CoinItems.IRON_COIN, COMMON_DROP_MULTIPLIER );
 						} else if( RARE_MOB_DROPS.contains( entity.getType() ) ) {
-							coins.put( IRON_COIN, 1 );
-							coins.put( GOLD_COIN, 1 );
+							coins.put( CoinItems.IRON_COIN, COMMON_DROP_MULTIPLIER );
+							coins.put( CoinItems.GOLD_COIN, COMMON_DROP_MULTIPLIER );
 						} else if( EPIC_MOB_DROPS.contains( entity.getType() ) ) {
-							multiplier = 3;
-							coins.put( GOLD_COIN, multiplier );
+							coins.put( CoinItems.GOLD_COIN, EPIC_DROP_MULTIPLIER );
 						} // if, else if ...
 						
 						dropCoins( entity, damageSource, coins );
@@ -137,10 +140,24 @@ public class mobsDropCoinsFeature {
 		coins.forEach( ( coin, multiplier ) -> {
 			CoinComponent coinComponent = coin.getComponents().get( COIN_COMPONENT );
 			
-			if( null != coinComponent && MathUtil.hasChance( (coinComponent.dropChance() * multiplier) * lootingModifier ) ) {
-				int amount = (int) MathUtil.getRandomWithinRange(coinComponent.dropMinimum(), coinComponent.dropMaximum());
-				
-				entity.dropStack(new ItemStack(coin, amount));
+			if( null != coinComponent ) {
+				if( MathUtil.hasChance( (coinComponent.dropChance() * multiplier) * lootingModifier ) ) {
+					int amount = (int) MathUtil.getRandomWithinRange(coinComponent.dropMinimum(), coinComponent.dropMaximum());
+					
+					if( amount > 0 ) {
+						CollectableComponent collectableComponent = coin.getComponents().get( COLLECTABLE_COMPONENT );
+						
+						if( null != collectableComponent ) {
+							if( collectableComponent.canAddToCirculation( coin ) ) {
+								collectableComponent.addToCirculation( coin, amount );
+								
+								entity.dropStack(new ItemStack(coin, amount));
+							} // if
+						} else {
+							entity.dropStack(new ItemStack(coin, amount));
+						} // if, else
+					} // if
+				} // if
 			} // if
 		} );
 	}

@@ -2,7 +2,8 @@ package me.villagerunknown.villagercoin.data.type;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.villagerunknown.villagercoin.feature.coinFeature;
+import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -26,23 +27,23 @@ public record CurrencyComponent(int value) {
 	}
 	
 	public ItemStack getLargestCoin( int coinValue ) {
-		return coinFeature.getLargestCoin( coinValue );
+		return CoinCraftingFeature.getLargestCoin( coinValue );
 	}
 	
 	public ItemStack getLargerCoin( int coinValue ) {
-		return coinFeature.getLargerCoin( coinValue );
+		return CoinCraftingFeature.getLargerCoin( coinValue );
 	}
 	
 	public ItemStack getSmallerCoin( int coinValue ) {
-		return coinFeature.getSmallerCoin( coinValue );
+		return CoinCraftingFeature.getSmallerCoin( coinValue );
 	}
 	
 	public int getConversionValue( int fromValue, CurrencyComponent toCurrencyComponent ) {
-		return coinFeature.getConversionValue( fromValue, toCurrencyComponent.value());
+		return CoinCraftingFeature.getConversionValue( fromValue, toCurrencyComponent.value());
 	}
 	
 	public int getConversionValue( int fromValue, int toValue ) {
-		return coinFeature.getConversionValue( fromValue, toValue );
+		return CoinCraftingFeature.getConversionValue( fromValue, toValue );
 	}
 	
 	static {

@@ -1,6 +1,7 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
@@ -10,12 +11,15 @@ import net.minecraft.registry.RegistryKey;
 
 import java.util.Set;
 
-import static me.villagerunknown.villagercoin.feature.coinFeature.*;
 import static net.minecraft.loot.LootTables.*;
 
-public class structuresIncludeCoinsFeature {
+public class StructuresIncludeCoinsFeature {
 	
-	public static final Set<RegistryKey<LootTable>> COMMON_LOOT_TABLES = Set.of(
+	public static final int COMMON_LOOT_TABLE_ROLLS = 5;
+	public static final int RARE_LOOT_TABLE_ROLLS = 3;
+	public static final int EPIC_LOOT_TABLE_ROLLS = 1;
+	
+	public static Set<RegistryKey<LootTable>> COMMON_LOOT_TABLES = Set.of(
 			FISHING_JUNK_GAMEPLAY,
 			VILLAGE_WEAPONSMITH_CHEST,
 			VILLAGE_TOOLSMITH_CHEST,
@@ -35,7 +39,7 @@ public class structuresIncludeCoinsFeature {
 			VILLAGE_SAVANNA_HOUSE_CHEST
 	);
 	
-	public static final Set<RegistryKey<LootTable>> UNCOMMON_LOOT_TABLES = Set.of(
+	public static Set<RegistryKey<LootTable>> UNCOMMON_LOOT_TABLES = Set.of(
 			SPAWN_BONUS_CHEST,
 			SIMPLE_DUNGEON_CHEST,
 			ABANDONED_MINESHAFT_CHEST,
@@ -78,7 +82,7 @@ public class structuresIncludeCoinsFeature {
 			PILLAGER_OUTPOST_CHEST
 	);
 	
-	public static final Set<RegistryKey<LootTable>> RARE_LOOT_TABLES = Set.of(
+	public static Set<RegistryKey<LootTable>> RARE_LOOT_TABLES = Set.of(
 			JUNGLE_TEMPLE_CHEST,
 			TRAIL_RUINS_RARE_ARCHAEOLOGY,
 			TRIAL_CHAMBER_KEY_SPAWNER,
@@ -101,7 +105,7 @@ public class structuresIncludeCoinsFeature {
 			BURIED_TREASURE_CHEST
 	);
 	
-	public static final Set<RegistryKey<LootTable>> EPIC_LOOT_TABLES = Set.of(
+	public static Set<RegistryKey<LootTable>> EPIC_LOOT_TABLES = Set.of(
 			BASTION_TREASURE_CHEST,
 			BASTION_HOGLIN_STABLE_CHEST,
 			BASTION_OTHER_CHEST,
@@ -119,29 +123,29 @@ public class structuresIncludeCoinsFeature {
 				
 				if( COMMON_LOOT_TABLES.contains( registryKey ) || UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
-							.with(ItemEntry.builder(COPPER_COIN).weight(10))
-							.rolls(UniformLootNumberProvider.create(0, 5));
+							.with(ItemEntry.builder(CoinItems.COPPER_COIN).weight(CoinFeature.COPPER_LOOT_TABLE_WEIGHT))
+							.rolls(UniformLootNumberProvider.create(0, COMMON_LOOT_TABLE_ROLLS));
 				} // if
 				
 				if( UNCOMMON_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
-							.with(ItemEntry.builder(IRON_COIN).weight(7));
+							.with(ItemEntry.builder(CoinItems.IRON_COIN).weight(CoinFeature.IRON_LOOT_TABLE_WEIGHT));
 				} // if
 				
 				if( RARE_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
-							.with(ItemEntry.builder(IRON_COIN).weight(7))
-							.rolls(UniformLootNumberProvider.create(0, 7));
+							.with(ItemEntry.builder(CoinItems.IRON_COIN).weight(CoinFeature.IRON_LOOT_TABLE_WEIGHT))
+							.rolls(UniformLootNumberProvider.create(0, RARE_LOOT_TABLE_ROLLS));
 				}  // if
 				
 				if( RARE_LOOT_TABLES.contains( registryKey ) || EPIC_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
-							.with(ItemEntry.builder(GOLD_COIN).weight(5));
+							.with(ItemEntry.builder(CoinItems.GOLD_COIN).weight(CoinFeature.GOLD_LOOT_TABLE_WEIGHT));
 				}  // if
 				
 				if( EPIC_LOOT_TABLES.contains( registryKey ) ) {
 					poolBuilder
-							.rolls(UniformLootNumberProvider.create(0, 10));
+							.rolls(UniformLootNumberProvider.create(0, EPIC_LOOT_TABLE_ROLLS));
 				} // if
 				
 				lootBuilder.pool(poolBuilder);

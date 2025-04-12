@@ -1,9 +1,11 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.feature.coinFeature;
+import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinFeature;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.VillagerUtil;
+import me.villagerunknown.villagercoin.item.CoinItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -41,13 +43,13 @@ public class TradeOfferMixin {
 	private void TradeOffer(TradedItem firstBuyItem, Optional secondBuyItem, ItemStack sellItem, int _uses, int maxUses, boolean rewardingPlayerExperience, int specialPrice, int demandBonus, float priceMultiplier, int merchantExperience, CallbackInfo ci) {
 		if(
 			!Villagercoin.CONFIG.enableTradeModifications
-			|| coinFeature.COINS.containsValue( this.firstBuyItem.itemStack().getItem() )
-			|| coinFeature.COINS.containsValue( this.sellItem.getItem() )
+			|| CoinCraftingFeature.CRAFTABLE_COINS.containsValue( this.firstBuyItem.itemStack().getItem() )
+			|| CoinCraftingFeature.CRAFTABLE_COINS.containsValue( this.sellItem.getItem() )
 		) {
 			return;
 		} // if
 		
-		Item coin = coinFeature.COPPER_COIN;
+		Item coin = CoinItems.COPPER_COIN;
 		
 		if(
 			(
@@ -66,7 +68,7 @@ public class TradeOfferMixin {
 			|| this.sellItem.getItem().equals( Items.QUARTZ_BLOCK )
 			|| this.sellItem.getItem().equals( Items.QUARTZ_PILLAR )
 		) {
-			coin = coinFeature.GOLD_COIN;
+			coin = CoinItems.GOLD_COIN;
 		} else if(
 			merchantExperience > VillagerUtil.NOVICE_BUY_XP || this.sellItem.hasEnchantments()
 			|| this.firstBuyItem.itemStack().getItem().equals( Items.BLACK_WOOL )
@@ -74,7 +76,7 @@ public class TradeOfferMixin {
 			|| this.firstBuyItem.itemStack().getItem().equals( Items.BROWN_WOOL )
 			|| this.firstBuyItem.itemStack().getItem().equals( Items.GRAY_WOOL )
 		) {
-			coin = coinFeature.IRON_COIN;
+			coin = CoinItems.IRON_COIN;
 		} // if, else if
 		
 		// # Require Copper Coins for Leather Armor
@@ -85,7 +87,7 @@ public class TradeOfferMixin {
 			|| this.sellItem.getItem().equals( Items.LEATHER_CHESTPLATE )
 			|| this.sellItem.getItem().equals( Items.LEATHER_LEGGINGS )
 		) {
-			coin = coinFeature.COPPER_COIN;
+			coin = CoinItems.COPPER_COIN;
 		} // if
 		
 		// # Change Items in Trades for Coins
@@ -101,7 +103,7 @@ public class TradeOfferMixin {
 				this.firstBuyItem = new TradedItem( Items.EMERALD, this.firstBuyItem.itemStack().getCount() );
 			} // if
 			
-			this.sellItem = new ItemStack( coinFeature.GOLD_COIN, sellAmount );
+			this.sellItem = new ItemStack( CoinItems.GOLD_COIN, sellAmount );
 			
 		} else {
 			
@@ -110,7 +112,7 @@ public class TradeOfferMixin {
 			if( this.firstBuyItem.itemStack().getItem().equals( Items.EMERALD ) ) {
 				int amount = this.firstBuyItem.itemStack().getCount();
 				
-				if( coin.equals( coinFeature.GOLD_COIN ) ) {
+				if( coin.equals( CoinItems.GOLD_COIN ) ) {
 					amount = Math.clamp( amount / 2, 1, 32 );
 				} // if
 				
@@ -119,15 +121,15 @@ public class TradeOfferMixin {
 			
 			if( this.secondBuyItem.isPresent() ) {
 				if( this.secondBuyItem.get().itemStack().getItem().equals(Items.EMERALD) ) {
-					if( this.firstBuyItem.itemStack().getItem().equals( coinFeature.IRON_COIN ) ) {
-						this.secondBuyItem = Optional.of(new TradedItem(coinFeature.COPPER_COIN, this.secondBuyItem.get().itemStack().getCount()));
-					} else if( this.firstBuyItem.itemStack().getItem().equals( coinFeature.GOLD_COIN ) ) {
-						this.secondBuyItem = Optional.of(new TradedItem(coinFeature.IRON_COIN, this.secondBuyItem.get().itemStack().getCount()));
+					if( this.firstBuyItem.itemStack().getItem().equals( CoinItems.IRON_COIN ) ) {
+						this.secondBuyItem = Optional.of(new TradedItem( CoinItems.COPPER_COIN, this.secondBuyItem.get().itemStack().getCount() ));
+					} else if( this.firstBuyItem.itemStack().getItem().equals( CoinItems.GOLD_COIN ) ) {
+						this.secondBuyItem = Optional.of(new TradedItem( CoinItems.IRON_COIN, this.secondBuyItem.get().itemStack().getCount() ));
 					} // if, else if
 				} // if
 				
 				if( this.secondBuyItem.get().itemStack().getItem().equals(Items.GRAVEL) ) {
-					this.firstBuyItem = new TradedItem( coinFeature.IRON_COIN, this.firstBuyItem.itemStack().getCount() );
+					this.firstBuyItem = new TradedItem( CoinItems.IRON_COIN, this.firstBuyItem.itemStack().getCount() );
 				} // if
 			} // if
 			
@@ -138,7 +140,7 @@ public class TradeOfferMixin {
 			// # Give Gold Coin for Nether items
 			
 			if( this.firstBuyItem.itemStack().getItem().equals( Items.QUARTZ ) || this.firstBuyItem.itemStack().getItem().equals( Items.NETHER_WART ) ) {
-				this.sellItem = new ItemStack( coinFeature.GOLD_COIN, this.sellItem.getCount() );
+				this.sellItem = new ItemStack( CoinItems.GOLD_COIN, this.sellItem.getCount() );
 			} // if
 			
 			// # Require Gold Coin for Nether items, late-game items, and Enchanted Journeyman items
@@ -162,7 +164,7 @@ public class TradeOfferMixin {
 				|| this.sellItem.getItem().equals( Items.DIAMOND_CHESTPLATE )
 				|| this.sellItem.getItem().equals( Items.DIAMOND_LEGGINGS )
 			) {
-				this.firstBuyItem = new TradedItem( coinFeature.GOLD_COIN, this.firstBuyItem.itemStack().getCount() );
+				this.firstBuyItem = new TradedItem( CoinItems.GOLD_COIN, this.firstBuyItem.itemStack().getCount() );
 			} // if
 			
 			// # Require Iron Coin (Mostly for the Wandering Trader)
@@ -208,7 +210,7 @@ public class TradeOfferMixin {
 				|| this.sellItem.getItem().equals( Items.CHAINMAIL_CHESTPLATE )
 				|| this.sellItem.getItem().equals( Items.CHAINMAIL_LEGGINGS )
 			) {
-				this.firstBuyItem = new TradedItem( coinFeature.IRON_COIN, this.firstBuyItem.itemStack().getCount() );
+				this.firstBuyItem = new TradedItem( CoinItems.IRON_COIN, this.firstBuyItem.itemStack().getCount() );
 			} // if
 			
 		} // if, else

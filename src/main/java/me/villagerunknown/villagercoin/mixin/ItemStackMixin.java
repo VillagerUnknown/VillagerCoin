@@ -3,7 +3,6 @@ package me.villagerunknown.villagercoin.mixin;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.feature.coinFeature;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.dynamic.Codecs;
