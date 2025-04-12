@@ -21,19 +21,11 @@ public record CollectableComponent(int maximumAllowedInServer) {
 		this.maximumAllowedInServer = maximumAllowedInServer;
 	}
 	
-	public boolean isCollectable( Item item ) {
-		return CollectableCoinFeature.isCollectable( item );
-	}
-	
-	public void addCollectable( Item item ) {
-		CollectableCoinFeature.addCollectable( item );
-	}
-	
 	public int maximumAllowedInWorld() {
 		return maximumAllowedInServer;
 	}
 	
-	public static int collectablesInCirculation() {
+	public int collectablesInCirculation() {
 		return CollectableCoinFeature.collectablesInCirculation();
 	}
 	
@@ -57,7 +49,11 @@ public record CollectableComponent(int maximumAllowedInServer) {
 		CollectableCoinFeature.removeFromCirculation( item );
 	}
 	
-	public static void removeFromCirculation( Item item, boolean maximum ) {
+	public void removeFromCirculation( Item item, int amount ) {
+		CollectableCoinFeature.removeFromCirculation( item, amount );
+	}
+	
+	public void removeFromCirculation( Item item, boolean maximum ) {
 		CollectableCoinFeature.removeFromCirculation( item, maximum );
 	}
 	
