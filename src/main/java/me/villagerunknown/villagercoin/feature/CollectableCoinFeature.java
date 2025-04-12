@@ -1,6 +1,5 @@
 package me.villagerunknown.villagercoin.feature;
 
-import me.villagerunknown.villagercoin.data.type.CollectableComponent;
 import me.villagerunknown.villagercoin.item.CollectableCoinItem;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
@@ -8,8 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Rarity;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
@@ -21,9 +18,9 @@ public class CollectableCoinFeature {
 	public static int EMERALD_MAXIMUM_IN_CIRCULATION = 2;
 	public static int NETHERITE_MAXIMUM_IN_CIRCULATION = 1;
 	
-	public static int COPPER_VALUE = CoinFeature.COPPER_VALUE;
-	public static int IRON_VALUE = CoinFeature.IRON_VALUE;
-	public static int GOLD_VALUE = CoinFeature.GOLD_VALUE;
+	public static int COPPER_VALUE = CoinFeature.IRON_VALUE;
+	public static int IRON_VALUE = CoinFeature.IRON_VALUE * 2;
+	public static int GOLD_VALUE = CoinFeature.GOLD_VALUE * 2;
 	public static int EMERALD_VALUE = CoinFeature.EMERALD_VALUE;
 	public static int NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
 	
@@ -32,8 +29,6 @@ public class CollectableCoinFeature {
 	public static float GOLD_DROP_CHANCE = 0.00001F;
 	public static float EMERALD_DROP_CHANCE = 0.000001F;
 	public static float NETHERITE_DROP_CHANCE = 0.0000001F;
-	
-	public static Set<Item> COLLECTABLES = new HashSet<>();
 	
 	public static HashMap<Item, Integer> IN_CIRCULATION = new HashMap<>();
 	
@@ -46,18 +41,7 @@ public class CollectableCoinFeature {
 	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
 		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, flipChance, maximumAllowedInServer ), MOD_ID );
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
-		
-		addCollectable( item );
-		
 		return item;
-	}
-	
-	public static boolean isCollectable( Item item ) {
-		return COLLECTABLES.contains( item );
-	}
-	
-	public static void addCollectable( Item item ) {
-		COLLECTABLES.add( item );
 	}
 	
 	public static int collectablesInCirculation() {
@@ -86,8 +70,6 @@ public class CollectableCoinFeature {
 		} // if
 		
 		IN_CIRCULATION.put( item, amount );
-		Villagercoin.LOGGER.info( "Put into circulation: " + item.getName().getString() );
-		Villagercoin.LOGGER.info( "New total: " + amount );
 	}
 	
 	public static void removeFromCirculation( Item item ) {
@@ -105,7 +87,7 @@ public class CollectableCoinFeature {
 	public static void removeFromCirculation( Item item, int amount ) {
 		if( !IN_CIRCULATION.containsKey( item ) ) {
 			return;
-		}
+		} // if
 		
 		int newAmount = IN_CIRCULATION.get( item ) - amount;
 		
@@ -114,8 +96,6 @@ public class CollectableCoinFeature {
 		} else {
 			IN_CIRCULATION.put( item, newAmount );
 		} // if, else
-		
-		Villagercoin.LOGGER.info( "Removed from circulation: " + item.getName().getString() );
 	}
 	
 }
