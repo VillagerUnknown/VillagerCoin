@@ -41,11 +41,16 @@ public class CollectableCoinItem extends AbstractCoinItem {
 	}
 	
 	public void onItemEntityDestroyed(ItemEntity entity) {
-		Item item = entity.getStack().getItem();
+		ItemStack itemStack = entity.getStack();
+		CollectableComponent collectableComponent = itemStack.get( COLLECTABLE_COMPONENT );
 		
-//		if( CollectableCoinFeature.isInCirculation( item ) ) {
-//			CollectableCoinFeature.removeFromCirculation( item );
-//		} // if
+		if( null != collectableComponent ) {
+			Item item = itemStack.getItem();
+			
+			if( collectableComponent.isInCirculation( item ) ) {
+				collectableComponent.removeFromCirculation( item, itemStack.getCount() );
+			} // if
+		} // if
 		
 		super.onItemEntityDestroyed(entity);
 	}
