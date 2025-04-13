@@ -1,12 +1,16 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.villagercoin.data.persistent.PersistentItemExistenceData;
 import me.villagerunknown.villagercoin.item.CollectableCoinItem;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootTable;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rarity;
 
 import java.util.HashMap;
@@ -34,9 +38,17 @@ public class CollectableCoinFeature {
 	public static float EMERALD_DROP_CHANCE = 0.000001F;
 	public static float NETHERITE_DROP_CHANCE = 0.0000001F;
 	
-	public static HashMap<Item, Integer> IN_CIRCULATION = new HashMap<>();
+	private static MinecraftServer server;
 	
-	public static void execute() {}
+	public static void execute() {
+		registerServerStartedEvent();
+	}
+	
+	public static void registerServerStartedEvent() {
+		ServerLifecycleEvents.SERVER_STARTED.register(( server ) -> {
+			CollectableCoinFeature.server = server;
+		});
+	}
 	
 	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer ) {
 		return registerCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, new Item.Settings() );
@@ -57,7 +69,7 @@ public class CollectableCoinFeature {
 	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
 		Item item = registerCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, settings );
 		
-		StructuresIncludeCoinsFeature.addCoinToLootTable( item, lootTables );
+		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
 		return item;
@@ -83,17 +95,31 @@ public class CollectableCoinFeature {
 		return registerCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, lootTables, entityDrops, settings );
 	}
 	
+	public static HashMap<Item, Integer> getItemsInExistence() {
+		PersistentItemExistenceData state = PersistentItemExistenceData.getServerState( CollectableCoinFeature.server );
+		
+		return state.ITEMS_IN_EXISTENCE;
+	}
+	
+	public static void setItemsInExistence( HashMap<Item, Integer> itemsInExistence ) {
+		PersistentItemExistenceData state = PersistentItemExistenceData.getServerState( CollectableCoinFeature.server );
+		
+		state.ITEMS_IN_EXISTENCE = itemsInExistence;
+	}
+	
 	public static int collectablesInCirculation() {
-		return IN_CIRCULATION.size();
+		return getItemsInExistence().size();
 	}
 	
 	public static boolean isInCirculation( Item item ) {
-		return IN_CIRCULATION.containsKey( item );
+		return getItemsInExistence().containsKey( item );
 	}
 	
 	public static boolean canAddToCirculation( Item item, int maximumAllowedInServer ) {
-		if( IN_CIRCULATION.containsKey( item ) ) {
-			return IN_CIRCULATION.get(item) < maximumAllowedInServer;
+		HashMap<Item, Integer> itemsInExistence = getItemsInExistence();
+		
+		if( itemsInExistence.containsKey( item ) ) {
+			return itemsInExistence.get(item) < maximumAllowedInServer;
 		} // if
 		
 		return maximumAllowedInServer >= 1;
@@ -104,11 +130,15 @@ public class CollectableCoinFeature {
 	}
 	
 	public static void addToCirculation( Item item, int amount ) {
-		if( IN_CIRCULATION.containsKey( item ) ) {
-			amount = IN_CIRCULATION.get( item ) + amount;
+		HashMap<Item, Integer> itemsInExistence = getItemsInExistence();
+		
+		if( itemsInExistence.containsKey( item ) ) {
+			amount = itemsInExistence.get( item ) + amount;
 		} // if
 		
-		IN_CIRCULATION.put( item, amount );
+		itemsInExistence.put( item, amount );
+		
+		setItemsInExistence( itemsInExistence );
 	}
 	
 	public static void removeFromCirculation( Item item ) {
@@ -124,17 +154,21 @@ public class CollectableCoinFeature {
 	}
 	
 	public static void removeFromCirculation( Item item, int amount ) {
-		if( !IN_CIRCULATION.containsKey( item ) ) {
+		HashMap<Item, Integer> itemsInExistence = getItemsInExistence();
+		
+		if( !itemsInExistence.containsKey( item ) ) {
 			return;
 		} // if
 		
-		int newAmount = IN_CIRCULATION.get( item ) - amount;
+		int newAmount = itemsInExistence.get( item ) - amount;
 		
 		if( newAmount <= 0 ) {
-			IN_CIRCULATION.remove( item );
+			itemsInExistence.remove( item );
 		} else {
-			IN_CIRCULATION.put( item, newAmount );
+			itemsInExistence.put( item, newAmount );
 		} // if, else
+		
+		setItemsInExistence( itemsInExistence );
 	}
 	
 }

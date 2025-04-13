@@ -2,7 +2,7 @@ package me.villagerunknown.villagercoin.mixin;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import me.villagerunknown.villagercoin.data.type.CollectableComponent;
+import me.villagerunknown.villagercoin.data.component.CollectableComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;

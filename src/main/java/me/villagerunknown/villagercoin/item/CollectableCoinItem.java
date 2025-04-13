@@ -1,8 +1,8 @@
 package me.villagerunknown.villagercoin.item;
 
-import me.villagerunknown.villagercoin.data.type.CoinComponent;
-import me.villagerunknown.villagercoin.data.type.CollectableComponent;
-import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
+import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.data.component.CollectableComponent;
+import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
 import net.minecraft.util.Rarity;
 
 import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;

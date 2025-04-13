@@ -1,7 +1,7 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
+import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;

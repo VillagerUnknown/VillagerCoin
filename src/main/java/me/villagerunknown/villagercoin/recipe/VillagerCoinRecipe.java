@@ -1,9 +1,7 @@
 package me.villagerunknown.villagercoin.recipe;
 
-import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
+import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
-import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
@@ -12,7 +10,6 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
-import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
 public class VillagerCoinRecipe extends SpecialCraftingRecipe {

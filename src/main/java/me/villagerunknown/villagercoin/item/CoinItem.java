@@ -1,8 +1,8 @@
 package me.villagerunknown.villagercoin.item;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.type.CoinComponent;
-import me.villagerunknown.villagercoin.data.type.CurrencyComponent;
+import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;

@@ -2,10 +2,8 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.type.CoinComponent;
-import me.villagerunknown.villagercoin.item.CoinItems;
+import me.villagerunknown.villagercoin.data.component.CoinComponent;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
@@ -130,7 +128,7 @@ public class StructuresIncludeCoinsFeature {
 		registerLootTableEvent();
 	}
 	
-	public static void addCoinToLootTable( Item coin, Set<RegistryKey<LootTable>> lootTables ) {
+	public static void addCoinToLootTables(Item coin, Set<RegistryKey<LootTable>> lootTables ) {
 		for (RegistryKey<LootTable> lootTable : lootTables) {
 			if( !LOOT_TABLES.containsKey( lootTable ) ) {
 				LOOT_TABLES.put( lootTable, new HashSet<>() );

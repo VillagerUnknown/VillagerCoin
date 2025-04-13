@@ -102,7 +102,7 @@ public class CoinFeature {
 	public static Item registerCraftableCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
 		Item item = registerCraftableCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, settings );
 		
-		StructuresIncludeCoinsFeature.addCoinToLootTable( item, lootTables );
+		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
 		return item;

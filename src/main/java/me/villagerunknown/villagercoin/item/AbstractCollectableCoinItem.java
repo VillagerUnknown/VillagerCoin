@@ -1,31 +1,17 @@
 package me.villagerunknown.villagercoin.item;
 
-import me.villagerunknown.platform.util.EntityUtil;
-import me.villagerunknown.platform.util.MathUtil;
-import me.villagerunknown.platform.util.MessageUtil;
-import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.type.CoinComponent;
-import me.villagerunknown.villagercoin.data.type.CollectableComponent;
-import net.minecraft.entity.Entity;
+import me.villagerunknown.villagercoin.data.component.CollectableComponent;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-import java.util.List;
-
-import static me.villagerunknown.villagercoin.Villagercoin.*;
 import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;
 
 public abstract class AbstractCollectableCoinItem extends AbstractFlippableCoinItem {

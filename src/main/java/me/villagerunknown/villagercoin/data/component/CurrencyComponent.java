@@ -1,9 +1,8 @@
-package me.villagerunknown.villagercoin.data.type;
+package me.villagerunknown.villagercoin.data.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
-import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;

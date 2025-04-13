@@ -1,4 +1,4 @@
-package me.villagerunknown.villagercoin.data.type;
+package me.villagerunknown.villagercoin.data.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

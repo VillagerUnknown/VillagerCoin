@@ -2,9 +2,8 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.type.CoinComponent;
-import me.villagerunknown.villagercoin.data.type.CollectableComponent;
-import me.villagerunknown.villagercoin.item.CoinItems;
+import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.data.component.CollectableComponent;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
