@@ -108,6 +108,11 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 * enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
 * lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
 * maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
+* goldCoinSellItemDivisor - Price divisor for Gold Coin trades. (Default: 2)
+* goldCoinSellItemMaximum - Maximum amount of Gold Coins for Gold Coin trades.
+* goldForDiamond - Amount of Gold Coins to reward for a single Diamond.
+* goldForEmerald - Amount of Gold Coins to reward for a single Emerald.
+* chanceDiamondBecomesEmeraldTrade - Chance that a Diamond trade becomes an Emerald trade.
 
 ## Support
 

@@ -5,7 +5,6 @@ import me.villagerunknown.villagercoin.item.CollectableCoinItem;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootTable;

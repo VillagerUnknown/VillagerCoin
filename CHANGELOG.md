@@ -7,8 +7,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Added option to set maximum number of coins in a stack. The default remains 5,000.
+- Added options for managing Gold Coin trades.
 - Added the `EdibleCoinFeature` class to allow addon developers to easily add edible coins that players can eat.
 - Added the `CollectableCoinFeature` class to allow addon developers to easily add collectable coins with a limited number in existence.
+- Added the `InventoryEffectCoinFeature` class to allow addon developers to easily add coins with a limited number in existence that apply status effects when in a player's inventory.
 
 ### Changed
 

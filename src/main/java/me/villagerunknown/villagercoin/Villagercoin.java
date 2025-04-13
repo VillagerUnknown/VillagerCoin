@@ -77,6 +77,8 @@ public class Villagercoin implements ModInitializer {
 		featureManager.addFeature( "structuresIncludeCoins", StructuresIncludeCoinsFeature::execute );
 		featureManager.addFeature( "mobsDropCoins", MobsDropCoinsFeature::execute );
 		featureManager.addFeature( "merchantCoinTrading", MerchantCoinTradingFeature::execute );
+		
+		featureManager.addFeature( "inventoryEffectCoins", InventoryEffectCoinFeature::execute );
 	}
 	
 	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
