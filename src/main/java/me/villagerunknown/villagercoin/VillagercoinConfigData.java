@@ -14,16 +14,10 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public boolean addCoinsToStructureLootTables = true;
 	
 	@ConfigEntry.Category("General")
-	public boolean addEdibleCoinsToStructureLootTables = true;
-	
-	@ConfigEntry.Category("General")
 	public boolean addCoinsToMobDrops = true;
 	
 	@ConfigEntry.Category("General")
 	public boolean enablePigCoinDrops = false;
-	
-	@ConfigEntry.Category("General")
-	public boolean addEdibleCoinsToMobDrops = true;
 	
 	@ConfigEntry.Category("General")
 	public boolean enableCoinFlipping = true;
@@ -36,5 +30,20 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	
 	@ConfigEntry.Category("General")
 	public int maximumCoinStackSize = 5000;
+	
+	@ConfigEntry.Category("General")
+	public int goldCoinSellItemDivisor = 2;
+	
+	@ConfigEntry.Category("General")
+	public int goldCoinSellItemMaximum = 32;
+	
+	@ConfigEntry.Category("General")
+	public int goldForDiamond = 16;
+	
+	@ConfigEntry.Category("General")
+	public int goldForEmerald = 8;
+	
+	@ConfigEntry.Category("General")
+	public float chanceDiamondBecomesEmeraldTrade = 0.5F;
 	
 }

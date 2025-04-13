@@ -11,6 +11,11 @@
   "text.autoconfig.villagerunknown-villagercoin.option.enableTradeModifications": "Enable Trade Modifications",
   "text.autoconfig.villagerunknown-villagercoin.option.lootingBonusPerLevel": "Looting Bonus per Level",
   "text.autoconfig.villagerunknown-villagercoin.option.maximumCoinStackSize": "Maximum Coin Stack Size",
+  "text.autoconfig.villagerunknown-villagercoin.option.goldCoinSellItemDivisor": "Gold Coin Sell Item Divisor",
+  "text.autoconfig.villagerunknown-villagercoin.option.goldCoinSellItemMaximum": "Gold Coin Sell Item Maximum",
+  "text.autoconfig.villagerunknown-villagercoin.option.goldForDiamond": "Gold Coins for Diamond Trades",
+  "text.autoconfig.villagerunknown-villagercoin.option.goldForEmerald": "Gold Coins for Emerald Trades",
+  "text.autoconfig.villagerunknown-villagercoin.option.chanceDiamondBecomesEmeraldTrade": "Chance Diamond Trade Becomes Emerald Trade",
 
   "item.villagerunknown-villagercoin.villager_coin.flip.heads": "%s flipped a coin and it landed heads up.",
   "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",

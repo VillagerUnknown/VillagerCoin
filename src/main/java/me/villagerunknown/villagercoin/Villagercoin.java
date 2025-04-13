@@ -6,10 +6,7 @@ import me.villagerunknown.platform.manager.featureManager;
 import me.villagerunknown.villagercoin.data.component.CoinComponent;
 import me.villagerunknown.villagercoin.data.component.CollectableComponent;
 import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
-import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
-import me.villagerunknown.villagercoin.feature.CoinFeature;
-import me.villagerunknown.villagercoin.feature.MobsDropCoinsFeature;
-import me.villagerunknown.villagercoin.feature.StructuresIncludeCoinsFeature;
+import me.villagerunknown.villagercoin.feature.*;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -79,6 +76,7 @@ public class Villagercoin implements ModInitializer {
 		
 		featureManager.addFeature( "structuresIncludeCoins", StructuresIncludeCoinsFeature::execute );
 		featureManager.addFeature( "mobsDropCoins", MobsDropCoinsFeature::execute );
+		featureManager.addFeature( "merchantCoinTrading", MerchantCoinTradingFeature::execute );
 	}
 	
 	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
