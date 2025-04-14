@@ -6,7 +6,7 @@ Coins can be converted between different types through the crafting table.
 Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite.
 
 Each type of coin stacks up to 5,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
-The stack size can be configured, but it's limited to a maximum of 1073741822.
+The stack size can be configured, but it's limited to a maximum of 1,073,741,822.
 
 Learn how to customize Villager Coin from the Developer Wiki at the bottom of this page.
 
@@ -40,6 +40,8 @@ These coins are mostly here to help players who amass a large wealth in their wo
 * 100 Iron Coins = 1 Gold Coin
 * 100 Gold Coins = 1 Emerald Coin
 * 100 Emerald Coins = 1 Netherite Coin
+
+The crafting tables will calculate the conversions for you.
 
 **Currency Conversion Crafting**
 
