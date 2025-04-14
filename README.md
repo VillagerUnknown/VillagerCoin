@@ -1,11 +1,14 @@
 # VillagerUnknown's Villager Coin
 
-Adds a custom currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades.
+Villager Coin adds a custom coin currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades. 
+Coins can be converted between different types through the crafting table.
 
 Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite.
 
 Each type of coin stacks up to 5,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
 The stack size can be configured, but it's limited to a maximum of 1073741822.
+
+Learn how to customize Villager Coin from the Developer Wiki at the bottom of this page.
 
 **Features**
 
@@ -118,3 +121,11 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 
 * Request features and report bugs at https://github.com/VillagerUnknown/VillagerCoin/issues
 * View the changelog at https://github.com/VillagerUnknown/VillagerCoin/blob/main/CHANGELOG.md
+
+## Developer Wiki
+
+Villager Coin allows players, and communities, to design their own coin economy. 
+Mod and resource pack developers can easily customize Villager Coin to make the coins look and function however they'd like. 
+Villager Coin provides the core features while allowing users to choose and create the add-on features they want.
+
+* Learn more about customizing Villager Coin at https://github.com/VillagerUnknown/VillagerCoin/wiki
