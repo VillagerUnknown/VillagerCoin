@@ -132,7 +132,7 @@ _Coins_
 
 _Effect Coins_
 
-* inventoryEffectChancePerTick - Chance per tick that a coin with an effect will apply the effect.
+* inventoryEffectChancePerTick - Chance per tick that a coin with an effect will apply the effect. (Default: 1)
 
 _Loot Tables_
 
