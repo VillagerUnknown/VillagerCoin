@@ -108,6 +108,7 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 
 _Coins_
 
+* currencyConversionMultiplier - The conversion value between currencies in the following order: Copper <-> Iron <-> Gold <-> Emerald <-> Netherite. (Default: 100)
 * maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
 * enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
 * copperDropMinimum - Minimum amount to drop for Copper coins, if the chance is successful.

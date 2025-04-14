@@ -11,6 +11,9 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	 */
 	
 	@ConfigEntry.Category("Coins")
+	public int currencyConversionMultiplier = 100;
+	
+	@ConfigEntry.Category("Coins")
 	public int maximumCoinStackSize = 5000;
 	
 	@ConfigEntry.Category("Coins")

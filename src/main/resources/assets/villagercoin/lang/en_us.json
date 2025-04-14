@@ -7,6 +7,7 @@
   "text.autoconfig.villagerunknown-villagercoin.category.MobDrops": "Mob Drops",
   "text.autoconfig.villagerunknown-villagercoin.category.Trades": "Trades",
 
+  "text.autoconfig.villagerunknown-villagercoin.option.currencyConversionMultiplier": "Currency Conversion Multiplier",
   "text.autoconfig.villagerunknown-villagercoin.option.copperDropMinimum": "Minimum Copper Drop Amount",
   "text.autoconfig.villagerunknown-villagercoin.option.ironDropMinimum": "Minimum Iron Drop Amount",
   "text.autoconfig.villagerunknown-villagercoin.option.goldDropMinimum": "Minimum Gold Drop Amount",

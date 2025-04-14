@@ -18,11 +18,13 @@ public class CoinFeature {
 	
 	public static String COIN_STRING = "villager_coin";
 	
+	public static final int CURRENCY_CONVERSION_MULTIPLIER = Villagercoin.CONFIG.currencyConversionMultiplier;
+	
 	public static final int COPPER_VALUE = 1;
-	public static final int IRON_VALUE = 100;
-	public static final int GOLD_VALUE = 10000;
-	public static final int EMERALD_VALUE = 1000000;
-	public static final int NETHERITE_VALUE = 100000000;
+	public static final int IRON_VALUE = COPPER_VALUE * CURRENCY_CONVERSION_MULTIPLIER;
+	public static final int GOLD_VALUE = IRON_VALUE * CURRENCY_CONVERSION_MULTIPLIER;
+	public static final int EMERALD_VALUE = GOLD_VALUE * CURRENCY_CONVERSION_MULTIPLIER;
+	public static final int NETHERITE_VALUE = EMERALD_VALUE * CURRENCY_CONVERSION_MULTIPLIER;
 	
 	public static final Rarity COPPER_RARITY = Rarity.COMMON;
 	public static final Rarity IRON_RARITY = Rarity.UNCOMMON;
