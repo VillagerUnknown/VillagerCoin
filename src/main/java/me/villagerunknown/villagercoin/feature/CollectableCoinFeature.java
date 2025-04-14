@@ -32,10 +32,10 @@ public class CollectableCoinFeature {
 	public static int NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
 	
 	public static float COPPER_DROP_CHANCE = 0.001F;
-	public static float IRON_DROP_CHANCE = 0.0001F;
-	public static float GOLD_DROP_CHANCE = 0.00001F;
-	public static float EMERALD_DROP_CHANCE = 0.000001F;
-	public static float NETHERITE_DROP_CHANCE = 0.0000001F;
+	public static float IRON_DROP_CHANCE = 0.0005F;
+	public static float GOLD_DROP_CHANCE = 0.0001F;
+	public static float EMERALD_DROP_CHANCE = 0.00005F;
+	public static float NETHERITE_DROP_CHANCE = 0.00001F;
 	
 	private static MinecraftServer server;
 	
