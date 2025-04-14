@@ -43,11 +43,11 @@ public abstract class AbstractCollectableCoinItem extends AbstractFlippableCoinI
 	
 	@Override
 	public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
-		if( !player.isInCreativeMode() ) {
+		if( !player.getWorld().isClient() && !player.isInCreativeMode() ) {
 			Item item = stack.getItem();
 			CollectableComponent collectableComponent = stack.get(COLLECTABLE_COMPONENT);
 			
-			if( null != collectableComponent && !collectableComponent.canAddToCirculation( item ) ) {
+			if( null != collectableComponent && collectableComponent.canAddToCirculation( item ) ) {
 				collectableComponent.addToCirculation( item );
 			} // if
 		} // if
