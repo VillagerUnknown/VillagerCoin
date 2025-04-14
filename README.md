@@ -45,7 +45,7 @@ These coins are mostly here to help players who amass a large wealth in their wo
 
 Convert between currencies using the crafting table and auto-crafter.
 
-* Insert 99 or fewer of the same coin in a crafting table to convert down.
+* Insert a single stack of 99 or fewer of the same coin in a crafting table to convert down.
 * Insert 100 or more of the same coin in a crafting table to convert up.
 
 You can sum up your coins by placing them all in the crafting table together. 
