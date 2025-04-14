@@ -65,6 +65,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public float netheriteDropChance = 0F;
 	
 	/**
+	 * Effect Coins
+	 */
+	
+	@ConfigEntry.Category("EffectCoins")
+	public float inventoryEffectChancePerTick = 1F;
+	
+	/**
 	 * Loot Tables
 	 */
 	

@@ -130,6 +130,10 @@ _Coins_
 * emeraldDropChance - Chance that Emerald coins will drop on mob death or loot table generation.
 * netheriteDropChance - Chance that Netherite coins will drop on mob death or loot table generation.
 
+_Effect Coins_
+
+* inventoryEffectChancePerTick - Chance per tick that a coin with an effect will apply the effect.
+
 _Loot Tables_
 
 * addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)

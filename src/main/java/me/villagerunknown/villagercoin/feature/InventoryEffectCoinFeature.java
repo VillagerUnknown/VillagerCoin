@@ -1,6 +1,7 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.EntityUtil;
+import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.component.CoinComponent;
