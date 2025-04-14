@@ -30,23 +30,23 @@ public class CoinFeature {
 	public static final Rarity EMERALD_RARITY = Rarity.EPIC;
 	public static final Rarity NETHERITE_RARITY = Rarity.EPIC;
 	
-	public static final int COPPER_DROP_MINIMUM = 1;
-	public static final int IRON_DROP_MINIMUM = 0;
-	public static final int GOLD_DROP_MINIMUM = 0;
-	public static final int EMERALD_DROP_MINIMUM = 0;
-	public static final int NETHERITE_DROP_MINIMUM = 0;
+	public static final int COPPER_DROP_MINIMUM = Villagercoin.CONFIG.copperDropMinimum;
+	public static final int IRON_DROP_MINIMUM = Villagercoin.CONFIG.ironDropMinimum;
+	public static final int GOLD_DROP_MINIMUM = Villagercoin.CONFIG.goldDropMinimum;
+	public static final int EMERALD_DROP_MINIMUM = Villagercoin.CONFIG.emeraldDropMinimum;
+	public static final int NETHERITE_DROP_MINIMUM = Villagercoin.CONFIG.netheriteDropMinimum;
 	
-	public static final int COPPER_DROP_MAXIMUM = 10;
-	public static final int IRON_DROP_MAXIMUM = 5;
-	public static final int GOLD_DROP_MAXIMUM = 3;
-	public static final int EMERALD_DROP_MAXIMUM = 0;
-	public static final int NETHERITE_DROP_MAXIMUM = 0;
+	public static final int COPPER_DROP_MAXIMUM = Villagercoin.CONFIG.copperDropMaximum;
+	public static final int IRON_DROP_MAXIMUM = Villagercoin.CONFIG.ironDropMaximum;
+	public static final int GOLD_DROP_MAXIMUM = Villagercoin.CONFIG.goldDropMaximum;
+	public static final int EMERALD_DROP_MAXIMUM = Villagercoin.CONFIG.emeraldDropMaximum;
+	public static final int NETHERITE_DROP_MAXIMUM = Villagercoin.CONFIG.netheriteDropMaximum;
 	
-	public static final float COPPER_DROP_CHANCE = 0.5F;
-	public static final float IRON_DROP_CHANCE = 0.25F;
-	public static final float GOLD_DROP_CHANCE = 0.1F;
-	public static final float EMERALD_DROP_CHANCE = 0F;
-	public static final float NETHERITE_DROP_CHANCE = 0F;
+	public static final float COPPER_DROP_CHANCE = Villagercoin.CONFIG.copperDropChance;
+	public static final float IRON_DROP_CHANCE = Villagercoin.CONFIG.ironDropChance;
+	public static final float GOLD_DROP_CHANCE = Villagercoin.CONFIG.goldDropChance;
+	public static final float EMERALD_DROP_CHANCE = Villagercoin.CONFIG.emeraldDropChance;
+	public static final float NETHERITE_DROP_CHANCE = Villagercoin.CONFIG.netheriteDropChance;
 	
 	public static final float COPPER_FLIP_CHANCE = 0.5F;
 	public static final float IRON_FLIP_CHANCE = 0.25F;

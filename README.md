@@ -1,7 +1,6 @@
 # VillagerUnknown's Villager Coin
 
-Villager Coin adds a custom coin currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades. 
-Coins can be converted between different types through the crafting table.
+Villager Coin adds a customizable coin currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades. Coins can be converted between different types through the crafting table.
 
 Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite.
 
@@ -16,9 +15,10 @@ Learn how to customize Villager Coin from the Developer Wiki at the bottom of th
 * Adds advancements for obtaining coins.
 * Convert between the different coins with the crafting tables.
 * Smelt down Copper, Iron, and Gold coins for their respective resources.
+* Configurable drop chances.
 * Optionally find coins in vanilla structures.
 * Optionally earn coins by killing some vanilla mobs.
-* Optionally earn coins by killing pigs, hoglins, and zoglins. (For easier coins.)
+* Optionally earn coins by killing breedable mobs. (For easier coins.)
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 * Optionally allow players to flip individual coins for a heads or tails result in chat.
 * Configurable loot bonus per level chance for coins from mobs.
@@ -70,7 +70,7 @@ Nether and End structures are more likely to reward Iron and Gold Villager Coins
 
 Coins can optionally drop when a player kills Humanoid mobs, Bosses, and Shulkers. 
 
-A separate option exists to drop coins from Pigs, Hoglins, and Zoglins if you want coins to be more common.
+A separate option exists to drop coins from breedable mobs if you want coins to be more common.
 
 The value of the coins will vary depending on the difficulty of the mob. 
 The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Skeleton, or Piglin.
@@ -86,12 +86,12 @@ With the trade modifications enabled:
 * Novice to Expert Villager trades typically trade in Iron Villager Coins.
 * Master Villager trades typically trade in Gold Villager Coins.
 * Most enchanted books, armor, tools, and weapons will cost Gold Villager Coins, 
-but at half of the original emerald amount.
+but at half of the original emerald amount. These are the most expensive trades.
 * Iron trades reward Iron Villager Coins.
 * Gold trades reward Gold Villager Coins.
 * Trades with Nether items typically trade in Gold Villager Coins.
-* Diamond trades, giving 16 Gold Villager Coins, have a 50% chance of being an Emerald trade giving 8 Gold Villager Coins. 
-These are the most rewarding trades available.
+* The Diamond trade, giving 16 Gold Villager Coins (by default), has a 50% chance of being an Emerald trade giving 8 Gold Villager Coins (by default). 
+These are the most rewarding trades available and they're configurable.
 
 **Additional Notes**
 
@@ -106,13 +106,39 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 
 **Options**
 
-* addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
-* addCoinsToMobDrops - Adds Coins to Mob drops. (Default: true)
-* enablePigCoinDrops - Allows Copper Coins to drop from Pigs and Iron coins from Hoglins, and Zoglins. (Default: false)
-* enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
-* enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
-* lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
+_Coins_
+
 * maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
+* enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
+* copperDropMinimum - Minimum amount to drop for Copper coins, if the chance is successful.
+* ironDropMinimum - Minimum amount to drop for Iron coins, if the chance is successful.
+* goldDropMinimum - Minimum amount to drop for Gold coins, if the chance is successful.
+* emeraldDropMinimum - Minimum amount to drop for Emerald coins, if the chance is successful.
+* netheriteDropMinimum - Minimum amount to drop for Netherite coins, if the chance is successful.
+* copperDropMaximum - Maximum amount to drop for Copper coins, if the chance is successful.
+* ironDropMaximum - Maximum amount to drop for Iron coins, if the chance is successful.
+* goldDropMaximum - Maximum amount to drop for Gold coins, if the chance is successful.
+* emeraldDropMaximum - Maximum amount to drop for Emerald coins, if the chance is successful.
+* netheriteDropMaximum - Maximum amount to drop for Netherite coins, if the chance is successful.
+* copperDropChance - Chance that Copper coins will drop on mob death or loot table generation.
+* ironDropChance - Chance that Iron coins will drop on mob death or loot table generation.
+* goldDropChance - Chance that Gold coins will drop on mob death or loot table generation.
+* emeraldDropChance - Chance that Emerald coins will drop on mob death or loot table generation.
+* netheriteDropChance - Chance that Netherite coins will drop on mob death or loot table generation.
+
+_Loot Tables_
+
+* addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
+
+_Mob Drops_
+
+* addCoinsToMobDrops - Adds Villager Coins to Mob drops. (Default: true)
+* enableBreedableMobDrops - Allows coins to drop from mobs with a breeding mechanic. (Default: false)
+* lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
+
+_Trades_
+
+* enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
 * goldCoinSellItemDivisor - Price divisor for Gold Coin trades. (Default: 2)
 * goldCoinSellItemMaximum - Maximum amount of Gold Coins for Gold Coin trades.
 * goldForDiamond - Amount of Gold Coins to reward for a single Diamond.

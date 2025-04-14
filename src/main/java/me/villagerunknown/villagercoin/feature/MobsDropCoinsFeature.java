@@ -35,6 +35,35 @@ public class MobsDropCoinsFeature {
 	public static final int RARE_DROP_MULTIPLIER = 2;
 	public static final int EPIC_DROP_MULTIPLIER = 3;
 	
+	public static Set<EntityType<?>> OPTIONAL_MOB_DROPS = new HashSet<>(Arrays.asList(
+			EntityType.PIG,
+			EntityType.HOGLIN,
+			EntityType.ZOGLIN,
+			EntityType.COW,
+			EntityType.SHEEP,
+			EntityType.HORSE,
+			EntityType.LLAMA,
+			EntityType.TRADER_LLAMA,
+			EntityType.RABBIT,
+			EntityType.PANDA,
+			EntityType.CAMEL,
+			EntityType.CAT,
+			EntityType.WOLF,
+			EntityType.FOX,
+			EntityType.CHICKEN,
+			EntityType.MOOSHROOM,
+			EntityType.FROG,
+			EntityType.GOAT,
+			EntityType.DONKEY,
+			EntityType.MULE,
+			EntityType.OCELOT,
+			EntityType.PARROT,
+			EntityType.AXOLOTL,
+			EntityType.POLAR_BEAR,
+			EntityType.SNIFFER,
+			EntityType.TURTLE
+	));
+	
 	public static Set<EntityType<?>> COMMON_MOB_DROPS = new HashSet<>(Arrays.asList(
 			EntityType.DROWNED,
 			EntityType.ENDERMAN,
@@ -73,10 +102,8 @@ public class MobsDropCoinsFeature {
 	public static void execute(){
 		registerMobDropsEvent();
 		
-		if( Villagercoin.CONFIG.enablePigCoinDrops ) {
-			COMMON_MOB_DROPS.add( EntityType.PIG );
-			COMMON_MOB_DROPS.add( EntityType.HOGLIN );
-			COMMON_MOB_DROPS.add( EntityType.ZOGLIN );
+		if( Villagercoin.CONFIG.enableBreedableMobDrops) {
+			COMMON_MOB_DROPS.addAll( OPTIONAL_MOB_DROPS );
 		} // if
 	}
 	
