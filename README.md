@@ -111,16 +111,19 @@ _Coins_
 * currencyConversionMultiplier - The conversion value between currencies in the following order: Copper <-> Iron <-> Gold <-> Emerald <-> Netherite. (Default: 100)
 * maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
 * enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
+
 * copperDropMinimum - Minimum amount to drop for Copper coins, if the chance is successful.
 * ironDropMinimum - Minimum amount to drop for Iron coins, if the chance is successful.
 * goldDropMinimum - Minimum amount to drop for Gold coins, if the chance is successful.
 * emeraldDropMinimum - Minimum amount to drop for Emerald coins, if the chance is successful.
 * netheriteDropMinimum - Minimum amount to drop for Netherite coins, if the chance is successful.
+
 * copperDropMaximum - Maximum amount to drop for Copper coins, if the chance is successful.
 * ironDropMaximum - Maximum amount to drop for Iron coins, if the chance is successful.
 * goldDropMaximum - Maximum amount to drop for Gold coins, if the chance is successful.
 * emeraldDropMaximum - Maximum amount to drop for Emerald coins, if the chance is successful.
 * netheriteDropMaximum - Maximum amount to drop for Netherite coins, if the chance is successful.
+
 * copperDropChance - Chance that Copper coins will drop on mob death or loot table generation.
 * ironDropChance - Chance that Iron coins will drop on mob death or loot table generation.
 * goldDropChance - Chance that Gold coins will drop on mob death or loot table generation.

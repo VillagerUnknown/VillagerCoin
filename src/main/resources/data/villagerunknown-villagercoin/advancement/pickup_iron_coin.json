@@ -16,7 +16,7 @@
     "announce_to_chat": true,
     "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
     "description": {
-      "translate": "advancements.villagercoin.pickup_iron_coin.description"
+      "translate": "advancements.villagerunknown-villagercoin.pickup_iron_coin.description"
     },
     "icon": {
       "count": 1,
@@ -24,7 +24,7 @@
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.villagercoin.pickup_iron_coin.title"
+      "translate": "advancements.villagerunknown-villagercoin.pickup_iron_coin.title"
     }
   },
   "requirements": [

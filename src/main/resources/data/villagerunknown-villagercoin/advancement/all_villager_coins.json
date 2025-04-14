@@ -26,7 +26,7 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.villagercoin.all_villager_coins.description"
+      "translate": "advancements.villagerunknown-villagercoin.all_villager_coins.description"
     },
     "frame": "challenge",
     "icon": {
@@ -34,7 +34,7 @@
       "id": "villagerunknown-villagercoin:netherite_villager_coin"
     },
     "title": {
-      "translate": "advancements.villagercoin.all_villager_coins.title"
+      "translate": "advancements.villagerunknown-villagercoin.all_villager_coins.title"
     }
   },
   "requirements": [

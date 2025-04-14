@@ -25,7 +25,7 @@ public class EdibleCoinFeature {
 	
 	public static float COPPER_DROP_CHANCE = CoinFeature.COPPER_DROP_CHANCE / 4;
 	public static float IRON_DROP_CHANCE = CoinFeature.IRON_DROP_CHANCE / 3;
-	public static float GOLD_DROP_CHANCE =CoinFeature.GOLD_DROP_CHANCE / 2;
+	public static float GOLD_DROP_CHANCE = CoinFeature.GOLD_DROP_CHANCE / 2;
 	public static float EMERALD_DROP_CHANCE = 0.005F;
 	public static float NETHERITE_DROP_CHANCE = 0.0005F;
 	

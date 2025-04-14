@@ -53,25 +53,25 @@
   "item.villagerunknown-villagercoin.emerald_villager_coin": "Emerald Villager Coin",
   "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin",
 
-  "advancements.villagercoin.root.title": "Villager Coin",
-  "advancements.villagercoin.root.description": "Accepted by Villagers everywhere",
+  "advancements.villagerunknown-villagercoin.root.title": "Villager Coin",
+  "advancements.villagerunknown-villagercoin.root.description": "Accepted by Villagers everywhere",
 
-  "advancements.villagercoin.pickup_copper_coin.title": "Don't Spend It All In One Place",
-  "advancements.villagercoin.pickup_copper_coin.description": "Acquire your first Copper Villager Coin",
+  "advancements.villagerunknown-villagercoin.pickup_copper_coin.title": "Don't Spend It All In One Place",
+  "advancements.villagerunknown-villagercoin.pickup_copper_coin.description": "Acquire your first Copper Villager Coin",
 
-  "advancements.villagercoin.pickup_iron_coin.title": "Hard Work Pays Off",
-  "advancements.villagercoin.pickup_iron_coin.description": "Acquire your first Iron Villager Coin",
+  "advancements.villagerunknown-villagercoin.pickup_iron_coin.title": "Hard Work Pays Off",
+  "advancements.villagerunknown-villagercoin.pickup_iron_coin.description": "Acquire your first Iron Villager Coin",
 
-  "advancements.villagercoin.pickup_gold_coin.title": "This Doesn't Make You A Pirate",
-  "advancements.villagercoin.pickup_gold_coin.description": "Acquire your first Gold Villager Coin",
+  "advancements.villagerunknown-villagercoin.pickup_gold_coin.title": "This Doesn't Make You A Pirate",
+  "advancements.villagerunknown-villagercoin.pickup_gold_coin.description": "Acquire your first Gold Villager Coin",
 
-  "advancements.villagercoin.pickup_emerald_coin.title": "Hrm.. Shiny",
-  "advancements.villagercoin.pickup_emerald_coin.description": "Acquire your first Emerald Villager Coin",
+  "advancements.villagerunknown-villagercoin.pickup_emerald_coin.title": "Hrm.. Shiny",
+  "advancements.villagerunknown-villagercoin.pickup_emerald_coin.description": "Acquire your first Emerald Villager Coin",
 
-  "advancements.villagercoin.pickup_netherite_coin.title": "Slashing The Coin Age",
-  "advancements.villagercoin.pickup_netherite_coin.description": "Acquire your first Netherite Villager Coin",
+  "advancements.villagerunknown-villagercoin.pickup_netherite_coin.title": "Slashing The Coin Age",
+  "advancements.villagerunknown-villagercoin.pickup_netherite_coin.description": "Acquire your first Netherite Villager Coin",
 
-  "advancements.villagercoin.all_villager_coins.title": "We Know Who To Rob Now",
-  "advancements.villagercoin.all_villager_coins.description": "Acquire all of the different types of Villager Coins"
+  "advancements.villagerunknown-villagercoin.all_villager_coins.title": "We Know Who To Rob Now",
+  "advancements.villagerunknown-villagercoin.all_villager_coins.description": "Acquire all of the different types of Villager Coins"
 
 }

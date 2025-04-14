@@ -25,7 +25,7 @@ public class AbstractInventoryEffectCoinItem extends AbstractCollectableCoinItem
 	
 	@Override
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-		SuspiciousStewEffectsComponent effectsComponent = stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS );
+		SuspiciousStewEffectsComponent effectsComponent = stack.get( DataComponentTypes.SUSPICIOUS_STEW_EFFECTS );
 		if( null != effectsComponent ) {
 			List<SuspiciousStewEffectsComponent.StewEffect> effects = effectsComponent.effects();
 			if( !effects.isEmpty() ) {

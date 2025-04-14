@@ -4,11 +4,13 @@ import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.effect.StewEffects;
 import me.villagerunknown.villagercoin.item.InventoryEffectCoinItem;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootTable;
@@ -23,16 +25,28 @@ import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
 public class InventoryEffectCoinFeature {
 	
-	public static Set<RegistryEntry<StatusEffect>> DELAY_EFFECTS = new HashSet<>(Arrays.asList(
+	public static final int SECOND_EFFECT_DURATION = 20;
+	
+	public static final int DEFAULT_EFFECT_DURATION = SECOND_EFFECT_DURATION * 10;
+	
+	public static final int EXTENDED_EFFECT_MODIFIER = 2;
+	
+	public static final int EXTENDED_EFFECT_DURATION = DEFAULT_EFFECT_DURATION * EXTENDED_EFFECT_MODIFIER;
+	
+	public static Set<RegistryEntry<StatusEffect>> CONSTANT_EFFECTS = new HashSet<>(Arrays.asList(
+			StatusEffects.NIGHT_VISION,
+			StatusEffects.MINING_FATIGUE,
 			StatusEffects.BAD_OMEN,
-			StatusEffects.RAID_OMEN,
 			StatusEffects.TRIAL_OMEN,
-			StatusEffects.MINING_FATIGUE
+			StatusEffects.RAID_OMEN,
+			StatusEffects.DOLPHINS_GRACE
 	));
 	
 	public static Set<RegistryEntry<StatusEffect>> IGNORE_EFFECTS = new HashSet<>(Arrays.asList());
 	
-	public static void execute() {}
+	public static void execute() {
+		new StewEffects();
+	}
 	
 	public static Item registerInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
 		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, statusEffects, new Item.Settings() );
@@ -87,14 +101,24 @@ public class InventoryEffectCoinFeature {
 	}
 	
 	public static boolean canApplyEffect(LivingEntity entity, SuspiciousStewEffectsComponent.StewEffect effect ) {
-		for (RegistryEntry<StatusEffect> delayEffectEntry : DELAY_EFFECTS) {
-			if( entity.hasStatusEffect( delayEffectEntry ) ) {
-				return false;
-			} // if
-		} // for
+		return canApplyConstantEffect( entity, effect )
+				||
+				(
+					!entity.hasStatusEffect( effect.effect() )
+					&& entity.canHaveStatusEffect( effect.createStatusEffectInstance() )
+					&& !IGNORE_EFFECTS.contains( effect )
+				);
+	}
+	
+	public static boolean canApplyConstantEffect(LivingEntity entity, SuspiciousStewEffectsComponent.StewEffect effect ) {
+		Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects = entity.getActiveStatusEffects();
 		
-		return !IGNORE_EFFECTS.contains( effect )
-				&& entity.canHaveStatusEffect( effect.createStatusEffectInstance() );
+		if( CONSTANT_EFFECTS.contains( effect.effect() ) && activeEffects.containsKey( effect.effect() ) ) {
+			StatusEffectInstance activeEffect = activeEffects.get(effect.effect());
+			return activeEffect.getDuration() <= EXTENDED_EFFECT_DURATION / EXTENDED_EFFECT_MODIFIER;
+		} // if
+		
+		return false;
 	}
 	
 	public static void applyStatusEffect( LivingEntity entity, SuspiciousStewEffectsComponent.StewEffect effect, Item coin ) {
