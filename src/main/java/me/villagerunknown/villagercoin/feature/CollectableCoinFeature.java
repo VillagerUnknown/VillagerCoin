@@ -1,7 +1,5 @@
 package me.villagerunknown.villagercoin.feature;
 
-import me.villagerunknown.villagercoin.data.component.CoinComponent;
-import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.data.persistent.PersistentItemExistenceData;
 import me.villagerunknown.villagercoin.item.CollectableCoinItem;
 import me.villagerunknown.platform.util.RegistryUtil;
@@ -17,27 +15,25 @@ import net.minecraft.util.Rarity;
 import java.util.HashMap;
 import java.util.Set;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
-
 public class CollectableCoinFeature {
 	
-	public static int COPPER_MAXIMUM_IN_CIRCULATION = 10;
-	public static int IRON_MAXIMUM_IN_CIRCULATION = 5;
-	public static int GOLD_MAXIMUM_IN_CIRCULATION = 2;
-	public static int EMERALD_MAXIMUM_IN_CIRCULATION = 1;
-	public static int NETHERITE_MAXIMUM_IN_CIRCULATION = 1;
+	public static int COPPER_MAXIMUM_IN_CIRCULATION = Villagercoin.CONFIG.copperMaximumCollectables;
+	public static int IRON_MAXIMUM_IN_CIRCULATION = Villagercoin.CONFIG.ironMaximumCollectables;
+	public static int GOLD_MAXIMUM_IN_CIRCULATION = Villagercoin.CONFIG.goldMaximumCollectables;
+	public static int EMERALD_MAXIMUM_IN_CIRCULATION = Villagercoin.CONFIG.emeraldMaximumCollectables;
+	public static int NETHERITE_MAXIMUM_IN_CIRCULATION = Villagercoin.CONFIG.netheriteMaximumCollectables;
 	
-	public static int COPPER_VALUE = CoinFeature.IRON_VALUE;
-	public static int IRON_VALUE = CoinFeature.IRON_VALUE * 50;
-	public static int GOLD_VALUE = CoinFeature.GOLD_VALUE * 20;
-	public static int EMERALD_VALUE = CoinFeature.EMERALD_VALUE;
-	public static int NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
+	public static int COPPER_VALUE = Villagercoin.CONFIG.copperCollectableValue;
+	public static int IRON_VALUE = Villagercoin.CONFIG.ironCollectableValue;
+	public static int GOLD_VALUE = Villagercoin.CONFIG.goldCollectableValue;
+	public static int EMERALD_VALUE = Villagercoin.CONFIG.emeraldCollectableValue;
+	public static int NETHERITE_VALUE = Villagercoin.CONFIG.netheriteCollectableValue;
 	
-	public static float COPPER_DROP_CHANCE = 0.001F;
-	public static float IRON_DROP_CHANCE = 0.0005F;
-	public static float GOLD_DROP_CHANCE = 0.0001F;
-	public static float EMERALD_DROP_CHANCE = 0.00005F;
-	public static float NETHERITE_DROP_CHANCE = 0.00001F;
+	public static float COPPER_DROP_CHANCE = Villagercoin.CONFIG.copperCollectableDropChance;
+	public static float IRON_DROP_CHANCE = Villagercoin.CONFIG.ironCollectableDropChance;
+	public static float GOLD_DROP_CHANCE = Villagercoin.CONFIG.goldCollectableDropChance;
+	public static float EMERALD_DROP_CHANCE = Villagercoin.CONFIG.emeraldCollectableDropChance;
+	public static float NETHERITE_DROP_CHANCE = Villagercoin.CONFIG.netheriteCollectableDropChance;
 	
 	private static MinecraftServer server;
 	
@@ -60,9 +56,9 @@ public class CollectableCoinFeature {
 	}
 	
 	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, flipChance, maximumAllowedInServer ), MOD_ID );
+		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, flipChance, maximumAllowedInServer ), Villagercoin.MOD_ID );
 		
-		RegistryUtil.addItemToGroup( ITEM_GROUP_KEY, item );
+		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
 		
 		return item;
 	}
