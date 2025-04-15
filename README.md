@@ -57,7 +57,7 @@ The crafting tables will calculate the conversions for you.
 
 #### Currency Conversion Crafting
 
-Convert between currencies using the crafting table and auto-crafter.
+Convert between coin currencies using the crafting table and auto-crafter.
 
 * Insert a single stack of 99 or fewer of the same coin in a crafting table to convert down.
 * Insert 100 or more of the same coin in a crafting table to convert up.
@@ -65,6 +65,9 @@ Convert between currencies using the crafting table and auto-crafter.
 The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder. 
 
 You can optionally configure the crafting table to craft the maximum amount of coins when placing multiple stacks of coins in the crafting table together.
+
+Additionally, coins will only appear as a crafting result if registered as such. 
+Meaning: Coins added by addon mods won't appear as a crafting result unless registered as a crafting result. 
 
 Copper, Iron, and Gold Villager Coins can be smelted down to their respective resources using the Furnace or Blast Furnace.
 
