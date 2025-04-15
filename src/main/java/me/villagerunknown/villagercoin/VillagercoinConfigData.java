@@ -52,13 +52,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int ironCollectableValue = 500;
 	
 	@ConfigEntry.Category("CollectableCoins")
-	public int goldCollectableValue = 50000;
+	public int goldCollectableValue = 500000;
 	
 	@ConfigEntry.Category("CollectableCoins")
-	public int emeraldCollectableValue = 5000000;
+	public int emeraldCollectableValue = 2000000;
 	
 	@ConfigEntry.Category("CollectableCoins")
-	public int netheriteCollectableValue = 500000000;
+	public int netheriteCollectableValue = 200000000;
 	
 	@ConfigEntry.Category("CollectableCoins")
 	public float copperCollectableDropChance = 0.001F;

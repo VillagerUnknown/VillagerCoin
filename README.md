@@ -1,29 +1,40 @@
 # VillagerUnknown's Villager Coin
 
-Villager Coin adds a customizable coin currency, Villager Coin, and optionally adds the currency to loot tables, mob drops, and merchant trades. Coins can be converted between different types through the crafting table.
+Villager Coin is a currency library that adds a customizable coin currency and optionally adds the currency to loot tables, mob drops, and merchant trades. 
+Coins can be converted between different types through the crafting table.
 
-Villager Coin consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite.
+Villager Coin, at it's core, consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
+More coins can be added with addon mods like edible and collectable coins. 
 
 Each type of coin stacks up to 5,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
 The stack size can be configured, but it's limited to a maximum of 1,073,741,822.
 
-Learn how to customize Villager Coin from the Developer Wiki at the bottom of this page.
+Learn how to customize Villager Coin with addon mods and the developer wiki at the bottom of this page.
 
-**Features**
+## Features
 
-* Adds 5 custom coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
-* Adds advancements for obtaining coins.
+* Adds 5 core coin items with individual currency values: Copper, Iron, Gold, Emerald, and Netherite.
 * Convert between the different coins with the crafting tables.
 * Smelt down Copper, Iron, and Gold coins for their respective resources.
-* Configurable drop chances.
+* Adds advancements for obtaining coins.
+* Options for fully customizing the coin value, chances, and amounts.
 * Optionally find coins in vanilla structures.
 * Optionally earn coins by killing some vanilla mobs.
 * Optionally earn coins by killing breedable mobs. (For easier coins.)
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 * Optionally allow players to flip individual coins for a heads or tails result in chat.
-* Configurable loot bonus per level chance for coins from mobs.
 
-**Currency Values**
+### Coin Currency
+
+The value of coins can be configured through a Currency Multiplier option, with a default multiplier of 100. 
+Copper coins are used as the base value of 1 with each coin above it multiplying by the Currency Multipler.
+
+By default, Villager Coin includes Copper, Iron, and Gold coins in the loot tables and mob drops with lower value coins being more common. 
+
+_Unless configured otherwise, Emerald and Netherite coins are only available through currency conversion crafting due to their high values. 
+This includes any Emerald or Netherite coins included by addon mods._
+
+#### Currency Values
 
 * Copper Coin = 1 Copper Coin
 * Iron Coin = 100 Copper Coins
@@ -31,10 +42,9 @@ Learn how to customize Villager Coin from the Developer Wiki at the bottom of th
 * Emerald Coin = 1,000,000 Copper Coins
 * Netherite Coin = 100,000,000 Copper Coins
 
-Emerald and Netherite coins are only available through currency conversion crafting due to their high values. 
-These coins are mostly here to help players who amass a large wealth in their world.
+Collectable coins have modified values configurable through the options.
 
-**Currency Conversions**
+#### Currency Conversions
 
 * 100 Copper Coins = 1 Iron Coin
 * 100 Iron Coins = 1 Gold Coin
@@ -43,7 +53,7 @@ These coins are mostly here to help players who amass a large wealth in their wo
 
 The crafting tables will calculate the conversions for you.
 
-**Currency Conversion Crafting**
+#### Currency Conversion Crafting
 
 Convert between currencies using the crafting table and auto-crafter.
 
@@ -59,14 +69,16 @@ _Due to technical limitations, quick-crafting (shift-clicking crafted items to c
 will still automatically stack with the same items in your inventory, but it will only craft once. 
 Use the auto-crafter to convert large amounts of coins._
 
-**Loot Tables**
+### Loot Tables
 
 Coins can be optionally included in the loot tables. 
 The value of the coins will vary depending on the loot table rarity. 
 Trial Chambers, Ancient Cities, Strongholds, and Nether Fortresses will reward players more than a Village, Mineshaft, or Fishing.
 Nether and End structures are more likely to reward Iron and Gold Villager Coins.
 
-**Mob Drops**
+Loot table weights and rolls can be configured through the options.
+
+### Mob Drops
 
 Coins can optionally drop when a player kills Humanoid mobs, Bosses, and Shulkers. 
 
@@ -75,7 +87,9 @@ A separate option exists to drop coins from breedable mobs if you want coins to 
 The value of the coins will vary depending on the difficulty of the mob. 
 The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Skeleton, or Piglin.
 
-**Trade Modifications**
+Mob drop chances, minimums, and maximums can be configured through the options.
+
+### Trade Modifications
 
 Coins can optionally be used for trading with Villagers and Wandering Traders by replacing Emerald trades with Coin trades. 
 _This will not change any existing villager trades in worlds. Only new villager trades will use the coins, if enabled._
@@ -93,7 +107,7 @@ but at half of the original emerald amount. These are the most expensive trades.
 * The Diamond trade, giving 16 Gold Villager Coins (by default), has a 50% chance of being an Emerald trade giving 8 Gold Villager Coins (by default). 
 These are the most rewarding trades available and they're configurable.
 
-**Additional Notes**
+### Additional Notes
 
 * If you have a single coin in your hand and interact (right-click) you can optionally flip a coin, for a heads or tails result in chat.
 * Trades are modified for both vanilla and modded Villagers.
@@ -104,9 +118,9 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 * Piglins might try to steal your Gold Villager Coins.
 * Netherite Villager Coins, like Netherite, are immune to fire damage making them the best way to secure large fortunes.
 
-**Options**
+## Configurable Options
 
-_Coins_
+**Coins**
 
 * currencyConversionMultiplier - The conversion value between currencies in the following order: Copper <-> Iron <-> Gold <-> Emerald <-> Netherite. (Default: 100)
 * maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
@@ -130,21 +144,21 @@ _Coins_
 * emeraldDropChance - Chance that Emerald coins will drop on mob death or loot table generation.
 * netheriteDropChance - Chance that Netherite coins will drop on mob death or loot table generation.
 
-_Effect Coins_
+**Effect Coins**
 
 * inventoryEffectChancePerTick - Chance per tick that a coin with an effect will apply the effect. (Default: 1)
 
-_Loot Tables_
+**Loot Tables**
 
 * addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
 
-_Mob Drops_
+**Mob Drops**
 
 * addCoinsToMobDrops - Adds Villager Coins to Mob drops. (Default: true)
 * enableBreedableMobDrops - Allows coins to drop from mobs with a breeding mechanic. (Default: false)
 * lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
 
-_Trades_
+**Trades**
 
 * enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
 * goldCoinSellItemDivisor - Price divisor for Gold Coin trades. (Default: 2)
@@ -153,10 +167,14 @@ _Trades_
 * goldForEmerald - Amount of Gold Coins to reward for a single Emerald.
 * chanceDiamondBecomesEmeraldTrade - Chance that a Diamond trade becomes an Emerald trade.
 
-## Support
+## Official Addon Mods
 
-* Request features and report bugs at https://github.com/VillagerUnknown/VillagerCoin/issues
-* View the changelog at https://github.com/VillagerUnknown/VillagerCoin/blob/main/CHANGELOG.md
+Customize your Villager Coin economy with these addon mods:
+
+* Edible Coins - Adds edible Villager Coins you can eat.
+* Collectable Coins - Adds rarer collectable Villager Coins worth more in value.
+* Cursed Coins - Adds rarer cursed Villager Coins that apply _negative_ status effects when in your inventory.
+* Lucky Coins - Adds rarer lucky Villager Coins that apply _positive_ status effects when in your inventory.
 
 ## Developer Wiki
 
@@ -165,3 +183,8 @@ Mod and resource pack developers can easily customize Villager Coin to make the 
 Villager Coin provides the core features while allowing users to choose and create the add-on features they want.
 
 * Learn more about customizing Villager Coin at https://github.com/VillagerUnknown/VillagerCoin/wiki
+
+## Support
+
+* Request features and report bugs at https://github.com/VillagerUnknown/VillagerCoin/issues
+* View the changelog at https://github.com/VillagerUnknown/VillagerCoin/blob/main/CHANGELOG.md
