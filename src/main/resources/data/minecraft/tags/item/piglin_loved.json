@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "villagerunknown-villagercoin:gold_villager_coin",
-    "villagerunknown-villagercoin:edible_gold_villager_coin"
+    "villagerunknown-villagercoin:gold_villager_coin"
   ]
 }

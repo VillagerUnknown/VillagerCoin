@@ -1,6 +1,6 @@
 package me.villagerunknown.villagercoin.mixin;
 
-import me.villagerunknown.villagercoin.feature.coinFeature;
+import me.villagerunknown.villagercoin.Villagercoin;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.inventory.Inventory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,7 +10,7 @@ public abstract class LootableContainerBlockEntityMixin implements Inventory {
 	
 	@Override
 	public int getMaxCountPerStack() {
-		return coinFeature.MAX_COUNT;
+		return Villagercoin.MAX_COUNT;
 	}
 	
 }

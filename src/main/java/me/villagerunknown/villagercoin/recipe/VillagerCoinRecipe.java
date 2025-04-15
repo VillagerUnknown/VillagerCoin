@@ -1,8 +1,9 @@
 package me.villagerunknown.villagercoin.recipe;
 
-import me.villagerunknown.villagercoin.feature.coinFeature;
+import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
@@ -10,15 +11,9 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
+import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+
 public class VillagerCoinRecipe extends SpecialCraftingRecipe {
-	
-	private static final Ingredient COIN = Ingredient.ofItems(
-			coinFeature.COPPER_COIN,
-			coinFeature.IRON_COIN,
-			coinFeature.GOLD_COIN,
-			coinFeature.EMERALD_COIN,
-			coinFeature.NETHERITE_COIN
-	);
 	
 	public VillagerCoinRecipe(CraftingRecipeCategory category) {
 		super(category);
@@ -26,14 +21,14 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
-		boolean containsCoin = false;
+		boolean containsOnlyCoins = false;
 		
 		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
 				if( !itemStack.isEmpty() ) {
-					if( COIN.test( itemStack ) ) {
-						containsCoin = true;
+					if( CoinCraftingFeature.canCraftResult( itemStack.getItem() ) ) {
+						containsOnlyCoins = true;
 					} else {
 						return false;
 					} // if, else
@@ -41,96 +36,68 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 			} // for
 		} // for
 		
-		return containsCoin;
+		return containsOnlyCoins;
 	}
 	
 	@Override
 	public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup lookup) {
-		int totalStacks = craftingRecipeInput.getStackCount();
 		int totalValue = 0;
-		
 		ItemStack returnStack = ItemStack.EMPTY;
 		
-		if( totalStacks > 1 ) {
-			// # Combine Coins to the Highest Coin Value
+		if( craftingRecipeInput.getStackCount() > 1 ) {
+			// # Combine Multiple Coins to the Highest Coin Value
 			
 			for(int i = 0; i < craftingRecipeInput.getSize(); ++i) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 				
 				if( !itemStack.isEmpty() ) {
+					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 					
-					if( itemStack.isOf( coinFeature.COPPER_COIN ) ) {
-						totalValue += itemStack.getCount();
-					}
-					else if( itemStack.isOf( coinFeature.IRON_COIN ) ) {
-						totalValue += itemStack.getCount() * coinFeature.getCoinValue( coinFeature.IRON_COIN );
-					}
-					else if( itemStack.isOf( coinFeature.GOLD_COIN ) ) {
-						totalValue += itemStack.getCount() * coinFeature.getCoinValue( coinFeature.GOLD_COIN );
-					}
-					else if( itemStack.isOf( coinFeature.EMERALD_COIN ) ) {
-						totalValue += itemStack.getCount() * coinFeature.getCoinValue( coinFeature.EMERALD_COIN );
-					}
-					else if( itemStack.isOf( coinFeature.NETHERITE_COIN ) ) {
-						totalValue += itemStack.getCount() * coinFeature.getCoinValue( coinFeature.NETHERITE_COIN );
-					} // if, else if ...
-					
+					if( null != currencyComponent ) {
+						totalValue += itemStack.getCount() * currencyComponent.value();
+					} // if
 				} // if
 			} // for
 			
-			if( totalValue >= coinFeature.getCoinValue( coinFeature.NETHERITE_COIN ) ) {
-				returnStack = new ItemStack( coinFeature.NETHERITE_COIN, 1 );
-			}
-			else if( totalValue >= coinFeature.getCoinValue( coinFeature.EMERALD_COIN ) ) {
-				returnStack = new ItemStack( coinFeature.EMERALD_COIN, 1 );
-			}
-			else if( totalValue >= coinFeature.getCoinValue( coinFeature.GOLD_COIN ) ) {
-				returnStack = new ItemStack( coinFeature.GOLD_COIN, 1 );
-			}
-			else if( totalValue >= coinFeature.getCoinValue( coinFeature.IRON_COIN ) ) {
-				returnStack = new ItemStack( coinFeature.IRON_COIN, 1 );
-			} // if, else if ...
+			ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue, !Villagercoin.CONFIG.enableCraftingMultipleToMaxCount );
+			CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
 			
+			if( null != largestComponent && largestComponent.value() > 1 ) {
+				returnStack = largestCoin;
+			} // if
 		} else {
-			// # Convert Single Coin to a Higher or Lower Valued Coin
+			// # Convert a Single Coin to a Higher or Lower Valued Coin
 			
 			for(int i = 0; i < craftingRecipeInput.getSize(); ++i) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 				
 				if( !itemStack.isEmpty() ) {
+					CurrencyComponent currencyComponent = itemStack.get(CURRENCY_COMPONENT);
 					
-					int itemCount = itemStack.getCount();
-					
-					if( itemStack.isOf( coinFeature.COPPER_COIN ) ) {
-						if( itemCount >= coinFeature.getConversionValue( coinFeature.COPPER_COIN, coinFeature.IRON_COIN ) ) {
-							returnStack = new ItemStack( coinFeature.IRON_COIN, 1 );
+					if (null != currencyComponent) {
+						totalValue = itemStack.getCount() * currencyComponent.value();
+						
+						ItemStack smallerCoin = CoinCraftingFeature.getSmallerCoin( currencyComponent.value() );
+						CurrencyComponent smallerComponent = smallerCoin.get( CURRENCY_COMPONENT );
+						
+						ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue, true );
+						CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
+						
+						if(
+							null != smallerComponent
+							&& itemStack.getCount() < currencyComponent.getConversionValue( currencyComponent.value(), smallerComponent.value() )
+						) {
+							// Convert to Lower
+							returnStack = smallerCoin;
+						} else if(
+								largestCoin.getItem() != itemStack.getItem()
+								&& null != largestComponent
+								&& itemStack.getCount() >= currencyComponent.getConversionValue( currencyComponent.value(), largestComponent.value() )
+						){
+							// Convert to Higher
+							returnStack = largestCoin;
 						} // if
-					}
-					else if( itemStack.isOf( coinFeature.IRON_COIN ) ) {
-						if( itemCount >= coinFeature.getConversionValue( coinFeature.IRON_COIN, coinFeature.GOLD_COIN ) ) {
-							returnStack = new ItemStack( coinFeature.GOLD_COIN, 1 );
-						} else {
-							returnStack = new ItemStack( coinFeature.COPPER_COIN, coinFeature.getConversionValue( coinFeature.IRON_COIN, coinFeature.COPPER_COIN ) );
-						} // if, else
-					}
-					else if( itemStack.isOf( coinFeature.GOLD_COIN ) ) {
-						if( itemCount >= coinFeature.getConversionValue( coinFeature.GOLD_COIN, coinFeature.EMERALD_COIN ) ) {
-							returnStack = new ItemStack( coinFeature.EMERALD_COIN, 1 );
-						} else {
-							returnStack = new ItemStack( coinFeature.IRON_COIN, coinFeature.getConversionValue( coinFeature.GOLD_COIN, coinFeature.IRON_COIN ) );
-						} // if, else
-					}
-					else if( itemStack.isOf( coinFeature.EMERALD_COIN ) ) {
-						if( itemCount >= coinFeature.getConversionValue( coinFeature.EMERALD_COIN, coinFeature.NETHERITE_COIN ) ) {
-							returnStack = new ItemStack( coinFeature.NETHERITE_COIN, 1 );
-						} else {
-							returnStack = new ItemStack( coinFeature.GOLD_COIN, coinFeature.getConversionValue( coinFeature.EMERALD_COIN, coinFeature.GOLD_COIN ) );
-						} // if, else
-					}
-					else if( itemStack.isOf( coinFeature.NETHERITE_COIN ) ) {
-						returnStack = new ItemStack( coinFeature.EMERALD_COIN, coinFeature.getConversionValue( coinFeature.NETHERITE_COIN, coinFeature.EMERALD_COIN ) );
-					} // if, else if ...
-					
+					} // if
 				} // if
 			} // for
 			
@@ -146,6 +113,6 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return coinFeature.RECIPE_SERIALIZER;
+		return CoinCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

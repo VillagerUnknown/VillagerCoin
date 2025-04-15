@@ -1,5 +1,5 @@
 {
-  "parent": "villagerunknown-villagercoin:root",
+  "parent": "villagerunknown-villagercoin:pickup_netherite_coin",
   "criteria": {
     "all_villager_coins": {
       "conditions": {
@@ -18,15 +18,6 @@
           },
           {
             "items": "villagerunknown-villagercoin:netherite_villager_coin"
-          },
-          {
-            "items": "villagerunknown-villagercoin:edible_gold_villager_coin"
-          },
-          {
-            "items": "villagerunknown-villagercoin:edible_emerald_villager_coin"
-          },
-          {
-            "items": "villagerunknown-villagercoin:edible_netherite_villager_coin"
           }
         ]
       },
@@ -35,7 +26,7 @@
   },
   "display": {
     "description": {
-      "translate": "advancements.villagercoin.all_villager_coins.description"
+      "translate": "advancements.villagerunknown-villagercoin.all_villager_coins.description"
     },
     "frame": "challenge",
     "icon": {
@@ -43,7 +34,7 @@
       "id": "villagerunknown-villagercoin:netherite_villager_coin"
     },
     "title": {
-      "translate": "advancements.villagercoin.all_villager_coins.title"
+      "translate": "advancements.villagerunknown-villagercoin.all_villager_coins.title"
     }
   },
   "requirements": [
