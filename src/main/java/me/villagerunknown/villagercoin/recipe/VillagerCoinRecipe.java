@@ -26,7 +26,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
 				if( !itemStack.isEmpty() ) {
-					if( CoinCraftingFeature.craftingAllowed( itemStack.getItem() ) ) {
+					if( CoinCraftingFeature.canCraftResult( itemStack.getItem() ) ) {
 						containsOnlyCoins = true;
 					} else {
 						return false;

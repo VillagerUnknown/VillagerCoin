@@ -78,9 +78,10 @@ public class CoinFeature {
 	}
 	
 	public static Item registerCoinItem(String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new CoinItem( settings, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance ), MOD_ID );
+		Item item = registerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, settings );
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
+		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
 		return item;
 	}
@@ -96,7 +97,7 @@ public class CoinFeature {
 	public static Item registerCraftableCoinItem( String id, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, float flipChance, Item.Settings settings ) {
 		Item item = registerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, flipChance, settings );
 		
-		CoinCraftingFeature.registerCoin( item, value );
+		CoinCraftingFeature.registerCraftingResultCoin( item, value );
 		
 		return item;
 	}

@@ -31,9 +31,11 @@ import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT
 
 public class MobsDropCoinsFeature {
 	
-	public static final int COMMON_DROP_MULTIPLIER = 1;
-	public static final int RARE_DROP_MULTIPLIER = 2;
-	public static final int EPIC_DROP_MULTIPLIER = 3;
+	public static final int COPPER_DROP_MULTIPLIER = Villagercoin.CONFIG.copperDropMultiplier;
+	public static final int IRON_DROP_MULTIPLIER = Villagercoin.CONFIG.ironDropMultiplier;
+	public static final int GOLD_DROP_MULTIPLIER = Villagercoin.CONFIG.goldDropMultiplier;
+	public static final int EMERALD_DROP_MULTIPLIER = Villagercoin.CONFIG.emeraldDropMultiplier;
+	public static final int NETHERITE_DROP_MULTIPLIER = Villagercoin.CONFIG.netheriteDropMultiplier;
 	
 	public static Set<EntityType<?>> OPTIONAL_MOB_DROPS = new HashSet<>(Arrays.asList(
 			EntityType.PIG,
@@ -64,38 +66,44 @@ public class MobsDropCoinsFeature {
 			EntityType.TURTLE
 	));
 	
-	public static Set<EntityType<?>> COMMON_MOB_DROPS = new HashSet<>(Arrays.asList(
-			EntityType.DROWNED,
-			EntityType.ENDERMAN,
-			EntityType.PILLAGER,
-			EntityType.SKELETON,
-			EntityType.BOGGED,
-			EntityType.STRAY,
-			EntityType.WITCH,
-			EntityType.VILLAGER,
-			EntityType.WANDERING_TRADER,
-			EntityType.ZOMBIFIED_PIGLIN,
-			EntityType.HUSK,
-			EntityType.ZOMBIE,
-			EntityType.ZOMBIE_VILLAGER
-	));
-	
-	public static Set<EntityType<?>> RARE_MOB_DROPS = new HashSet<>(Arrays.asList(
-			EntityType.ELDER_GUARDIAN,
-			EntityType.ILLUSIONER,
-			EntityType.PIGLIN,
-			EntityType.PIGLIN_BRUTE,
-			EntityType.SHULKER,
-			EntityType.EVOKER,
-			EntityType.VINDICATOR,
-			EntityType.WITHER_SKELETON
-	));
-	
-	public static Set<EntityType<?>> EPIC_MOB_DROPS = new HashSet<>(Arrays.asList(
+	public static Set<EntityType<?>> NETHERITE_MOB_DROPS = new HashSet<>(Arrays.asList(
 			EntityType.ENDER_DRAGON,
 			EntityType.WARDEN,
 			EntityType.WITHER
 	));
+	
+	public static Set<EntityType<?>> EMERALD_MOB_DROPS = combineEntityTypes( NETHERITE_MOB_DROPS, new HashSet<>(Arrays.asList(
+			EntityType.SHULKER
+	)));
+	
+	public static Set<EntityType<?>> GOLD_MOB_DROPS = combineEntityTypes( EMERALD_MOB_DROPS, new HashSet<>(Arrays.asList(
+			EntityType.ELDER_GUARDIAN,
+			EntityType.ILLUSIONER,
+			EntityType.PIGLIN,
+			EntityType.PIGLIN_BRUTE,
+			EntityType.EVOKER,
+			EntityType.VINDICATOR,
+			EntityType.WITHER_SKELETON
+	)));
+	
+	public static Set<EntityType<?>> IRON_MOB_DROPS = combineEntityTypes( GOLD_MOB_DROPS, new HashSet<>(Arrays.asList(
+			EntityType.ENDERMAN,
+			EntityType.PILLAGER,
+			EntityType.BOGGED,
+			EntityType.STRAY,
+			EntityType.WITCH,
+			EntityType.ZOMBIFIED_PIGLIN
+	)));
+	
+	public static Set<EntityType<?>> COPPER_MOB_DROPS = combineEntityTypes( IRON_MOB_DROPS, new HashSet<>(Arrays.asList(
+			EntityType.DROWNED,
+			EntityType.SKELETON,
+			EntityType.VILLAGER,
+			EntityType.WANDERING_TRADER,
+			EntityType.HUSK,
+			EntityType.ZOMBIE,
+			EntityType.ZOMBIE_VILLAGER
+	)));
 	
 	public static HashMap<EntityType<?>, Set<Item>> MOB_DROPS = new HashMap<>();
 	
@@ -103,8 +111,19 @@ public class MobsDropCoinsFeature {
 		registerMobDropsEvent();
 		
 		if( Villagercoin.CONFIG.enableBreedableMobDrops) {
-			COMMON_MOB_DROPS.addAll( OPTIONAL_MOB_DROPS );
+			COPPER_MOB_DROPS.addAll( OPTIONAL_MOB_DROPS );
 		} // if
+	}
+	
+	@SafeVarargs
+	private static Set<EntityType<?>> combineEntityTypes(Set<EntityType<?>>... entityTypeCollections ) {
+		Set<EntityType<?>> combinedEntityTypes = new HashSet<>();
+		
+		for( Set<EntityType<?>> entityTypes : entityTypeCollections) {
+			combinedEntityTypes.addAll( entityTypes );
+		} // for
+		
+		return combinedEntityTypes;
 	}
 	
 	public static void addCoinToMobDrops( Item coin, Set<EntityType<?>> entityTypes ) {
@@ -132,12 +151,16 @@ public class MobsDropCoinsFeature {
 						if( MOB_DROPS.containsKey( entityType ) ) {
 							Set<Item> items = MOB_DROPS.get( entityType );
 							
-							int dropMultiplier = COMMON_DROP_MULTIPLIER;
+							int dropMultiplier = COPPER_DROP_MULTIPLIER;
 							
-							if( EPIC_MOB_DROPS.contains( entityType ) ) {
-								dropMultiplier = EPIC_DROP_MULTIPLIER;
-							} else if( RARE_MOB_DROPS.contains( entityType ) ) {
-								dropMultiplier = RARE_DROP_MULTIPLIER;
+							if( NETHERITE_MOB_DROPS.contains( entityType ) ) {
+								dropMultiplier = NETHERITE_DROP_MULTIPLIER;
+							} else if( EMERALD_MOB_DROPS.contains( entityType ) ) {
+								dropMultiplier = EMERALD_DROP_MULTIPLIER;
+							} else if( GOLD_MOB_DROPS.contains( entityType ) ) {
+								dropMultiplier = GOLD_DROP_MULTIPLIER;
+							} else if( IRON_MOB_DROPS.contains( entityType ) ) {
+								dropMultiplier = IRON_DROP_MULTIPLIER;
 							} // if, else
 							
 							for (Item item : items) {
@@ -188,7 +211,7 @@ public class MobsDropCoinsFeature {
 			CoinComponent coinComponent = coin.getComponents().get( COIN_COMPONENT );
 			
 			if( null != coinComponent ) {
-				if( MathUtil.hasChance( (coinComponent.dropChance() * multiplier) * lootingModifier ) ) {
+				if( coinComponent.dropMaximum() > 0 && MathUtil.hasChance( (coinComponent.dropChance() * multiplier) * lootingModifier ) ) {
 					int amount = (int) MathUtil.getRandomWithinRange(coinComponent.dropMinimum(), coinComponent.dropMaximum());
 					
 					if( amount > 0 ) {

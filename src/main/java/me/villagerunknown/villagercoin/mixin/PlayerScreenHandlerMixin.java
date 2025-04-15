@@ -46,7 +46,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 		if( 0 == slot ) {
 			ItemStack craftedItemStack = this.craftingResult.getStack( slot );
 			
-			if( CoinCraftingFeature.CRAFTABLE_COINS.containsValue( craftedItemStack.getItem() ) ) {
+			if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) ) {
 				CraftingRecipeInput.Positioned positioned = this.craftingInput.createPositionedRecipeInput();
 				CraftingRecipeInput craftingRecipeInput = positioned.input();
 				DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());

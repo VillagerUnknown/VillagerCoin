@@ -41,7 +41,7 @@ public class CraftingResultSlotMixin {
 			return;
 		} // if
 		
-		if( CoinCraftingFeature.CRAFTABLE_COINS.containsValue( stack.getItem() ) ) {
+		if( CoinCraftingFeature.isCraftingResultCoin( stack.getItem() ) ) {
 			CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
 			CraftingRecipeInput craftingRecipeInput = positioned.input();
 			DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());

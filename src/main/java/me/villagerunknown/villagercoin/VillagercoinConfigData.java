@@ -19,51 +19,6 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	@ConfigEntry.Category("Coins")
 	public boolean enableCoinFlipping = true;
 	
-	@ConfigEntry.Category("Coins")
-	public int copperDropMinimum = 1;
-	
-	@ConfigEntry.Category("Coins")
-	public int ironDropMinimum = 0;
-	
-	@ConfigEntry.Category("Coins")
-	public int goldDropMinimum = 0;
-	
-	@ConfigEntry.Category("Coins")
-	public int emeraldDropMinimum = 0;
-	
-	@ConfigEntry.Category("Coins")
-	public int netheriteDropMinimum = 0;
-	
-	@ConfigEntry.Category("Coins")
-	public int copperDropMaximum = 10;
-	
-	@ConfigEntry.Category("Coins")
-	public int ironDropMaximum = 5;
-	
-	@ConfigEntry.Category("Coins")
-	public int goldDropMaximum = 3;
-	
-	@ConfigEntry.Category("Coins")
-	public int emeraldDropMaximum = 0;
-	
-	@ConfigEntry.Category("Coins")
-	public int netheriteDropMaximum = 0;
-	
-	@ConfigEntry.Category("Coins")
-	public float copperDropChance = 0.5F;
-	
-	@ConfigEntry.Category("Coins")
-	public float ironDropChance = 0.25F;
-	
-	@ConfigEntry.Category("Coins")
-	public float goldDropChance = 0.1F;
-	
-	@ConfigEntry.Category("Coins")
-	public float emeraldDropChance = 0F;
-	
-	@ConfigEntry.Category("Coins")
-	public float netheriteDropChance = 0F;
-	
 	/**
 	 * Effect Coins
 	 */
@@ -78,6 +33,36 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	@ConfigEntry.Category("LootTables")
 	public boolean addCoinsToStructureLootTables = true;
 	
+	@ConfigEntry.Category("LootTables")
+	public int copperLootTableRolls = 10;
+	
+	@ConfigEntry.Category("LootTables")
+	public int ironLootTableRolls = 7;
+	
+	@ConfigEntry.Category("LootTables")
+	public int goldLootTableRolls = 5;
+	
+	@ConfigEntry.Category("LootTables")
+	public int emeraldLootTableRolls = 0;
+	
+	@ConfigEntry.Category("LootTables")
+	public int netheriteLootTableRolls = 0;
+	
+	@ConfigEntry.Category("LootTables")
+	public int copperLootTableWeight = 5;
+	
+	@ConfigEntry.Category("LootTables")
+	public int ironLootTableWeight = 3;
+	
+	@ConfigEntry.Category("LootTables")
+	public int goldLootTableWeight = 1;
+	
+	@ConfigEntry.Category("LootTables")
+	public int emeraldLootTableWeight = 0;
+	
+	@ConfigEntry.Category("LootTables")
+	public int netheriteLootTableWeight = 0;
+	
 	/**
 	 * Mob Drops
 	 */
@@ -90,6 +75,66 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	
 	@ConfigEntry.Category("MobDrops")
 	public float lootingBonusPerLevel = 0.1F;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int copperDropMinimum = 1;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int ironDropMinimum = 0;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int goldDropMinimum = 0;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int emeraldDropMinimum = 0;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int netheriteDropMinimum = 0;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int copperDropMaximum = 10;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int ironDropMaximum = 5;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int goldDropMaximum = 3;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int emeraldDropMaximum = 0;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int netheriteDropMaximum = 0;
+	
+	@ConfigEntry.Category("MobDrops")
+	public float copperDropChance = 0.5F;
+	
+	@ConfigEntry.Category("MobDrops")
+	public float ironDropChance = 0.25F;
+	
+	@ConfigEntry.Category("MobDrops")
+	public float goldDropChance = 0.1F;
+	
+	@ConfigEntry.Category("MobDrops")
+	public float emeraldDropChance = 0F;
+	
+	@ConfigEntry.Category("MobDrops")
+	public float netheriteDropChance = 0F;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int copperDropMultiplier = 1;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int ironDropMultiplier = 2;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int goldDropMultiplier = 3;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int emeraldDropMultiplier = 4;
+	
+	@ConfigEntry.Category("MobDrops")
+	public int netheriteDropMultiplier = 5;
 	
 	/**
 	 * Trades

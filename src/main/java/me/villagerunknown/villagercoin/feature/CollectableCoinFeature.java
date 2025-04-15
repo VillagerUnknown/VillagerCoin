@@ -1,5 +1,7 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.data.persistent.PersistentItemExistenceData;
 import me.villagerunknown.villagercoin.item.CollectableCoinItem;
 import me.villagerunknown.platform.util.RegistryUtil;
@@ -15,7 +17,7 @@ import net.minecraft.util.Rarity;
 import java.util.HashMap;
 import java.util.Set;
 
-import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.Villagercoin.*;
 
 public class CollectableCoinFeature {
 	
@@ -60,7 +62,7 @@ public class CollectableCoinFeature {
 	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
 		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, flipChance, maximumAllowedInServer ), MOD_ID );
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		RegistryUtil.addItemToGroup( ITEM_GROUP_KEY, item );
 		
 		return item;
 	}
@@ -83,15 +85,16 @@ public class CollectableCoinFeature {
 	}
 	
 	public static Item registerCraftableCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
-		Item item = registerCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, settings );
-		
-		CoinCraftingFeature.registerCoin( item, value );
-		
-		return item;
+		return registerCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, settings );
 	}
 	
 	public static Item registerCraftableCollectableCoinItem(String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
-		return registerCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, lootTables, entityDrops, settings );
+		Item item = registerCraftableCollectableCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, settings );
+		
+		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
+		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
+		
+		return item;
 	}
 	
 	public static HashMap<Item, Integer> getItemsInExistence() {

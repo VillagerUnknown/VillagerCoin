@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.Villagercoin.LOGGER;
 import static net.minecraft.block.CrafterBlock.CRAFTING;
 import static net.minecraft.block.CrafterBlock.getCraftingRecipe;
 
@@ -47,33 +48,33 @@ public class CrafterBlockMixin {
 				if (itemStack.isEmpty()) {
 					world.syncWorldEvent(1050, pos, 0);
 				} else {
-					Collection<Item> coins = CoinCraftingFeature.CRAFTABLE_COINS.values();
+					Collection<Item> coins = CoinCraftingFeature.getCraftingResultCoins();
 					
 					if( coins.contains( itemStack.getItem() ) ) {
-						crafterBlockEntity.setCraftingTicksRemaining(6);
-						world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
-						itemStack.onCraftByCrafter(world);
-						this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
-						Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRemainder(craftingRecipeInput).iterator();
-						
-						while(var9.hasNext()) {
-							ItemStack itemStack2 = (ItemStack)var9.next();
-							if (!itemStack2.isEmpty()) {
-								this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack2, state, recipeEntry);
-							}
-						}
-						
-						// This ingredients map doesn't require as much information as the others.
-						// ItemStack is used instead of coinFeature.CoinIngredient
-						AtomicReference<TreeMap<Integer, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>(Villagercoin.reverseSort));
-						
-						crafterBlockEntity.getHeldStacks().forEach((stack) -> {
-							ingredientsMap.set(CoinCraftingFeature.updateCoinIngredientsMap(ingredientsMap.get(), stack));
-						});
-						
 						CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 						
 						if( null != currencyComponent ) {
+							crafterBlockEntity.setCraftingTicksRemaining(6);
+							world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
+							itemStack.onCraftByCrafter(world);
+							this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
+							Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRemainder(craftingRecipeInput).iterator();
+							
+							while(var9.hasNext()) {
+								ItemStack itemStack2 = (ItemStack)var9.next();
+								if (!itemStack2.isEmpty()) {
+									this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack2, state, recipeEntry);
+								}
+							}
+							
+							// This ingredients map doesn't require as much information as the others.
+							// ItemStack is used instead of coinFeature.CoinIngredient
+							AtomicReference<TreeMap<Integer, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>());
+							
+							crafterBlockEntity.getHeldStacks().forEach((stack) -> {
+								ingredientsMap.set(CoinCraftingFeature.updateCoinIngredientsMap(ingredientsMap.get(), stack));
+							});
+							
 							AtomicInteger totalCost = new AtomicInteger(itemStack.getCount() * currencyComponent.value());
 							
 							ingredientsMap.get().forEach((order, ingredient) -> {

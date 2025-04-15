@@ -137,8 +137,8 @@ public class MerchantCoinTradingFeature {
 	
 	public static boolean shouldReplaceTrades( TradedItem firstBuyItem, ItemStack sellItem ) {
 		return Villagercoin.CONFIG.enableTradeModifications
-				&& !CoinCraftingFeature.CRAFTABLE_COINS.containsValue( firstBuyItem.itemStack().getItem() )
-				&& !CoinCraftingFeature.CRAFTABLE_COINS.containsValue( sellItem.getItem() );
+				&& !CoinCraftingFeature.isCraftingResultCoin( firstBuyItem.itemStack().getItem() )
+				&& !CoinCraftingFeature.isCraftingResultCoin( sellItem.getItem() );
 	}
 	
 	public static Item getCoinForTrade(TradedItem firstBuyItem, ItemStack sellItem, int maxUses, boolean rewardingPlayerExperience, int specialPrice, int demandBonus, float priceMultiplier, int merchantExperience ) {

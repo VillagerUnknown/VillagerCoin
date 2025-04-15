@@ -1,7 +1,6 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.EntityUtil;
-import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.component.CoinComponent;
@@ -83,13 +82,7 @@ public class InventoryEffectCoinFeature {
 	}
 	
 	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new InventoryEffectCoinItem( settings, value, rarity, 1, 1, dropChance, flipChance, maximumAllowedInServer, statusEffects ), MOD_ID );
-		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
-		
-		CoinCraftingFeature.registerCoin( item, value );
-		
-		return item;
+		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, statusEffects );
 	}
 	
 	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {

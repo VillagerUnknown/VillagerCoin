@@ -47,7 +47,9 @@ public class EdibleCoinFeature {
 	
 	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, Item.Settings settings ) {
 		Item item = RegistryUtil.registerItem( id, new EdibleCoinItem( settings, foodComponent, rarity, dropMinimum, dropMaximum, dropChance ), MOD_ID );
+		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
 		return item;
 	}
 	
