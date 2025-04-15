@@ -95,7 +95,7 @@ public class MobsDropCoinsFeature {
 			EntityType.ZOMBIFIED_PIGLIN
 	)));
 	
-	public static Set<EntityType<?>> COPPER_MOB_DROPS = combineEntityTypes( IRON_MOB_DROPS, new HashSet<>(Arrays.asList(
+	public static Set<EntityType<?>> COPPER_MOB_DROPS = buildCopperMobDrops(new HashSet<>(Arrays.asList(
 			EntityType.DROWNED,
 			EntityType.SKELETON,
 			EntityType.VILLAGER,
@@ -108,11 +108,11 @@ public class MobsDropCoinsFeature {
 	public static HashMap<EntityType<?>, Set<Item>> MOB_DROPS = new HashMap<>();
 	
 	public static void execute(){
-		registerMobDropsEvent();
-		
-		if( Villagercoin.CONFIG.enableBreedableMobDrops) {
-			COPPER_MOB_DROPS.addAll( OPTIONAL_MOB_DROPS );
+		if( Villagercoin.CONFIG.enableBreedableMobDrops ) {
+			COPPER_MOB_DROPS = combineEntityTypes( COPPER_MOB_DROPS, OPTIONAL_MOB_DROPS );
 		} // if
+		
+		registerMobDropsEvent();
 	}
 	
 	@SafeVarargs
@@ -124,6 +124,16 @@ public class MobsDropCoinsFeature {
 		} // for
 		
 		return combinedEntityTypes;
+	}
+	
+	private static Set<EntityType<?>> buildCopperMobDrops( Set<EntityType<?>> entityTypes ) {
+		Set<EntityType<?>> copperMobDrops = combineEntityTypes( IRON_MOB_DROPS, entityTypes );
+		
+		if( Villagercoin.CONFIG.enableBreedableMobDrops ) {
+			copperMobDrops = combineEntityTypes( copperMobDrops, OPTIONAL_MOB_DROPS );
+		} // if
+		
+		return copperMobDrops;
 	}
 	
 	public static void addCoinToMobDrops( Item coin, Set<EntityType<?>> entityTypes ) {

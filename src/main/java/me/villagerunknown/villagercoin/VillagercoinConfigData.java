@@ -89,10 +89,10 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int copperLootTableRolls = 10;
 	
 	@ConfigEntry.Category("LootTables")
-	public int ironLootTableRolls = 7;
+	public int ironLootTableRolls = 10;
 	
 	@ConfigEntry.Category("LootTables")
-	public int goldLootTableRolls = 5;
+	public int goldLootTableRolls = 10;
 	
 	@ConfigEntry.Category("LootTables")
 	public int emeraldLootTableRolls = 0;
@@ -101,13 +101,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int netheriteLootTableRolls = 0;
 	
 	@ConfigEntry.Category("LootTables")
-	public int copperLootTableWeight = 5;
+	public int copperLootTableWeight = 10;
 	
 	@ConfigEntry.Category("LootTables")
-	public int ironLootTableWeight = 3;
+	public int ironLootTableWeight = 7;
 	
 	@ConfigEntry.Category("LootTables")
-	public int goldLootTableWeight = 1;
+	public int goldLootTableWeight = 5;
 	
 	@ConfigEntry.Category("LootTables")
 	public int emeraldLootTableWeight = 0;

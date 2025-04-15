@@ -45,13 +45,6 @@ public class Villagercoin implements ModInitializer {
 			.displayName(Text.translatable("itemGroup." + MOD_ID))
 			.build();
 	
-	public static Comparator<Integer> reverseSort = new Comparator<Integer>() {
-		@Override
-		public int compare(Integer num1, Integer num2) {
-			return num2.compareTo(num1);
-		}
-	};
-	
 	@Override
 	public void onInitialize() {
 		MAX_COUNT = CONFIG.maximumCoinStackSize;
