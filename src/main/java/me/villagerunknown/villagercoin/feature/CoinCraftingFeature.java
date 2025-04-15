@@ -45,7 +45,7 @@ public class CoinCraftingFeature {
 		return CRAFTING_RESULT_COINS.values();
 	}
 	
-	public static ItemStack getLargestCoin(int coinValue ) {
+	public static ItemStack getLargestCoin( int coinValue, boolean singleCount ) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
@@ -62,17 +62,17 @@ public class CoinCraftingFeature {
 		if( null != coin ) {
 			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
 			
-			if( null != currencyComponent ) {
+			returnStack = new ItemStack(coin, 1);
+			
+			if( !singleCount && null != currencyComponent ) {
 				returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
-			} else {
-				returnStack = new ItemStack(coin, getConversionValue(coinValue, 1));
-			} // if, else
+			} // if
 		} // if
 		
 		return returnStack;
 	}
 	
-	public static ItemStack getLargerCoin( int coinValue ) {
+	public static ItemStack getLargerCoin( int coinValue, boolean singleCount ) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
@@ -90,11 +90,11 @@ public class CoinCraftingFeature {
 		if( null != coin ) {
 			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
 			
-			if( null != currencyComponent ) {
+			returnStack = new ItemStack(coin, getConversionValue(coinValue, 1));
+			
+			if( !singleCount && null != currencyComponent ) {
 				returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
-			} else {
-				returnStack = new ItemStack(coin, getConversionValue(coinValue, 1));
-			} // if, else
+			} // if
 		} // if
 		
 		return returnStack;

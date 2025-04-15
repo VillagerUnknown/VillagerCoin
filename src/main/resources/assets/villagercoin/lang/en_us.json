@@ -60,6 +60,7 @@
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToMobDrops": "Add Coins to Mob Drops",
   "text.autoconfig.villagerunknown-villagercoin.option.enableBreedableMobDrops": "Enable Breedable Mob Coin Drops",
   "text.autoconfig.villagerunknown-villagercoin.option.enableCoinFlipping": "Enable Coin Flipping",
+  "text.autoconfig.villagerunknown-villagercoin.option.enableCraftingMultipleToMaxCount": "Enable Crafting Multiple to Max Count",
   "text.autoconfig.villagerunknown-villagercoin.option.enableTradeModifications": "Enable Trade Modifications",
   "text.autoconfig.villagerunknown-villagercoin.option.lootingBonusPerLevel": "Looting Bonus per Level",
   "text.autoconfig.villagerunknown-villagercoin.option.maximumCoinStackSize": "Maximum Coin Stack Size",

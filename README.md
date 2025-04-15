@@ -62,13 +62,13 @@ Convert between currencies using the crafting table and auto-crafter.
 * Insert a single stack of 99 or fewer of the same coin in a crafting table to convert down.
 * Insert 100 or more of the same coin in a crafting table to convert up.
 
-You can sum up your coins by placing them all in the crafting table together. 
 The crafting table will calculate the total value of the coins and allow you to craft the highest value coin while leaving the remainder. 
+
+You can optionally configure the crafting table to craft the maximum amount of coins when placing multiple stacks of coins in the crafting table together.
 
 Copper, Iron, and Gold Villager Coins can be smelted down to their respective resources using the Furnace or Blast Furnace.
 
-_Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) 
-will still automatically stack with the same items in your inventory, but it will only craft once. 
+_Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) will only craft once. 
 Use the auto-crafter to convert large amounts of coins._
 
 ### Loot Tables
@@ -132,7 +132,8 @@ These options apply to every Villager Coin.
 
 * currencyConversionMultiplier - The conversion value between currencies in the following order: Copper <-> Iron <-> Gold <-> Emerald <-> Netherite. (Default: 100)
 * maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
-* enableCoinFlipping - Allow players to flip a single coin for a heads or tails result.
+* enableCraftingMultipleToMaxCount - Allow crafting the maximum count when multiple stacks of coins are placed in the crafting table. (Default: false)
+* enableCoinFlipping - Allow players to flip a single coin for a heads or tails result. (Default: true)
 
 **Effect Coins**
 

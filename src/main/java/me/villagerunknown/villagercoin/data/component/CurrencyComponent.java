@@ -29,12 +29,12 @@ public record CurrencyComponent(int value) {
 		return value;
 	}
 	
-	public ItemStack getLargestCoin( int coinValue ) {
-		return CoinCraftingFeature.getLargestCoin( coinValue );
+	public ItemStack getLargestCoin( int coinValue, boolean singleCount ) {
+		return CoinCraftingFeature.getLargestCoin( coinValue, singleCount );
 	}
 	
-	public ItemStack getLargerCoin( int coinValue ) {
-		return CoinCraftingFeature.getLargerCoin( coinValue );
+	public ItemStack getLargerCoin( int coinValue, boolean singleCount ) {
+		return CoinCraftingFeature.getLargerCoin( coinValue, singleCount );
 	}
 	
 	public ItemStack getSmallerCoin( int coinValue ) {

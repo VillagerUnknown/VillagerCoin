@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.recipe;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.item.ItemStack;
@@ -58,7 +59,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 				} // if
 			} // for
 			
-			ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue );
+			ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue, !Villagercoin.CONFIG.enableCraftingMultipleToMaxCount );
 			CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
 			
 			if( null != largestComponent && largestComponent.value() > 1 ) {
@@ -79,7 +80,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 						ItemStack smallerCoin = CoinCraftingFeature.getSmallerCoin( currencyComponent.value() );
 						CurrencyComponent smallerComponent = smallerCoin.get( CURRENCY_COMPONENT );
 						
-						ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue );
+						ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue, true );
 						CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
 						
 						if(
