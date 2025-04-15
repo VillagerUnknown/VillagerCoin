@@ -4,7 +4,7 @@ Villager Coin is a currency library that adds a customizable coin currency and o
 Coins can be converted between different types through the crafting table.
 
 Villager Coin, on its own, consists of 5 types of coins each with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
-More coins can be added with addon mods like edible and collectable coins. 
+More coins can be added, like edible, collectable, cursed, and lucky coins, with addon mods. 
 
 Each type of coin stacks up to 5,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
 The stack size can be configured, but it's limited to a maximum of 1,073,741,822.
