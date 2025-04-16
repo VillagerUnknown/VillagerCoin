@@ -48,24 +48,24 @@ public class InventoryEffectCoinFeature {
 		new StewEffects();
 	}
 	
-	public static Item registerInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, statusEffects, new Item.Settings() );
+	public static Item registerInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
+		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, new Item.Settings() );
 	}
 	
-	public static Item registerInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops,  List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Settings() );
+	public static Item registerInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops,  List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
+		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Settings() );
 	}
 	
-	public static Item registerInventoryEffectCoinItem(String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new InventoryEffectCoinItem( settings, value, rarity, 1, 1, dropChance, flipChance, maximumAllowedInServer, statusEffects ), MOD_ID );
+	public static Item registerInventoryEffectCoinItem(String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
+		Item item = RegistryUtil.registerItem( id, new InventoryEffectCoinItem( settings, value, rarity, 1, 1, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects ), MOD_ID );
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
 		
 		return item;
 	}
 	
-	public static Item registerInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
-		Item item = registerInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, statusEffects, settings );
+	public static Item registerInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
+		Item item = registerInventoryEffectCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
@@ -73,20 +73,20 @@ public class InventoryEffectCoinFeature {
 		return item;
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerCraftableInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, statusEffects, new Item.Settings() );
+	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
+		return registerCraftableInventoryEffectCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, new Item.Settings() );
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerCraftableInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Settings() );
+	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
+		return registerCraftableInventoryEffectCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Settings() );
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
-		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, statusEffects );
+	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
+		return registerInventoryEffectCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects );
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
-		Item item = registerCraftableInventoryEffectCoinItem( id, value, rarity, dropChance, flipChance, maximumAllowedInServer, statusEffects, settings );
+	public static Item registerCraftableInventoryEffectCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
+		Item item = registerCraftableInventoryEffectCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );

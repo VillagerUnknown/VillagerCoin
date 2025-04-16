@@ -23,62 +23,6 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public boolean enableCoinFlipping = true;
 	
 	/**
-	 * Effect Coins
-	 */
-	
-	@ConfigEntry.Category("EffectCoins")
-	public float inventoryEffectChancePerTick = 1F;
-	
-	/**
-	 * Collectable Coins
-	 */
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int copperMaximumCollectables = 10;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int ironMaximumCollectables = 5;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int goldMaximumCollectables = 3;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int emeraldMaximumCollectables = 2;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int netheriteMaximumCollectables = 1;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int copperCollectableValue = 100;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int ironCollectableValue = 500;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int goldCollectableValue = 500000;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int emeraldCollectableValue = 2000000;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int netheriteCollectableValue = 200000000;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float copperCollectableDropChance = 0.001F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float ironCollectableDropChance = 0.0005F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float goldCollectableDropChance = 0.0001F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float emeraldCollectableDropChance = 0.00005F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float netheriteCollectableDropChance = 0.00001F;
-	
-	/**
 	 * Loot Tables
 	 */
 	
@@ -209,5 +153,95 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	
 	@ConfigEntry.Category("Trades")
 	public float chanceDiamondBecomesEmeraldTrade = 0.5F;
+	
+	/**
+	 * Collectable Coins
+	 */
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int copperMaximumCollectables = 10;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int ironMaximumCollectables = 5;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int goldMaximumCollectables = 3;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int emeraldMaximumCollectables = 2;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int netheriteMaximumCollectables = 1;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int copperCollectableValue = 100;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int ironCollectableValue = 500;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int goldCollectableValue = 500000;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int emeraldCollectableValue = 2000000;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int netheriteCollectableValue = 200000000;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float copperCollectableDropChance = 0.001F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float ironCollectableDropChance = 0.0005F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float goldCollectableDropChance = 0.0001F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float emeraldCollectableDropChance = 0.00005F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float netheriteCollectableDropChance = 0.00001F;
+	
+	/**
+	 * Effect Coins
+	 */
+	
+	@ConfigEntry.Category("EffectCoins")
+	public float inventoryEffectChancePerTick = 1F;
+	
+	/**
+	 * Edible Coins
+	 */
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public int copperEdibleDropMaximum = 2;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public int ironEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public int goldEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public int emeraldEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public int netheriteEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public float copperEdibleDropChance = 0.125F;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public float ironEdibleDropChance = 0.0625F;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public float goldEdibleDropChance = 0.025F;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public float emeraldEdibleDropChance = 0.00625F;
+	
+	@ConfigEntry.Category("EdibleDrops")
+	public float netheriteEdibleDropChance = 0.0015625F;
 	
 }
