@@ -33,10 +33,10 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int copperLootTableRolls = 10;
 	
 	@ConfigEntry.Category("LootTables")
-	public int ironLootTableRolls = 10;
+	public int ironLootTableRolls = 15;
 	
 	@ConfigEntry.Category("LootTables")
-	public int goldLootTableRolls = 10;
+	public int goldLootTableRolls = 20;
 	
 	@ConfigEntry.Category("LootTables")
 	public int emeraldLootTableRolls = 0;
@@ -45,13 +45,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int netheriteLootTableRolls = 0;
 	
 	@ConfigEntry.Category("LootTables")
-	public int copperLootTableWeight = 10;
+	public int copperLootTableWeight = 20;
 	
 	@ConfigEntry.Category("LootTables")
-	public int ironLootTableWeight = 7;
+	public int ironLootTableWeight = 15;
 	
 	@ConfigEntry.Category("LootTables")
-	public int goldLootTableWeight = 5;
+	public int goldLootTableWeight = 10;
 	
 	@ConfigEntry.Category("LootTables")
 	public int emeraldLootTableWeight = 0;
@@ -214,34 +214,34 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	 * Edible Coins
 	 */
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public int copperEdibleDropMaximum = 2;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public int ironEdibleDropMaximum = 1;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public int goldEdibleDropMaximum = 1;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public int emeraldEdibleDropMaximum = 1;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public int netheriteEdibleDropMaximum = 1;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public float copperEdibleDropChance = 0.125F;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public float ironEdibleDropChance = 0.0625F;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public float goldEdibleDropChance = 0.025F;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public float emeraldEdibleDropChance = 0.00625F;
 	
-	@ConfigEntry.Category("EdibleDrops")
+	@ConfigEntry.Category("EdibleCoins")
 	public float netheriteEdibleDropChance = 0.0015625F;
 	
 }

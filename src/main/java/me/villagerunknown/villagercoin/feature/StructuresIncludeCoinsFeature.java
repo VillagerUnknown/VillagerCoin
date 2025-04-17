@@ -173,19 +173,26 @@ public class StructuresIncludeCoinsFeature {
 							CollectableComponent collectableComponent = item.getComponents().get( COLLECTABLE_COMPONENT );
 							DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
 							
-							if( null != collectableComponent && null != dropComponent ) {
-								if( MathUtil.hasChance( dropComponent.dropChance() ) && collectableComponent.canAddToCirculation( item ) ) {
-									poolBuilder.with(ItemEntry.builder(item).weight(lootTableComponent.lootTableWeight()));
-									poolBuilder.rolls(UniformLootNumberProvider.create(0, lootTableComponent.lootTableRolls()));
-								} // if
-							} else {
-								poolBuilder.with( ItemEntry.builder( item ).weight( lootTableComponent.lootTableWeight() ) );
-								poolBuilder.rolls( UniformLootNumberProvider.create( 0, lootTableComponent.lootTableRolls() ) );
-							}
-						} else {
-							poolBuilder.with( ItemEntry.builder( item ).weight( getLootTableWeight( registryKey ) ) );
-							poolBuilder.rolls( UniformLootNumberProvider.create( 0, getLootTableRolls( registryKey ) ) );
-						} // if, else
+							int lootTableWeight = lootTableComponent.lootTableWeight();
+							int lootTableRolls = lootTableComponent.lootTableRolls();
+							
+							if( lootTableWeight > 0 && lootTableRolls > 0 ) {
+								if( null != collectableComponent && null != dropComponent ) {
+									if( MathUtil.hasChance( dropComponent.dropChance() ) && collectableComponent.canAddToCirculation( item ) ) {
+										// Collectable Coins
+										// Every collectable coin has a minimum roll of 0
+										poolBuilder.with(ItemEntry.builder(item).weight( lootTableWeight ));
+										poolBuilder.rolls( UniformLootNumberProvider.create( 0, lootTableRolls ) );
+									} // if
+								} else {
+									// Coins
+									// Every coin has a minimum roll equal to lootTableRolls divided by COPPER_LOOT_TABLE_ROLLS
+									// with the larger number dividing into the smaller number.
+									poolBuilder.with( ItemEntry.builder( item ).weight( lootTableWeight ) );
+									poolBuilder.rolls( UniformLootNumberProvider.create( getMinimumLootTableRolls( lootTableRolls ), lootTableRolls ) );
+								} // if, else
+							} // if
+						} // if
 					} // for
 				} // if
 				
@@ -222,6 +229,16 @@ public class StructuresIncludeCoinsFeature {
 		} else if( IRON_LOOT_TABLES.contains(registryKey) ) {
 			lootTableRolls = IRON_LOOT_TABLE_ROLLS;
 		} // if, else if ...
+		
+		return lootTableRolls;
+	}
+	
+	public static int getMinimumLootTableRolls( int lootTableRolls ) {
+		if( lootTableRolls > COPPER_LOOT_TABLE_ROLLS ) {
+			lootTableRolls = lootTableRolls / COPPER_LOOT_TABLE_ROLLS;
+		} else {
+			lootTableRolls = COPPER_LOOT_TABLE_ROLLS / lootTableRolls;
+		} // if, else
 		
 		return lootTableRolls;
 	}
