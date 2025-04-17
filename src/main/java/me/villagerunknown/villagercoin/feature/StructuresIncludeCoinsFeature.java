@@ -178,11 +178,14 @@ public class StructuresIncludeCoinsFeature {
 							
 							if( lootTableWeight > 0 && lootTableRolls > 0 ) {
 								if( null != collectableComponent && null != dropComponent ) {
-									if( MathUtil.hasChance( dropComponent.dropChance() ) && collectableComponent.canAddToCirculation( item ) ) {
-										// Collectable Coins
-										// Every collectable coin has a minimum roll of 0
+									// Collectable Coins
+									if(
+										MathUtil.hasChance( dropComponent.dropChance() * dropComponent.dropChanceMultiplier() )
+										&& collectableComponent.canAddToCirculation( item )
+									) {
+										// Every collectable coin has a minimum roll of 1 after passing the drop chance check
 										poolBuilder.with(ItemEntry.builder(item).weight( lootTableWeight ));
-										poolBuilder.rolls( UniformLootNumberProvider.create( 0, lootTableRolls ) );
+										poolBuilder.rolls( UniformLootNumberProvider.create( lootTableRolls, lootTableRolls ) );
 									} // if
 								} else {
 									// Coins

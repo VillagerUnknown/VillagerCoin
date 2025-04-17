@@ -35,7 +35,7 @@ public class CollectableCoinFeature {
 	public static float EMERALD_DROP_CHANCE = Villagercoin.CONFIG.emeraldCollectableDropChance;
 	public static float NETHERITE_DROP_CHANCE = Villagercoin.CONFIG.netheriteCollectableDropChance;
 	
-	private static MinecraftServer server;
+	private static MinecraftServer server = null;
 	
 	public static void execute() {
 		registerServerStartedEvent();
@@ -94,15 +94,20 @@ public class CollectableCoinFeature {
 	}
 	
 	public static HashMap<Item, Integer> getItemsInExistence() {
-		PersistentItemExistenceData state = PersistentItemExistenceData.getServerState( CollectableCoinFeature.server );
+		if( null != CollectableCoinFeature.server ) {
+			PersistentItemExistenceData state = PersistentItemExistenceData.getServerState(CollectableCoinFeature.server);
+			return state.ITEMS_IN_EXISTENCE;
+		} // if
 		
-		return state.ITEMS_IN_EXISTENCE;
+		return new HashMap<>();
 	}
 	
 	public static void setItemsInExistence( HashMap<Item, Integer> itemsInExistence ) {
-		PersistentItemExistenceData state = PersistentItemExistenceData.getServerState( CollectableCoinFeature.server );
-		
-		state.ITEMS_IN_EXISTENCE = itemsInExistence;
+		if( null != CollectableCoinFeature.server ) {
+			PersistentItemExistenceData state = PersistentItemExistenceData.getServerState(CollectableCoinFeature.server);
+			
+			state.ITEMS_IN_EXISTENCE = itemsInExistence;
+		} // if
 	}
 	
 	public static int collectablesInCirculation() {
