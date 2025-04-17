@@ -2,9 +2,7 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.CoinComponent;
-import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
-import me.villagerunknown.villagercoin.data.component.LootTableComponent;
+import me.villagerunknown.villagercoin.data.component.*;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
@@ -172,8 +170,18 @@ public class StructuresIncludeCoinsFeature {
 						LootTableComponent lootTableComponent = item.getComponents().get( LOOT_TABLE_COMPONENT );
 						
 						if( null != lootTableComponent ) {
-							poolBuilder.with( ItemEntry.builder( item ).weight( lootTableComponent.lootTableWeight() ) );
-							poolBuilder.rolls( UniformLootNumberProvider.create( 0, lootTableComponent.lootTableRolls() ) );
+							CollectableComponent collectableComponent = item.getComponents().get( COLLECTABLE_COMPONENT );
+							DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
+							
+							if( null != collectableComponent && null != dropComponent ) {
+								if( MathUtil.hasChance( dropComponent.dropChance() ) && collectableComponent.canAddToCirculation( item ) ) {
+									poolBuilder.with(ItemEntry.builder(item).weight(lootTableComponent.lootTableWeight()));
+									poolBuilder.rolls(UniformLootNumberProvider.create(0, lootTableComponent.lootTableRolls()));
+								} // if
+							} else {
+								poolBuilder.with( ItemEntry.builder( item ).weight( lootTableComponent.lootTableWeight() ) );
+								poolBuilder.rolls( UniformLootNumberProvider.create( 0, lootTableComponent.lootTableRolls() ) );
+							}
 						} else {
 							poolBuilder.with( ItemEntry.builder( item ).weight( getLootTableWeight( registryKey ) ) );
 							poolBuilder.rolls( UniformLootNumberProvider.create( 0, getLootTableRolls( registryKey ) ) );
