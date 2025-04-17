@@ -17,66 +17,7 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int maximumCoinStackSize = 5000;
 	
 	@ConfigEntry.Category("Coins")
-	public boolean enableCraftingMultipleToMaxCount = false;
-	
-	@ConfigEntry.Category("Coins")
 	public boolean enableCoinFlipping = true;
-	
-	/**
-	 * Effect Coins
-	 */
-	
-	@ConfigEntry.Category("EffectCoins")
-	public float inventoryEffectChancePerTick = 1F;
-	
-	/**
-	 * Collectable Coins
-	 */
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int copperMaximumCollectables = 10;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int ironMaximumCollectables = 5;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int goldMaximumCollectables = 3;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int emeraldMaximumCollectables = 2;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int netheriteMaximumCollectables = 1;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int copperCollectableValue = 100;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int ironCollectableValue = 500;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int goldCollectableValue = 500000;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int emeraldCollectableValue = 2000000;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public int netheriteCollectableValue = 200000000;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float copperCollectableDropChance = 0.001F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float ironCollectableDropChance = 0.0005F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float goldCollectableDropChance = 0.0001F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float emeraldCollectableDropChance = 0.00005F;
-	
-	@ConfigEntry.Category("CollectableCoins")
-	public float netheriteCollectableDropChance = 0.00001F;
 	
 	/**
 	 * Loot Tables
@@ -89,10 +30,10 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int copperLootTableRolls = 10;
 	
 	@ConfigEntry.Category("LootTables")
-	public int ironLootTableRolls = 10;
+	public int ironLootTableRolls = 15;
 	
 	@ConfigEntry.Category("LootTables")
-	public int goldLootTableRolls = 10;
+	public int goldLootTableRolls = 20;
 	
 	@ConfigEntry.Category("LootTables")
 	public int emeraldLootTableRolls = 0;
@@ -101,13 +42,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int netheriteLootTableRolls = 0;
 	
 	@ConfigEntry.Category("LootTables")
-	public int copperLootTableWeight = 10;
+	public int copperLootTableWeight = 20;
 	
 	@ConfigEntry.Category("LootTables")
-	public int ironLootTableWeight = 7;
+	public int ironLootTableWeight = 15;
 	
 	@ConfigEntry.Category("LootTables")
-	public int goldLootTableWeight = 5;
+	public int goldLootTableWeight = 10;
 	
 	@ConfigEntry.Category("LootTables")
 	public int emeraldLootTableWeight = 0;
@@ -209,5 +150,95 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	
 	@ConfigEntry.Category("Trades")
 	public float chanceDiamondBecomesEmeraldTrade = 0.5F;
+	
+	/**
+	 * Collectable Coins
+	 */
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int copperMaximumCollectables = 10;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int ironMaximumCollectables = 5;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int goldMaximumCollectables = 3;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int emeraldMaximumCollectables = 2;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int netheriteMaximumCollectables = 1;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int copperCollectableValue = 100;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int ironCollectableValue = 500;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int goldCollectableValue = 500000;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int emeraldCollectableValue = 2000000;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public int netheriteCollectableValue = 200000000;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float copperCollectableDropChance = 0.001F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float ironCollectableDropChance = 0.0005F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float goldCollectableDropChance = 0.0001F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float emeraldCollectableDropChance = 0.00005F;
+	
+	@ConfigEntry.Category("CollectableCoins")
+	public float netheriteCollectableDropChance = 0.00001F;
+	
+	/**
+	 * Effect Coins
+	 */
+	
+	@ConfigEntry.Category("EffectCoins")
+	public float inventoryEffectChancePerTick = 1F;
+	
+	/**
+	 * Edible Coins
+	 */
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public int copperEdibleDropMaximum = 2;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public int ironEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public int goldEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public int emeraldEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public int netheriteEdibleDropMaximum = 1;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public float copperEdibleDropChance = 0.125F;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public float ironEdibleDropChance = 0.0625F;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public float goldEdibleDropChance = 0.025F;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public float emeraldEdibleDropChance = 0.00625F;
+	
+	@ConfigEntry.Category("EdibleCoins")
+	public float netheriteEdibleDropChance = 0.0015625F;
 	
 }

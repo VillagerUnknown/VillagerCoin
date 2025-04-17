@@ -59,7 +59,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 				} // if
 			} // for
 			
-			ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue, !Villagercoin.CONFIG.enableCraftingMultipleToMaxCount );
+			ItemStack largestCoin = CoinCraftingFeature.getLargestCoin( totalValue, false );
 			CurrencyComponent largestComponent = largestCoin.get( CURRENCY_COMPONENT );
 			
 			if( null != largestComponent && largestComponent.value() > 1 ) {

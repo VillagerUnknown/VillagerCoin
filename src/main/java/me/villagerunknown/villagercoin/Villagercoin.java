@@ -3,9 +3,7 @@ package me.villagerunknown.villagercoin;
 import me.villagerunknown.platform.Platform;
 import me.villagerunknown.platform.PlatformMod;
 import me.villagerunknown.platform.manager.featureManager;
-import me.villagerunknown.villagercoin.data.component.CoinComponent;
-import me.villagerunknown.villagercoin.data.component.CollectableComponent;
-import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.data.component.*;
 import me.villagerunknown.villagercoin.feature.*;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ModInitializer;
@@ -34,6 +32,10 @@ public class Villagercoin implements ModInitializer {
 	public static int MAX_COUNT = 5000;
 	
 	public static final ComponentType<CoinComponent> COIN_COMPONENT;
+	
+	public static final ComponentType<DropComponent> DROP_COMPONENT;
+	
+	public static final ComponentType<LootTableComponent> LOOT_TABLE_COMPONENT;
 	
 	public static final ComponentType<CurrencyComponent> CURRENCY_COMPONENT;
 	
@@ -81,6 +83,12 @@ public class Villagercoin implements ModInitializer {
 	static{
 		COIN_COMPONENT = registerComponentType("coin", (builder) -> {
 			return builder.codec(CoinComponent.CODEC).packetCodec(CoinComponent.PACKET_CODEC).cache();
+		});
+		DROP_COMPONENT = registerComponentType("drop", (builder) -> {
+			return builder.codec(DropComponent.CODEC).packetCodec(DropComponent.PACKET_CODEC).cache();
+		});
+		LOOT_TABLE_COMPONENT = registerComponentType("loot_table", (builder) -> {
+			return builder.codec(LootTableComponent.CODEC).packetCodec(LootTableComponent.PACKET_CODEC).cache();
 		});
 		CURRENCY_COMPONENT = registerComponentType("currency", (builder) -> {
 			return builder.codec(CurrencyComponent.CODEC).packetCodec(CurrencyComponent.PACKET_CODEC).cache();

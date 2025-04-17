@@ -17,17 +17,17 @@ import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
 public class EdibleCoinFeature {
 	
-	public static int COPPER_DROP_MAXIMUM = 5;
-	public static int IRON_DROP_MAXIMUM = 4;
-	public static int GOLD_DROP_MAXIMUM = 3;
-	public static int EMERALD_DROP_MAXIMUM = 2;
-	public static int NETHERITE_DROP_MAXIMUM = 1;
+	public static int COPPER_DROP_MAXIMUM = Villagercoin.CONFIG.copperEdibleDropMaximum;
+	public static int IRON_DROP_MAXIMUM = Villagercoin.CONFIG.ironEdibleDropMaximum;
+	public static int GOLD_DROP_MAXIMUM = Villagercoin.CONFIG.goldEdibleDropMaximum;
+	public static int EMERALD_DROP_MAXIMUM = Villagercoin.CONFIG.emeraldEdibleDropMaximum;
+	public static int NETHERITE_DROP_MAXIMUM = Villagercoin.CONFIG.netheriteEdibleDropMaximum;
 	
-	public static float COPPER_DROP_CHANCE = CoinFeature.COPPER_DROP_CHANCE / 4;
-	public static float IRON_DROP_CHANCE = CoinFeature.IRON_DROP_CHANCE / 3;
-	public static float GOLD_DROP_CHANCE = CoinFeature.GOLD_DROP_CHANCE / 2;
-	public static float EMERALD_DROP_CHANCE = 0.005F;
-	public static float NETHERITE_DROP_CHANCE = 0.0005F;
+	public static float COPPER_DROP_CHANCE = Villagercoin.CONFIG.copperEdibleDropChance;
+	public static float IRON_DROP_CHANCE = Villagercoin.CONFIG.ironEdibleDropChance;
+	public static float GOLD_DROP_CHANCE = Villagercoin.CONFIG.goldEdibleDropChance;
+	public static float EMERALD_DROP_CHANCE = Villagercoin.CONFIG.emeraldEdibleDropChance;
+	public static float NETHERITE_DROP_CHANCE = Villagercoin.CONFIG.netheriteEdibleDropChance;
 	
 	public static FoodComponent COPPER_FOOD = FoodComponents.COOKIE;
 	public static FoodComponent IRON_FOOD = FoodComponents.BREAD;
@@ -37,24 +37,24 @@ public class EdibleCoinFeature {
 	
 	public static void execute() {}
 	
-	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance ) {
-		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, new Item.Settings() );
+	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls ) {
+		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, new Item.Settings() );
 	}
 	
-	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
-		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, lootTables, entityDrops, new Item.Settings() );
+	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
+		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, lootTables, entityDrops, new Item.Settings() );
 	}
 	
-	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new EdibleCoinItem( settings, foodComponent, rarity, dropMinimum, dropMaximum, dropChance ), MOD_ID );
+	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Item.Settings settings ) {
+		Item item = RegistryUtil.registerItem( id, new EdibleCoinItem( settings, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls ), MOD_ID );
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
 		
 		return item;
 	}
 	
-	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
-		Item item = registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, settings );
+	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+		Item item = registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );

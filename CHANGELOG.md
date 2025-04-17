@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2]
+
+### Added
+
+- Added options for Edible coins.
+
+### Changed
+
+- Changed `StructuresIncludeCoinsFeature` to use `LootTableComponent` data.
+- Changed `MobsDropCoinsFeature` to use `DropComponent` data.
+- Added `LootTableComponent` to hold information about a coins loot table.
+- Added `DropComponent` to hold information about a coins mob drop chances.
+
+### Removed
+
+- Removed `JUNGLE_TEMPLE_DISPENSER_CHEST` loot table from the Iron coin loot table.
+
+### Fixed
+
+- Loot tables now work as intended.
+- Mob drops now work as intended.
+
 ## [1.0.1]
 
 Villager Coin has been rewritten as a coin currency library and now only provides the core currency coins in favor of addon mods providing additional coins. 

@@ -2,7 +2,7 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.data.component.*;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static me.villagerunknown.villagercoin.Villagercoin.COIN_COMPONENT;
+import static me.villagerunknown.villagercoin.Villagercoin.*;
 import static net.minecraft.loot.LootTables.*;
 
 public class StructuresIncludeCoinsFeature {
@@ -73,7 +73,6 @@ public class StructuresIncludeCoinsFeature {
 			SPAWN_BONUS_CHEST,
 			SIMPLE_DUNGEON_CHEST,
 			ABANDONED_MINESHAFT_CHEST,
-			JUNGLE_TEMPLE_DISPENSER_CHEST,
 			IGLOO_CHEST_CHEST,
 			SHIPWRECK_SUPPLY_CHEST,
 			SHIPWRECK_MAP_CHEST,
@@ -167,37 +166,84 @@ public class StructuresIncludeCoinsFeature {
 				if( LOOT_TABLES.containsKey( registryKey ) ) {
 					Set<Item> items = LOOT_TABLES.get( registryKey );
 					
-					int lootTableWeight = COPPER_LOOT_TABLE_WEIGHT;
-					int lootTableRolls = COPPER_LOOT_TABLE_ROLLS;
-					
-					if( NETHERITE_LOOT_TABLES.contains( registryKey ) ) {
-						lootTableWeight = NETHERITE_LOOT_TABLE_WEIGHT;
-						lootTableRolls = NETHERITE_LOOT_TABLE_ROLLS;
-					} else if( EMERALD_LOOT_TABLES.contains( registryKey ) ) {
-						lootTableWeight = EMERALD_LOOT_TABLE_WEIGHT;
-						lootTableRolls = EMERALD_LOOT_TABLE_ROLLS;
-					} else if( GOLD_LOOT_TABLES.contains( registryKey ) ) {
-						lootTableWeight = GOLD_LOOT_TABLE_WEIGHT;
-						lootTableRolls = GOLD_LOOT_TABLE_ROLLS;
-					} else if( IRON_LOOT_TABLES.contains( registryKey ) ) {
-						lootTableWeight = IRON_LOOT_TABLE_WEIGHT;
-						lootTableRolls = IRON_LOOT_TABLE_ROLLS;
-					} // if, else if ...
-					
 					for (Item item : items) {
-						CoinComponent coinComponent = item.getComponents().get( COIN_COMPONENT );
+						LootTableComponent lootTableComponent = item.getComponents().get( LOOT_TABLE_COMPONENT );
 						
-						if( null != coinComponent && MathUtil.hasChance( coinComponent.dropChance() ) ) {
-							poolBuilder.with( ItemEntry.builder( item ).weight( lootTableWeight ) );
+						if( null != lootTableComponent ) {
+							CollectableComponent collectableComponent = item.getComponents().get( COLLECTABLE_COMPONENT );
+							DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
+							
+							int lootTableWeight = lootTableComponent.lootTableWeight();
+							int lootTableRolls = lootTableComponent.lootTableRolls();
+							
+							if( lootTableWeight > 0 && lootTableRolls > 0 ) {
+								if( null != collectableComponent && null != dropComponent ) {
+									// Collectable Coins
+									if(
+										MathUtil.hasChance( dropComponent.dropChance() * dropComponent.dropChanceMultiplier() )
+										&& collectableComponent.canAddToCirculation( item )
+									) {
+										// Every collectable coin has a minimum roll of 1 after passing the drop chance check
+										poolBuilder.with(ItemEntry.builder(item).weight( lootTableWeight ));
+										poolBuilder.rolls( UniformLootNumberProvider.create( lootTableRolls, lootTableRolls ) );
+									} // if
+								} else {
+									// Coins
+									// Every coin has a minimum roll equal to lootTableRolls divided by COPPER_LOOT_TABLE_ROLLS
+									// with the larger number dividing into the smaller number.
+									poolBuilder.with( ItemEntry.builder( item ).weight( lootTableWeight ) );
+									poolBuilder.rolls( UniformLootNumberProvider.create( getMinimumLootTableRolls( lootTableRolls ), lootTableRolls ) );
+								} // if, else
+							} // if
 						} // if
 					} // for
-					
-					poolBuilder.rolls( UniformLootNumberProvider.create( 0, lootTableRolls ) );
 				} // if
 				
 				lootBuilder.pool(poolBuilder);
 			} // if
 		});
+	}
+	
+	public static int getLootTableWeight( RegistryKey<LootTable> registryKey ) {
+		int lootTableWeight = COPPER_LOOT_TABLE_WEIGHT;
+		
+		if( NETHERITE_LOOT_TABLES.contains(registryKey) ) {
+			lootTableWeight = NETHERITE_LOOT_TABLE_WEIGHT;
+		} else if( EMERALD_LOOT_TABLES.contains(registryKey) ) {
+			lootTableWeight = EMERALD_LOOT_TABLE_WEIGHT;
+		} else if( GOLD_LOOT_TABLES.contains(registryKey) ) {
+			lootTableWeight = GOLD_LOOT_TABLE_WEIGHT;
+		} else if( IRON_LOOT_TABLES.contains(registryKey) ) {
+			lootTableWeight = IRON_LOOT_TABLE_WEIGHT;
+		} // if, else if ...
+		
+		return lootTableWeight;
+	}
+	
+	public static int getLootTableRolls( RegistryKey<LootTable> registryKey ) {
+		int lootTableRolls = COPPER_LOOT_TABLE_ROLLS;
+		
+		if( NETHERITE_LOOT_TABLES.contains(registryKey) ) {
+			lootTableRolls = NETHERITE_LOOT_TABLE_ROLLS;
+		} else if( EMERALD_LOOT_TABLES.contains(registryKey) ) {
+			lootTableRolls = EMERALD_LOOT_TABLE_ROLLS;
+		} else if( GOLD_LOOT_TABLES.contains(registryKey) ) {
+			lootTableRolls = GOLD_LOOT_TABLE_ROLLS;
+		} else if( IRON_LOOT_TABLES.contains(registryKey) ) {
+			lootTableRolls = IRON_LOOT_TABLE_ROLLS;
+		} // if, else if ...
+		
+		return lootTableRolls;
+	}
+	
+	public static int getMinimumLootTableRolls( int lootTableRolls ) {
+		if( lootTableRolls > COPPER_LOOT_TABLE_ROLLS ) {
+			lootTableRolls = lootTableRolls / COPPER_LOOT_TABLE_ROLLS;
+		} else {
+			lootTableRolls = COPPER_LOOT_TABLE_ROLLS / lootTableRolls;
+		} // if, else
+		
+		return lootTableRolls;
 	}
 	
 }
