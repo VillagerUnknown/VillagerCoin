@@ -32,7 +32,7 @@ Copper coins are used as the base value of 1 with each coin above it multiplying
 By default, Villager Coin includes Copper, Iron, and Gold coins in the loot tables and mob drops with lower value coins being more common. 
 
 _Unless configured otherwise, Emerald and Netherite coins are only available through currency conversion crafting due to their high values. 
-This includes any Emerald or Netherite coins included by addon mods._
+This includes any Emerald or Netherite coins included by addon mods. Learn how to enable emerald and netherite coins at https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy_
 
 #### Currency Values
 
