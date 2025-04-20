@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.mixin;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.block.BlockState;
@@ -67,7 +68,7 @@ public class CrafterBlockMixin {
 							
 							// This ingredients map doesn't require as much information as the others.
 							// ItemStack is used instead of coinFeature.CoinIngredient
-							AtomicReference<TreeMap<Integer, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>());
+							AtomicReference<TreeMap<Integer, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>(Villagercoin.reverseSort));
 							
 							crafterBlockEntity.getHeldStacks().forEach((stack) -> {
 								ingredientsMap.set(CoinCraftingFeature.updateCoinIngredientsMap(ingredientsMap.get(), stack));

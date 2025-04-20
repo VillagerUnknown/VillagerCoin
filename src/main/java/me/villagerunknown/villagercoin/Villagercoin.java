@@ -22,6 +22,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 
+import java.util.Comparator;
 import java.util.function.UnaryOperator;
 
 public class Villagercoin implements ModInitializer {
@@ -91,6 +92,13 @@ public class Villagercoin implements ModInitializer {
 	public static TagKey<Block> getBlockTagKey(String id ) {
 		return TagKey.of( RegistryKeys.BLOCK, Identifier.of(MOD_ID, id) );
 	}
+	
+	public static Comparator<Integer> reverseSort = new Comparator<Integer>() {
+		@Override
+		public int compare(Integer num1, Integer num2) {
+			return num2.compareTo(num1);
+		}
+	};
 	
 	static{
 		COIN_COMPONENT = registerComponentType("coin", (builder) -> {
