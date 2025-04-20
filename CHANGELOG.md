@@ -16,6 +16,10 @@ and drop the total value in coins when broken without silk touch.
 
 - Changed location of components from `villagercoin.data.component` to `villagercoin.component`.
 
+### Fixed
+
+- Fixed issue with multiple coins in the crafting table where smaller coins were being consumed before larger coins.
+
 ## [1.0.2]
 
 ### Added
