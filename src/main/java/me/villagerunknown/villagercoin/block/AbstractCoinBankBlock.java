@@ -100,7 +100,7 @@ public abstract class AbstractCoinBankBlock extends BlockWithEntity {
 		
 		CurrencyComponent currencyComponent = stack.get(CURRENCY_COMPONENT);
 		
-		if( null != currencyComponent && !stack.isIn( Villagercoin.getItemTagKey( "coin_bank" ) ) ) {
+		if( null != currencyComponent && stack.isIn( Villagercoin.getItemTagKey( "villager_coin" ) ) ) {
 			BlockEntity blockEntity = world.getBlockEntity( pos );
 			
 			if( incrementBlockEntityCurrencyValue( blockEntity, currencyComponent ) ) {
