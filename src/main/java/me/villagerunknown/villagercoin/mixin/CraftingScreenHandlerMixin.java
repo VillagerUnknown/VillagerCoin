@@ -1,6 +1,6 @@
 package me.villagerunknown.villagercoin.mixin;
 
-import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;

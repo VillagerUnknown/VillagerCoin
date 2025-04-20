@@ -4,7 +4,7 @@ import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.MessageUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.component.CoinComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

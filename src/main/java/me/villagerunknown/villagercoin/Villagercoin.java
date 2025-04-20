@@ -3,17 +3,21 @@ package me.villagerunknown.villagercoin;
 import me.villagerunknown.platform.Platform;
 import me.villagerunknown.platform.PlatformMod;
 import me.villagerunknown.platform.manager.featureManager;
-import me.villagerunknown.villagercoin.data.component.*;
+import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.feature.*;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.block.Block;
 import net.minecraft.component.ComponentType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -42,6 +46,7 @@ public class Villagercoin implements ModInitializer {
 	public static final ComponentType<CollectableComponent> COLLECTABLE_COMPONENT;
 	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
+	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
 			.icon(() -> new ItemStack(CoinItems.EMERALD_COIN))
 			.displayName(Text.translatable("itemGroup." + MOD_ID))
@@ -79,6 +84,21 @@ public class Villagercoin implements ModInitializer {
 	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
 		return (ComponentType) Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MOD.getModId(), id), ((ComponentType.Builder)builderOperator.apply(ComponentType.builder())).build());
 	}
+	
+	public static TagKey<Item> getItemTagKey(String id ) {
+		return TagKey.of( RegistryKeys.ITEM, Identifier.of(MOD_ID, id) );
+	}
+	
+	public static TagKey<Block> getBlockTagKey(String id ) {
+		return TagKey.of( RegistryKeys.BLOCK, Identifier.of(MOD_ID, id) );
+	}
+	
+	public static Comparator<Integer> reverseSort = new Comparator<Integer>() {
+		@Override
+		public int compare(Integer num1, Integer num2) {
+			return num2.compareTo(num1);
+		}
+	};
 	
 	static{
 		COIN_COMPONENT = registerComponentType("coin", (builder) -> {

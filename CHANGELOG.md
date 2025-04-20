@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3]
+
+### Added
+
+- Added `CoinBankBlocksFeature`, `AbstractCoinBankBlock`, and `AbstractCoinBankBlockEntity` to allow addon mods to 
+provide "Coin Bank" blocks that can only hold coins, hold the value of the coins if broken with silk touch, 
+and drop the total value in coins when broken without silk touch.
+- Added additional item tags for the various types of coins.
+- Added item tag for coin banks.
+
+### Changed
+
+- Changed location of components from `villagercoin.data.component` to `villagercoin.component`.
+
+### Fixed
+
+- Fixed issue with multiple coins in the crafting table where smaller coins were being consumed before larger coins.
+
 ## [1.0.2]
 
 ### Added

@@ -1,7 +1,7 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
@@ -15,7 +15,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -145,7 +144,7 @@ public class CoinCraftingFeature {
 		int left = positioned.left();
 		int top = positioned.top();
 		
-		TreeMap<Integer, CoinIngredient> ingredientsMap = new TreeMap<>();
+		TreeMap<Integer, CoinIngredient> ingredientsMap = new TreeMap<>(Villagercoin.reverseSort);
 		
 		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
 			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {

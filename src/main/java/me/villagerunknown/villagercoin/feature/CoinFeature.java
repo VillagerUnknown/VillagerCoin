@@ -1,13 +1,18 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import me.villagerunknown.villagercoin.item.CoinItem;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootTable;
 import net.minecraft.registry.*;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Rarity;
 
 import java.util.Set;
@@ -17,6 +22,8 @@ import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 public class CoinFeature {
 	
 	public static String COIN_STRING = "villager_coin";
+	
+	public static SoundEvent SOUND = SoundEvents.BLOCK_CHAIN_STEP;
 	
 	public static final int CURRENCY_CONVERSION_MULTIPLIER = Villagercoin.CONFIG.currencyConversionMultiplier;
 	
@@ -93,6 +100,12 @@ public class CoinFeature {
 		return item;
 	}
 	
-	
+	public static void playCoinSound( PlayerEntity player ) {
+		if( player.getWorld().isClient() ) {
+			return;
+		} // if
+		
+		EntityUtil.playSound(player, SOUND, SoundCategory.PLAYERS, 0.5F, 1F, false);
+	}
 	
 }

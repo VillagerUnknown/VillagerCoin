@@ -1,6 +1,6 @@
 package me.villagerunknown.villagercoin.item;
 
-import me.villagerunknown.villagercoin.data.component.*;
+import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
 import me.villagerunknown.villagercoin.feature.CollectableCoinFeature;
 import me.villagerunknown.villagercoin.feature.MobsDropCoinsFeature;
