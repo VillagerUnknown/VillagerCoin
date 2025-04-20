@@ -1,16 +1,12 @@
-package me.villagerunknown.villagercoin.data.component;
+package me.villagerunknown.villagercoin.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
-import me.villagerunknown.villagercoin.feature.CollectableCoinFeature;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
-
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
 public record CurrencyComponent(int value) {
 	

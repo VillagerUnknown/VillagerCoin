@@ -84,12 +84,22 @@
   "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",
 
   "tag.item.villagerunknown-villagercoin.villager_coin": "Villager Coin",
-  "tag.item.villagerunknown-villagercoin.vcoin": "vCoin",
-  "tag.item.villagerunknown-villagercoin.edible": "Edible Coin",
-  "tag.item.villagerunknown-villagercoin.collectable": "Collectable Coin",
-  "tag.item.villagerunknown-villagercoin.cursed": "Cursed Coin",
+
+  "tag.item.villagerunknown-villagercoin.copper_coin": "Copper Coin",
+  "tag.item.villagerunknown-villagercoin.iron_coin": "Iron Coin",
+  "tag.item.villagerunknown-villagercoin.gold_coin": "Gold Coin",
+  "tag.item.villagerunknown-villagercoin.emerald_coin": "Emerald Coin",
+  "tag.item.villagerunknown-villagercoin.netherite_coin": "Netherite Coin",
+
+  "tag.item.villagerunknown-villagercoin.edible_coin": "Edible Coin",
+  "tag.item.villagerunknown-villagercoin.collectable_coin": "Collectable Coin",
+  "tag.item.villagerunknown-villagercoin.instant_effect_coin": "Instant Effect Coin",
+
+  "tag.item.villagerunknown-villagercoin.coin_bank": "Coin Bank",
 
   "itemGroup.villagerunknown-villagercoin": "Villager Coin",
+
+  "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s).",
 
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",

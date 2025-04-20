@@ -3,7 +3,7 @@ package me.villagerunknown.villagercoin.feature;
 import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.CoinComponent;
+import me.villagerunknown.villagercoin.component.CoinComponent;
 import me.villagerunknown.villagercoin.effect.StewEffects;
 import me.villagerunknown.villagercoin.item.InventoryEffectCoinItem;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;

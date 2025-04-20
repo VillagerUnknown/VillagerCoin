@@ -1,10 +1,10 @@
 package me.villagerunknown.villagercoin.item;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.CoinComponent;
-import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
-import me.villagerunknown.villagercoin.data.component.DropComponent;
-import me.villagerunknown.villagercoin.data.component.LootTableComponent;
+import me.villagerunknown.villagercoin.component.CoinComponent;
+import me.villagerunknown.villagercoin.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.component.DropComponent;
+import me.villagerunknown.villagercoin.component.LootTableComponent;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
 import me.villagerunknown.villagercoin.feature.MobsDropCoinsFeature;
 import me.villagerunknown.villagercoin.feature.StructuresIncludeCoinsFeature;

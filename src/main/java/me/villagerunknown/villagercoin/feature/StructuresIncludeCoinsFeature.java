@@ -2,7 +2,9 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.*;
+import me.villagerunknown.villagercoin.component.CollectableComponent;
+import me.villagerunknown.villagercoin.component.DropComponent;
+import me.villagerunknown.villagercoin.component.LootTableComponent;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;

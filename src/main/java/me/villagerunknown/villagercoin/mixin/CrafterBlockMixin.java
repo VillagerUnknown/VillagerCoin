@@ -1,7 +1,6 @@
 package me.villagerunknown.villagercoin.mixin;
 
-import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.data.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CrafterBlock;
@@ -25,7 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
-import static me.villagerunknown.villagercoin.Villagercoin.LOGGER;
 import static net.minecraft.block.CrafterBlock.CRAFTING;
 import static net.minecraft.block.CrafterBlock.getCraftingRecipe;
 
