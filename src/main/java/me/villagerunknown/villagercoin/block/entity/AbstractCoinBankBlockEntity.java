@@ -12,6 +12,9 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
 public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
@@ -23,19 +26,28 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 	}
 	
 	public void setTotalCurrencyValue( int value ) {
-		totalCurrencyValue = value;
+		this.totalCurrencyValue = value;
 	}
 	
 	public int getTotalCurrencyValue() {
-		return totalCurrencyValue;
+		return this.totalCurrencyValue;
 	}
 	
 	public boolean canIncrementCurrencyValue( int increment ) {
-		return ( totalCurrencyValue + increment < Integer.MAX_VALUE );
+		return (this.totalCurrencyValue + (long) increment) <= Integer.MAX_VALUE;
 	}
 	
-	public void incrementCurrencyValue(int value ) {
-		totalCurrencyValue += value;
+	public void incrementCurrencyValue( int value ) {
+		this.totalCurrencyValue += value;
+		markDirty();
+	}
+	
+	public boolean canDecrementCurrencyValue( int decrement ) {
+		return (this.totalCurrencyValue - decrement) >= 0;
+	}
+	
+	public void decrementCurrencyValue( int value ) {
+		this.totalCurrencyValue -= value;
 		markDirty();
 	}
 	
@@ -56,24 +68,40 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 		return createNbt(registryLookup);
 	}
 	
-	public void dropTotalValueAsCoins() {
+	public List<ItemStack> getTotalValueAsCoins() {
+		List<ItemStack> coinItemStacks = new ArrayList<>();
+		
 		World world = this.getWorld();
 		
+		int totalValue = this.totalCurrencyValue;
+		
 		if( null != world ) {
-			while (totalCurrencyValue > 0) {
-				ItemStack coinStack = CoinCraftingFeature.getLargestCoin(totalCurrencyValue, false);
+			while (totalValue > 0) {
+				ItemStack coinStack = CoinCraftingFeature.getLargestCoin(totalValue, false);
 				
 				CurrencyComponent currencyComponent = coinStack.get(CURRENCY_COMPONENT);
 				
 				if (null != currencyComponent) {
-					world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
+					coinItemStacks.add( coinStack );
 					
-					totalCurrencyValue -= coinStack.getCount() * currencyComponent.value();
+					totalValue -= coinStack.getCount() * currencyComponent.value();
 				} else {
 					break;
 				} // if, else
 			} // while
 		} // if
+		
+		return coinItemStacks;
+	}
+	
+	public void dropTotalValueAsCoins() {
+		List<ItemStack> coinStacks = getTotalValueAsCoins();
+		
+		World world = this.getWorld();
+		
+		for (ItemStack coinStack : coinStacks) {
+			world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
+		} // for
 	}
 	
 }

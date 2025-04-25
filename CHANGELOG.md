@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.4]
+
+### Added
+
+- Coin Bank Blocks now provide a comparator output relative to their value limit of 2,147,483,647.
+
+### Fixed
+
+- Coin Bank Blocks now properly drop their coins when broken in various ways (pistons, water, arrows, etc.).
+- Coin Bank Blocks now properly respect their value limit of 2,147,483,647.
+
 ## [1.0.3]
 
 ### Added
