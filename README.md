@@ -32,7 +32,8 @@ Copper coins are used as the base value of 1 with each coin above it multiplying
 By default, Villager Coin includes Copper, Iron, and Gold coins in the loot tables and mob drops with lower value coins being more common. 
 
 _Unless configured otherwise, Emerald and Netherite coins are only available through currency conversion crafting due to their high values. 
-This includes any Emerald or Netherite coins included by addon mods. Learn how to enable emerald and netherite coins at https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy_
+This includes any Emerald or Netherite coins included by addon mods. Learn how to enable emerald and netherite coins 
+at https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy _
 
 #### Currency Values
 
@@ -129,113 +130,7 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 
 ## Configurable Options
 
-**Coins**
-
-These options apply to every Villager Coin.
-
-* currencyConversionMultiplier - The conversion value between currencies in the following order: Copper <-> Iron <-> Gold <-> Emerald <-> Netherite. (Default: 100)
-* maximumCoinStackSize - Maximum amount of coins in a single stack. (Default: 5000; Capped at: 1073741822)
-* enableCraftingMultipleToMaxCount - Allow crafting the maximum count when multiple stacks of coins are placed in the crafting table. (Default: false)
-* enableCoinFlipping - Allow players to flip a single coin for a heads or tails result. (Default: true)
-
-**Effect Coins**
-
-These options are for status effect coins added by addon mods.
-
-* inventoryEffectChancePerTick - Chance per tick that a coin with an effect will apply the effect. (Default: 1)
-
-**Collectable Coins**
-
-These options are for Collectable coins added by addon mods.
-
-* copperMaximumCollectables - Maximum amount of coins to drop for collectable Copper coins.
-* ironMaximumCollectables - Maximum amount of coins to drop for collectable Iron coins.
-* goldMaximumCollectables - Maximum amount of coins to drop for collectable Gold coins.
-* emeraldMaximumCollectables - Maximum amount of coins to drop for collectable Emerald coins.
-* netheriteMaximumCollectables - Maximum amount of coins to drop for collectable Netherite coins.
-
-
-* copperCollectableValue - Value of collectable Copper coins.
-* ironCollectableValue - Value of collectable Iron coins.
-* goldCollectableValue - Value of collectable Gold coins.
-* emeraldCollectableValue - Value of collectable Emerald coins.
-* netheriteCollectableValue - Value of collectable Netherite coins.
-
-
-* copperCollectableDropChance - Drop chance of collectable Copper coins.
-* ironCollectableDropChance - Drop chance of collectable Iron coins.
-* goldCollectableDropChance - Drop chance of collectable Gold coins.
-* emeraldCollectableDropChance - Drop chance of collectable Emerald coins.
-* netheriteCollectableDropChance - Drop chance of collectable Netherite coins.
-
-**Loot Tables**
-
-These options configure loot tables in structure generation.
-
-* addCoinsToStructureLootTables - Adds Coins to Structure loot tables. (Default: true)
-
-
-* copperLootTableRolls - Rolls for Copper coins.
-* ironLootTableRolls - Rolls for Iron coins.
-* goldLootTableRolls - Rolls for Gold coins.
-* emeraldLootTableRolls - Rolls for Emerald coins.
-* netheriteLootTableRolls - Rolls for Netherite coins.
-
-
-* copperLootTableWeight - Weight for Copper coins.
-* ironLootTableWeight - Weight for Iron coins.
-* goldLootTableWeight - Weight for Gold coins.
-* emeraldLootTableWeight - Weight for Emerald coins.
-* netheriteLootTableWeight - Weight for Netherite coins.
-
-**Mob Drops**
-
-These options configure drops from mobs.
-
-* addCoinsToMobDrops - Adds Villager Coins to Mob drops. (Default: true)
-* enableBreedableMobDrops - Allows coins to drop from mobs with a breeding mechanic. (Default: false)
-* lootingBonusPerLevel - Bonus chance per level of looting coins will drop from mobs. (Default: 0.1)
-
-
-* copperDropMinimum - Minimum amount to drop for Copper coins, if the chance is successful.
-* ironDropMinimum - Minimum amount to drop for Iron coins, if the chance is successful.
-* goldDropMinimum - Minimum amount to drop for Gold coins, if the chance is successful.
-* emeraldDropMinimum - Minimum amount to drop for Emerald coins, if the chance is successful.
-* netheriteDropMinimum - Minimum amount to drop for Netherite coins, if the chance is successful.
-
-
-* copperDropMaximum - Maximum amount to drop for Copper coins, if the chance is successful.
-* ironDropMaximum - Maximum amount to drop for Iron coins, if the chance is successful.
-* goldDropMaximum - Maximum amount to drop for Gold coins, if the chance is successful.
-* emeraldDropMaximum - Maximum amount to drop for Emerald coins, if the chance is successful.
-* netheriteDropMaximum - Maximum amount to drop for Netherite coins, if the chance is successful.
-
-
-* copperDropChance - Chance that Copper coins will drop on mob death or loot table generation.
-* ironDropChance - Chance that Iron coins will drop on mob death or loot table generation.
-* goldDropChance - Chance that Gold coins will drop on mob death or loot table generation.
-* emeraldDropChance - Chance that Emerald coins will drop on mob death or loot table generation.
-* netheriteDropChance - Chance that Netherite coins will drop on mob death or loot table generation.
-
-
-* copperDropMultiplier - Amount multiplier for Copper coins, if dropped.
-* ironDropMultiplier - Amount multiplier for Iron coins, if dropped.
-* goldDropMultiplier - Amount multiplier for Gold coins, if dropped.
-* emeraldDropMultiplier - Amount multiplier for Emerald coins, if dropped.
-* netheriteDropMultiplier - Amount multiplier for Netherite coins, if dropped.
-
-**Trades**
-
-These options configure trade modifications for villagers, wandering traders, and other merchants.
-
-* enableTradeModifications - Modifies trades and replaces Emerald trades with Coin trades. (Default: true)
-
-
-* goldCoinSellItemDivisor - Price divisor for Gold Coin trades. (Default: 2)
-* goldCoinSellItemMaximum - Maximum amount of Gold Coins for Gold Coin trades.
-* goldForDiamond - Amount of Gold Coins to reward for a single Diamond.
-* goldForEmerald - Amount of Gold Coins to reward for a single Emerald.
-* chanceDiamondBecomesEmeraldTrade - Chance that a Diamond trade becomes an Emerald trade.
+The list of configurable options, and their default values, can be found on the Wiki at https://github.com/VillagerUnknown/VillagerCoin/wiki/Configurable-Options
 
 ## Official Addon Mods
 

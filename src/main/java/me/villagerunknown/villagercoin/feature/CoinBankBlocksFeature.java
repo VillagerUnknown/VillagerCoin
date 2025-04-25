@@ -5,12 +5,16 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCoinBankBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
@@ -37,6 +41,23 @@ public class CoinBankBlocksFeature {
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
 
 		return block;
+	}
+	
+	public static int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+		BlockEntity blockEntity = world.getBlockEntity( pos );
+		
+		if( blockEntity instanceof AbstractCoinBankBlockEntity coinBankBlockEntity ) {
+			int value = coinBankBlockEntity.getTotalCurrencyValue();
+			if( value > 0 ) {
+				if( Integer.MAX_VALUE == value ) {
+					return 15;
+				} else {
+					return Math.max(1, (int) Math.ceil(Math.log(value) / Math.log(Integer.MAX_VALUE) * 14));
+				} // if, else
+			} // if
+		} // if
+		
+		return 0;
 	}
 	
 }
