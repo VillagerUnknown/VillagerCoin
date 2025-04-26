@@ -5,6 +5,7 @@ import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -42,6 +43,11 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 		markDirty();
 	}
 	
+	public void incrementCurrencyValueAndSetComponent( int value ) {
+		incrementCurrencyValue( value );
+		this.setComponents(ComponentMap.builder().add(CURRENCY_COMPONENT, new CurrencyComponent( getTotalCurrencyValue() )).build());
+	}
+	
 	public boolean canDecrementCurrencyValue( int decrement ) {
 		return (this.totalCurrencyValue - decrement) >= 0;
 	}
@@ -76,7 +82,7 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 		int totalValue = this.totalCurrencyValue;
 		
 		if( null != world ) {
-			while (totalValue > 0) {
+			while( totalValue > 0 ) {
 				ItemStack coinStack = CoinCraftingFeature.getLargestCoin(totalValue, false);
 				
 				CurrencyComponent currencyComponent = coinStack.get(CURRENCY_COMPONENT);
@@ -99,9 +105,11 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 		
 		World world = this.getWorld();
 		
-		for (ItemStack coinStack : coinStacks) {
-			world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
-		} // for
+		if( null != world ) {
+			for (ItemStack coinStack : coinStacks) {
+				world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
+			} // for
+		} // if
 	}
 	
 }

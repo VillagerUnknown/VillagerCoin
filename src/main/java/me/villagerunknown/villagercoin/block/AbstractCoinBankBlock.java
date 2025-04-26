@@ -132,8 +132,7 @@ public abstract class AbstractCoinBankBlock extends BlockWithEntity {
 	public boolean incrementBlockEntityCurrencyValue( BlockEntity blockEntity, CurrencyComponent currencyComponent ) {
 		if( blockEntity instanceof AbstractCoinBankBlockEntity coinBankBlockEntity ) {
 			if( coinBankBlockEntity.canIncrementCurrencyValue( currencyComponent.value() ) ) {
-				coinBankBlockEntity.incrementCurrencyValue(currencyComponent.value());
-				coinBankBlockEntity.setComponents(ComponentMap.builder().add(CURRENCY_COMPONENT, new CurrencyComponent(coinBankBlockEntity.getTotalCurrencyValue())).build());
+				coinBankBlockEntity.incrementCurrencyValueAndSetComponent(currencyComponent.value());
 				
 				return true;
 			} // if
