@@ -18,11 +18,11 @@ import java.util.List;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
-public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
+public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	
 	private Integer totalCurrencyValue = 0;
 	
-	public AbstractCoinBankBlockEntity(BlockEntityType<? extends AbstractCoinBankBlockEntity> type, BlockPos pos, BlockState state) {
+	public AbstractCurrencyValueBlockEntity(BlockEntityType<? extends AbstractCurrencyValueBlockEntity> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 	
@@ -110,6 +110,29 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 				world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
 			} // for
 		} // if
+	}
+	
+	public boolean setBlockEntityCurrencyValue( BlockEntity blockEntity, ItemStack itemStack, CurrencyComponent currencyComponent ) {
+		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
+			coinBankBlockEntity.setComponents( itemStack.getComponents() );
+			coinBankBlockEntity.setTotalCurrencyValue( currencyComponent.value() );
+			
+			return true;
+		} // if
+		
+		return false;
+	}
+	
+	public boolean incrementBlockEntityCurrencyValue( BlockEntity blockEntity, CurrencyComponent currencyComponent ) {
+		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
+			if( coinBankBlockEntity.canIncrementCurrencyValue( currencyComponent.value() ) ) {
+				coinBankBlockEntity.incrementCurrencyValueAndSetComponent(currencyComponent.value());
+				
+				return true;
+			} // if
+		} // if
+		
+		return false;
 	}
 	
 }

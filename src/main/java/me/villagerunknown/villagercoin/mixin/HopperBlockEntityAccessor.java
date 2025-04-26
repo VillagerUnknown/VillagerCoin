@@ -11,6 +11,6 @@ public interface HopperBlockEntityAccessor {
 	boolean invokeIsDisabled();
 	
 	@Invoker("setTransferCooldown")
-	void setTransferCooldown(int transferCooldown);
+	void invokeSetTransferCooldown(int transferCooldown);
 
 }

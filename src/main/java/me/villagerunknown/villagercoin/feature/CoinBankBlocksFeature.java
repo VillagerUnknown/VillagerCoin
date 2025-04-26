@@ -2,7 +2,7 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.block.entity.AbstractCoinBankBlockEntity;
+import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -24,7 +24,7 @@ public class CoinBankBlocksFeature {
 	
 	public static void execute(){}
 	
-	public static BlockEntityType<? extends AbstractCoinBankBlockEntity> registerCoinBankBlockEntities(BlockEntityType.Builder<? extends AbstractCoinBankBlockEntity> builder) {
+	public static BlockEntityType<? extends AbstractCurrencyValueBlockEntity> registerCoinBankBlockEntities(BlockEntityType.Builder<? extends AbstractCurrencyValueBlockEntity> builder) {
 		// # Register the Block Entity Types
 		return Registry.register(
 				Registries.BLOCK_ENTITY_TYPE,
@@ -46,7 +46,7 @@ public class CoinBankBlocksFeature {
 	public static int getComparatorOutput(BlockState state, World world, BlockPos pos) {
 		BlockEntity blockEntity = world.getBlockEntity( pos );
 		
-		if( blockEntity instanceof AbstractCoinBankBlockEntity coinBankBlockEntity ) {
+		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
 			int value = coinBankBlockEntity.getTotalCurrencyValue();
 			if( value > 0 ) {
 				if( Integer.MAX_VALUE == value ) {

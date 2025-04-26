@@ -2,6 +2,7 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.item.CoinItems;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
@@ -124,6 +125,14 @@ public class CoinCraftingFeature {
 		} // if
 		
 		return returnStack;
+	}
+	
+	public static ItemStack getSmallestCoin( int coinValue ) {
+		if( coinValue > 0 ) {
+			return new ItemStack( CoinItems.COPPER_COIN, coinValue );
+		} // if
+		
+		return ItemStack.EMPTY;
 	}
 	
 	public static int getConversionValue(int fromValue, int toValue) {
