@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
@@ -107,10 +108,12 @@ public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implem
 		CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
 		
 		if( null != currencyComponent ) {
+			NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+			
 			tooltip.add(
 					Text.translatable(
 							"block.villagerunknown-villagercoin.coin_bank.tooltip",
-							currencyComponent.value(),
+							numberFormat.format( currencyComponent.value() ),
 							CoinItems.COPPER_COIN.getName().getString()
 					).formatted(Formatting.ITALIC, Formatting.GRAY)
 			);

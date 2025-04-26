@@ -16,6 +16,7 @@ This allows developers to get an ItemStack with a total value in Copper Villager
 - Coin Bank Blocks now accept coins from hoppers above them that are pointed down.
 - Changed `AbstractCoinBankBlock` to extend `AbstractCoinCollectionBlock`.
 - Changed `AbstractCoinCollectionBlock` to implement `Waterloggable`. Coin Banks and Coin Stacks can now be waterlogged.
+- Changed Value tooltips for Coin Banks and Coin Stacks to a readable format.
 
 ## [1.0.4]
 
