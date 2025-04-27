@@ -19,29 +19,34 @@ import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperBlockEntityMixin {
 	
-	@Inject(method = "insert", at = @At("HEAD"))
+	@Inject(method = "insert", at = @At("HEAD"), cancellable = true)
 	private static void insert(World world, BlockPos pos, HopperBlockEntity hopperBlockEntity, CallbackInfoReturnable<Boolean> cir) {
 		Direction direction = Direction.getFacing( pos.getX(), pos.getY(), pos.getZ() );
 		
-		if( Direction.DOWN == direction && !((HopperBlockEntityAccessor) hopperBlockEntity).invokeIsDisabled() ) {
+		if( Direction.DOWN == direction ) {
 			BlockEntity be = world.getBlockEntity( pos.down() );
 			
 			if( be instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
 				if( coinBankBlockEntity.canIncrementCurrencyValue( 1 ) ) {
 					for (int i = 0; i < hopperBlockEntity.size(); i++) {
-						ItemStack itemStack = hopperBlockEntity.getStack(i);
-						
-						if( !itemStack.isEmpty() && itemStack.isIn( Villagercoin.getItemTagKey( "villager_coin" ) ) ) {
-							CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
+						if( !((HopperBlockEntityAccessor) hopperBlockEntity).invokeIsDisabled() ) {
+							ItemStack itemStack = hopperBlockEntity.getStack(i);
 							
-							if( null != currencyComponent ) {
-								int currencyValue = currencyComponent.value();
+							if (!itemStack.isEmpty() && itemStack.isIn(Villagercoin.getItemTagKey("villager_coin"))) {
+								CurrencyComponent currencyComponent = itemStack.get(CURRENCY_COMPONENT);
 								
-								if( coinBankBlockEntity.canIncrementCurrencyValue( currencyValue ) ) {
-									itemStack.decrement( 1 );
-									coinBankBlockEntity.incrementCurrencyValueAndSetComponent( currencyValue );
+								if (null != currencyComponent) {
+									int currencyValue = currencyComponent.value();
 									
-									((HopperBlockEntityAccessor) hopperBlockEntity).invokeSetTransferCooldown(8);
+									if (coinBankBlockEntity.canIncrementCurrencyValue(currencyValue)) {
+										itemStack.decrement(1);
+										coinBankBlockEntity.incrementCurrencyValueAndSetComponent(currencyValue);
+										
+										((HopperBlockEntityAccessor) hopperBlockEntity).invokeSetTransferCooldown(8);
+										
+										cir.setReturnValue(true);
+										break;
+									} // if
 								} // if
 							} // if
 						} // if
