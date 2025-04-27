@@ -141,6 +141,7 @@ Search for these addon mods to further customize your Villager Coin economy:
 * Cursed Coins - Adds rarer cursed Villager Coins that apply _negative_ status effects when in your inventory.
 * Lucky Coins - Adds rarer lucky Villager Coins that apply _positive_ status effects when in your inventory.
 * Coin Banks - Adds coin banks that hold the total value of coins added.
+* Coin Stacks - Adds coin stacks that allow mapmakers and custom structures to provide stacks of coins for players to collect.
 
 ## Developer Wiki (WIP)
 

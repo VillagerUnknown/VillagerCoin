@@ -5,6 +5,7 @@ import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -17,11 +18,11 @@ import java.util.List;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
-public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
+public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	
 	private Integer totalCurrencyValue = 0;
 	
-	public AbstractCoinBankBlockEntity(BlockEntityType<? extends AbstractCoinBankBlockEntity> type, BlockPos pos, BlockState state) {
+	public AbstractCurrencyValueBlockEntity(BlockEntityType<? extends AbstractCurrencyValueBlockEntity> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 	
@@ -40,6 +41,11 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 	public void incrementCurrencyValue( int value ) {
 		this.totalCurrencyValue += value;
 		markDirty();
+	}
+	
+	public void incrementCurrencyValueAndSetComponent( int value ) {
+		incrementCurrencyValue( value );
+		this.setComponents(ComponentMap.builder().add(CURRENCY_COMPONENT, new CurrencyComponent( getTotalCurrencyValue() )).build());
 	}
 	
 	public boolean canDecrementCurrencyValue( int decrement ) {
@@ -76,7 +82,7 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 		int totalValue = this.totalCurrencyValue;
 		
 		if( null != world ) {
-			while (totalValue > 0) {
+			while( totalValue > 0 ) {
 				ItemStack coinStack = CoinCraftingFeature.getLargestCoin(totalValue, false);
 				
 				CurrencyComponent currencyComponent = coinStack.get(CURRENCY_COMPONENT);
@@ -99,9 +105,34 @@ public abstract class AbstractCoinBankBlockEntity extends BlockEntity {
 		
 		World world = this.getWorld();
 		
-		for (ItemStack coinStack : coinStacks) {
-			world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
-		} // for
+		if( null != world ) {
+			for (ItemStack coinStack : coinStacks) {
+				world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
+			} // for
+		} // if
+	}
+	
+	public boolean setBlockEntityCurrencyValue( BlockEntity blockEntity, ItemStack itemStack, CurrencyComponent currencyComponent ) {
+		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
+			coinBankBlockEntity.setComponents( itemStack.getComponents() );
+			coinBankBlockEntity.setTotalCurrencyValue( currencyComponent.value() );
+			
+			return true;
+		} // if
+		
+		return false;
+	}
+	
+	public boolean incrementBlockEntityCurrencyValue( BlockEntity blockEntity, CurrencyComponent currencyComponent ) {
+		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
+			if( coinBankBlockEntity.canIncrementCurrencyValue( currencyComponent.value() ) ) {
+				coinBankBlockEntity.incrementCurrencyValueAndSetComponent(currencyComponent.value());
+				
+				return true;
+			} // if
+		} // if
+		
+		return false;
 	}
 	
 }

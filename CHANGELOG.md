@@ -2,11 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.5]
+
+### Added
+
+- Added `getSmallestCoin` utility method to `CoinCraftingFeature`. 
+This allows developers to get an ItemStack with a total value in Copper Villager Coins.
+- Added `CoinStackBlocksFeature`.
+- Added `AbstractCoinStackBlock` and `AbstractCoinCollectionBlock`.
+
+### Changed
+
+- Coin Bank Blocks now accept coins from hoppers above them that are pointed down.
+- Changed `AbstractCoinBankBlock` to extend `AbstractCoinCollectionBlock`.
+- Changed `AbstractCoinCollectionBlock` to implement `Waterloggable`. Coin Banks and Coin Stacks can now be waterlogged.
+- Changed Value tooltips for Coin Banks and Coin Stacks to a readable format.
+
 ## [1.0.4]
 
 ### Added
 
-- Coin Bank Blocks now provide a comparator output relative to their value limit of 2,147,483,647.
+- Coin Bank Blocks now provide a comparator output relative to their value limit of 2,147,483,647. 
+The output signal will be 1 if there is at least 1 coin, and it will be 15 when it reaches the maximum.
 
 ### Fixed
 
@@ -21,7 +38,7 @@ All notable changes to this project will be documented in this file.
 provide "Coin Bank" blocks that can only hold coins, hold the value of the coins if broken with silk touch, 
 and drop the total value in coins when broken without silk touch.
 - Added additional item tags for the various types of coins.
-- Added item tag for coin banks.
+- Added block tag for coin banks.
 
 ### Changed
 
