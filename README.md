@@ -132,16 +132,9 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 
 The list of configurable options, and their default values, can be found on the Wiki at https://github.com/VillagerUnknown/VillagerCoin/wiki/Configurable-Options
 
-## Official Addon Mods
+## Add-ons
 
-Search for these addon mods to further customize your Villager Coin economy:
-
-* Edible Coins - Adds edible Villager Coins you can eat.
-* Collectable Coins - Adds rarer collectable Villager Coins worth more in value.
-* Cursed Coins - Adds rarer cursed Villager Coins that apply _negative_ status effects when in your inventory.
-* Lucky Coins - Adds rarer lucky Villager Coins that apply _positive_ status effects when in your inventory.
-* Coin Banks - Adds coin banks that hold the total value of coins added.
-* Coin Stacks - Adds coin stacks that allow mapmakers and custom structures to provide stacks of coins for players to collect.
+Check out our list of add-ons for Villager Coin at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons
 
 ## Developer Wiki (WIP)
 
