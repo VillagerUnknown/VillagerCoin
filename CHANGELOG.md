@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.6]
+
+### Added
+
+- Added coin specific subtitles.
+
+### Changed
+
+- Players in Creative mode no longer break Coin Stacks by walking over them. 
+_This change is to make it easier for mapmakers to work with the Coin Stacks._
+
 ## [1.0.5]
 
 ### Added
