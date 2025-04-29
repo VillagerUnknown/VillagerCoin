@@ -20,6 +20,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
+
 import java.util.Optional;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
@@ -35,6 +37,8 @@ public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock 
 		if( world.isClient() ) {
 			return ItemActionResult.SUCCESS;
 		} // if
+		
+		world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 		
 		CurrencyComponent currencyComponent = stack.get(CURRENCY_COMPONENT);
 		

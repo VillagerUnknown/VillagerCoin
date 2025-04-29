@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 
 - Players in Creative mode no longer break Coin Stacks by walking over them. 
 _This change is to make it easier for mapmakers to work with the Coin Stacks._
+- Coin flips now send a signal to sculk sensors.
+- Inserting coins in Coin Banks now sends a signal to sculk sensors.
 
 ## [1.0.5]
 
