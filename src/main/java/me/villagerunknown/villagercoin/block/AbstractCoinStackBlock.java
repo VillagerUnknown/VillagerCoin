@@ -25,7 +25,7 @@ public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock
 	
 	@Override
 	protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-		if( !world.isClient && entity instanceof PlayerEntity playerEntity ) {
+		if( !world.isClient && entity instanceof PlayerEntity playerEntity && !playerEntity.isInCreativeMode() ) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			
 			if (blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity) {
