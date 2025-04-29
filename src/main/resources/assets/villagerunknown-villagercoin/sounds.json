@@ -1,0 +1,65 @@
+{
+  "coin_heavy": {
+    "subtitle": "sound.villagerunknown-villagercoin.coin",
+    "sounds": [
+      {
+        "name": "villagerunknown-villagercoin:chain/break1",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/break2",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/break3",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/break4",
+        "stream": true
+      }
+    ]
+  },
+  "coin_light": {
+    "subtitle": "sound.villagerunknown-villagercoin.coin",
+    "sounds": [
+      {
+        "name": "villagerunknown-villagercoin:chain/step1",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/step2",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/step3",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/step4",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/step5",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/step6",
+        "stream": true
+      }
+    ]
+  },
+  "coin_flip": {
+    "subtitle": "sound.villagerunknown-villagercoin.coin_flip",
+    "sounds": [
+      {
+        "name": "villagerunknown-villagercoin:chain/step4",
+        "stream": true
+      },
+      {
+        "name": "villagerunknown-villagercoin:chain/step6",
+        "stream": true
+      }
+    ]
+  }
+}

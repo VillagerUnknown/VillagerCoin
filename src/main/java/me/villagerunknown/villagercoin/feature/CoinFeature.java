@@ -10,9 +10,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootTable;
 import net.minecraft.registry.*;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Rarity;
 
 import java.util.Set;
@@ -23,7 +23,19 @@ public class CoinFeature {
 	
 	public static String COIN_STRING = "villager_coin";
 	
-	public static SoundEvent SOUND = SoundEvents.BLOCK_CHAIN_STEP;
+	public static final SoundEvent COIN_HEAVY_SOUND = RegistryUtil.registerSound( "coin_heavy", MOD_ID );
+	public static final SoundEvent COIN_LIGHT_SOUND = RegistryUtil.registerSound( "coin_light", MOD_ID );
+	public static final SoundEvent COIN_FLIP_SOUND = RegistryUtil.registerSound( "coin_flip", MOD_ID );
+	
+	public static final BlockSoundGroup COIN = new BlockSoundGroup(
+			1.0F,
+			1.0F,
+			COIN_HEAVY_SOUND,
+			COIN_LIGHT_SOUND,
+			COIN_HEAVY_SOUND,
+			COIN_LIGHT_SOUND,
+			COIN_LIGHT_SOUND
+	);
 	
 	public static final int CURRENCY_CONVERSION_MULTIPLIER = Villagercoin.CONFIG.currencyConversionMultiplier;
 	
@@ -100,12 +112,24 @@ public class CoinFeature {
 		return item;
 	}
 	
-	public static void playCoinSound( PlayerEntity player ) {
+	public static void playSound( PlayerEntity player, SoundEvent sound ) {
 		if( player.getWorld().isClient() ) {
 			return;
 		} // if
 		
-		EntityUtil.playSound(player, SOUND, SoundCategory.PLAYERS, 0.5F, 1F, false);
+		EntityUtil.playSound(player, sound, SoundCategory.PLAYERS, 0.5F, 1F, false);
+	}
+	
+	public static void playCoinSound( PlayerEntity player ) {
+		playSound( player, COIN_LIGHT_SOUND );
+	}
+	
+	public static void playCoinHeavySound( PlayerEntity player ) {
+		playSound( player, COIN_HEAVY_SOUND );
+	}
+	
+	public static void playCoinFlipSound( PlayerEntity player ) {
+		playSound( player, COIN_FLIP_SOUND );
 	}
 	
 }

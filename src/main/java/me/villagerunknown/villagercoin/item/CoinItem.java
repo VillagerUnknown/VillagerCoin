@@ -41,10 +41,4 @@ public class CoinItem extends AbstractFlippableCoinItem {
 		);
 	}
 	
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		playCoinSound( user );
-		return super.use( world, user, hand );
-	}
-	
 }

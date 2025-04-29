@@ -47,7 +47,7 @@ public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implem
 				settings
 						.breakInstantly()
 						.pistonBehavior(PistonBehavior.DESTROY)
-						.sounds( BlockSoundGroup.CHAIN )
+						.sounds( CoinFeature.COIN )
 		);
 	}
 	

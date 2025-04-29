@@ -5,6 +5,7 @@ import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.MessageUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CoinComponent;
+import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,8 @@ public abstract class AbstractFlippableCoinItem extends AbstractCoinItem {
 		
 		if( !world.isClient() && !user.isSpectator() && Villagercoin.CONFIG.enableCoinFlipping ) {
 			if( null != itemStack && 1 == itemStack.getCount() ) {
+				CoinFeature.playCoinFlipSound( user );
+				
 				CoinComponent coinComponent = itemStack.get( COIN_COMPONENT );
 				
 				float flipChance = 0.5F;
