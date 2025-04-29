@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Added coin specific subtitles.
+- Added value tooltip to coin items with a currency component.
 
 ### Changed
 
