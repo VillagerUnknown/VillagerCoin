@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Added coin specific subtitles.
 - Added value tooltip to coin items with a currency component.
+- Added option to allow coin entities to sink, instead of float, in water.
 
 ### Changed
 
