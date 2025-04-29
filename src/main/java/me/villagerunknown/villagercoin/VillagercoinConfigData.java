@@ -20,7 +20,7 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public boolean enableCoinFlipping = true;
 	
 	@ConfigEntry.Category("Coins")
-	public boolean enableCoinsSinkingInWater = false;
+	public boolean coinsSinkInLiquids = false;
 	
 	/**
 	 * Loot Tables
