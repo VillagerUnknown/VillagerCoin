@@ -159,7 +159,7 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	 */
 	
 	@ConfigEntry.Category("CoinStacks")
-	public boolean enableCoinStacksBreakOnCollision = true;
+	public boolean enableCoinStacksBreakOnCollision = false;
 	
 	/**
 	 * Collectable Coins

@@ -22,13 +22,12 @@ public class CoinStackBlocksFeature {
 	public static final int SMALL_VALUE_MULTIPLIER = 1;
 	public static final int MEDIUM_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER / 2;
 	public static final int LARGE_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER;
+	public static final int SLAB_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER * 5;
+	public static final int BLOCK_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER * 10;
 	
-	public static final int MEDIUM_HIGH_VALUE_MULTIPLIER = 2;
-	public static final int LARGE_HIGH_VALUE_MULTIPLIER = 3;
-	
-	public static final int COPPER_VALUE = CoinFeature.COPPER_VALUE * SMALL_VALUE_MULTIPLIER;
-	public static final int IRON_VALUE = CoinFeature.IRON_VALUE * SMALL_VALUE_MULTIPLIER;
-	public static final int GOLD_VALUE = CoinFeature.GOLD_VALUE * SMALL_VALUE_MULTIPLIER;
+	public static final int COPPER_VALUE = CoinFeature.COPPER_VALUE;
+	public static final int IRON_VALUE = CoinFeature.IRON_VALUE;
+	public static final int GOLD_VALUE = CoinFeature.GOLD_VALUE;
 	public static final int EMERALD_VALUE = CoinFeature.EMERALD_VALUE;
 	public static final int NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
 	
@@ -43,14 +42,20 @@ public class CoinStackBlocksFeature {
 		);
 	}
 	
-	public static Block registerCoinStackBlock( CoinType type, String id, Block block, int value ) {
+	public static Block registerCoinStackBlock( String id, Block block, int value ) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
 		
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
 		
-		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, block, value );
+		return block;
+	}
+	
+	public static Block registerCraftableCoinStackBlock( CoinType type, String id, Block block, int value ) {
+		Block registeredBlock = registerCoinStackBlock( id, block, value );
+		
+		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, registeredBlock, value );
 		
 		return block;
 	}

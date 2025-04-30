@@ -124,7 +124,7 @@ public class CoinFeature {
 		playSound( player, COIN_LIGHT_SOUND );
 	}
 	
-	public static void playCoinHeavySound( PlayerEntity player ) {
+	public static void playHeavyCoinSound( PlayerEntity player ) {
 		playSound( player, COIN_HEAVY_SOUND );
 	}
 	

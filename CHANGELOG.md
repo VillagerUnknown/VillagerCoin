@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 - Added coin specific subtitles.
 - Added value tooltip to coin items with a currency component.
 - Added option to allow coin entities to sink, instead of float, in water and lava.
-- Added option to toggle Coin Stacks breaking on collision.
+- Added option to toggle Coin Stacks breaking on collision. _The default value prevents breaking on collision. 
+This is to match the expected functionality of Minecraft blocks._
 - Added `CoinStackCraftingFeature` to allow crafting Coin Stacks.
 
 ### Changed
