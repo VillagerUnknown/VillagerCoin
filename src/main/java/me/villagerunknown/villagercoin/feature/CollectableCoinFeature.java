@@ -23,11 +23,11 @@ public class CollectableCoinFeature {
 	public static int EMERALD_MAXIMUM_IN_CIRCULATION = Villagercoin.CONFIG.emeraldMaximumCollectables;
 	public static int NETHERITE_MAXIMUM_IN_CIRCULATION = Villagercoin.CONFIG.netheriteMaximumCollectables;
 	
-	public static int COPPER_VALUE = Villagercoin.CONFIG.copperCollectableValue;
-	public static int IRON_VALUE = Villagercoin.CONFIG.ironCollectableValue;
-	public static int GOLD_VALUE = Villagercoin.CONFIG.goldCollectableValue;
-	public static int EMERALD_VALUE = Villagercoin.CONFIG.emeraldCollectableValue;
-	public static int NETHERITE_VALUE = Villagercoin.CONFIG.netheriteCollectableValue;
+	public static long COPPER_VALUE = Villagercoin.CONFIG.copperCollectableValue;
+	public static long IRON_VALUE = Villagercoin.CONFIG.ironCollectableValue;
+	public static long GOLD_VALUE = Villagercoin.CONFIG.goldCollectableValue;
+	public static long EMERALD_VALUE = Villagercoin.CONFIG.emeraldCollectableValue;
+	public static long NETHERITE_VALUE = Villagercoin.CONFIG.netheriteCollectableValue;
 	
 	public static float COPPER_DROP_CHANCE = Villagercoin.CONFIG.copperCollectableDropChance;
 	public static float IRON_DROP_CHANCE = Villagercoin.CONFIG.ironCollectableDropChance;
@@ -47,15 +47,15 @@ public class CollectableCoinFeature {
 		});
 	}
 	
-	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer ) {
+	public static Item registerCollectableCoinItem( String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer ) {
 		return registerCollectableCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, new Item.Settings() );
 	}
 	
-	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
+	public static Item registerCollectableCoinItem( String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
 		return registerCollectableCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, new Item.Settings() );
 	}
 	
-	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
+	public static Item registerCollectableCoinItem( String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
 		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer ), Villagercoin.MOD_ID );
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
@@ -63,7 +63,7 @@ public class CollectableCoinFeature {
 		return item;
 	}
 	
-	public static Item registerCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+	public static Item registerCollectableCoinItem( String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
 		Item item = registerCollectableCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
@@ -72,19 +72,19 @@ public class CollectableCoinFeature {
 		return item;
 	}
 	
-	public static Item registerCraftableCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer ) {
+	public static Item registerCraftableCollectableCoinItem( String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer ) {
 		return registerCraftableCollectableCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, new Item.Settings() );
 	}
 	
-	public static Item registerCraftableCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
+	public static Item registerCraftableCollectableCoinItem( String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
 		return registerCraftableCollectableCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, new Item.Settings() );
 	}
 	
-	public static Item registerCraftableCollectableCoinItem( String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
+	public static Item registerCraftableCollectableCoinItem( String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
 		return registerCollectableCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, settings );
 	}
 	
-	public static Item registerCraftableCollectableCoinItem(String id, int value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+	public static Item registerCraftableCollectableCoinItem(String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
 		Item item = registerCraftableCollectableCoinItem( id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );

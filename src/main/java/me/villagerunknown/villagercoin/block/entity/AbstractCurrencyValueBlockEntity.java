@@ -9,10 +9,12 @@ import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.swing.text.NumberFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,39 +22,39 @@ import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
 public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	
-	private Integer totalCurrencyValue = 0;
+	private Long totalCurrencyValue = 0L;
 	
 	public AbstractCurrencyValueBlockEntity(BlockEntityType<? extends AbstractCurrencyValueBlockEntity> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 	}
 	
-	public void setTotalCurrencyValue( int value ) {
+	public void setTotalCurrencyValue( long value ) {
 		this.totalCurrencyValue = value;
 	}
 	
-	public int getTotalCurrencyValue() {
+	public long getTotalCurrencyValue() {
 		return this.totalCurrencyValue;
 	}
 	
-	public boolean canIncrementCurrencyValue( int increment ) {
-		return (this.totalCurrencyValue + (long) increment) <= Integer.MAX_VALUE;
+	public boolean canIncrementCurrencyValue( long increment ) {
+		return (this.totalCurrencyValue + increment) <= Integer.MAX_VALUE;
 	}
 	
-	public void incrementCurrencyValue( int value ) {
+	public void incrementCurrencyValue( long value ) {
 		this.totalCurrencyValue += value;
 		markDirty();
 	}
 	
-	public void incrementCurrencyValueAndSetComponent( int value ) {
+	public void incrementCurrencyValueAndSetComponent( long value ) {
 		incrementCurrencyValue( value );
 		this.setComponents(ComponentMap.builder().add(CURRENCY_COMPONENT, new CurrencyComponent( getTotalCurrencyValue() )).build());
 	}
 	
-	public boolean canDecrementCurrencyValue( int decrement ) {
+	public boolean canDecrementCurrencyValue( long decrement ) {
 		return (this.totalCurrencyValue - decrement) >= 0;
 	}
 	
-	public void decrementCurrencyValue( int value ) {
+	public void decrementCurrencyValue( long value ) {
 		this.totalCurrencyValue -= value;
 		markDirty();
 	}
@@ -60,12 +62,21 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	@Override
 	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
 		super.readNbt(nbt, registryLookup);
-		this.totalCurrencyValue = nbt.getInt("totalCurrencyValue");
+		
+//		NbtElement nbtValue = nbt.get("totalCurrencyValue");
+//
+//		if( null != nbtValue ) {
+//			this.totalCurrencyValue = Long.parseLong(nbtValue.toString());
+//		} else {
+//			this.totalCurrencyValue = nbt.get("totalCurrencyValue");
+//		} // if, else
+		
+		this.totalCurrencyValue = nbt.getLong("totalCurrencyValue");
 	}
 	
 	@Override
 	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		nbt.putInt("totalCurrencyValue", this.totalCurrencyValue);
+		nbt.putLong("totalCurrencyValue", this.totalCurrencyValue);
 		super.writeNbt(nbt, registryLookup);
 	}
 	
@@ -79,7 +90,7 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 		
 		World world = this.getWorld();
 		
-		int totalValue = this.totalCurrencyValue;
+		long totalValue = this.totalCurrencyValue;
 		
 		if( null != world ) {
 			while( totalValue > 0 ) {

@@ -30,7 +30,7 @@ public class InventoryEffectCoinItem extends AbstractInventoryEffectCoinItem {
 		);
 	}
 	
-	public InventoryEffectCoinItem(Settings settings, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects) {
+	public InventoryEffectCoinItem(Settings settings, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects) {
 		super(
 				settings
 						.maxCount( maximumAllowedInServer )

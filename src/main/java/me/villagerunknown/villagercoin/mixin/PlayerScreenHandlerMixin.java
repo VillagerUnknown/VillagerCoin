@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
@@ -55,8 +56,8 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 				CurrencyComponent currencyComponent = craftedItemStack.get( CURRENCY_COMPONENT );
 				
 				if( null != currencyComponent ) {
-					AtomicInteger totalCost = new AtomicInteger(craftedItemStack.getCount() * currencyComponent.value());
-					TreeMap<Integer, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap( this.craftingInput );
+					AtomicLong totalCost = new AtomicLong((long) craftedItemStack.getCount() * currencyComponent.value());
+					TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap( this.craftingInput );
 					
 					ingredientsMap.forEach( ( order, coinIngredient ) -> {
 						int ingredientSlot = coinIngredient.slot;

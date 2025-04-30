@@ -10,7 +10,7 @@ public abstract class DoubleInventoryMixin implements Inventory {
 	
 	@Override
 	public int getMaxCountPerStack() {
-		return Villagercoin.MAX_COUNT;
+		return Villagercoin.MAX_STACK_COUNT;
 	}
 	
 }

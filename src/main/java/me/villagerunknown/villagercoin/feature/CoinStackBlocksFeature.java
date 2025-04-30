@@ -19,17 +19,17 @@ public class CoinStackBlocksFeature {
 	
 	public static final String COIN_STACK_STRING = "coin_stack";
 	
-	public static final int SMALL_VALUE_MULTIPLIER = 1;
-	public static final int MEDIUM_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER / 2;
-	public static final int LARGE_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER;
-	public static final int SLAB_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER * 5;
-	public static final int BLOCK_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER * 10;
+	public static final long SMALL_VALUE_MULTIPLIER = 1;
+	public static final long MEDIUM_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER / 2;
+	public static final long LARGE_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER;
+	public static final long SLAB_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER * 5L;
+	public static final long BLOCK_VALUE_MULTIPLIER = CoinFeature.CURRENCY_CONVERSION_MULTIPLIER * 10L;
 	
-	public static final int COPPER_VALUE = CoinFeature.COPPER_VALUE;
-	public static final int IRON_VALUE = CoinFeature.IRON_VALUE;
-	public static final int GOLD_VALUE = CoinFeature.GOLD_VALUE;
-	public static final int EMERALD_VALUE = CoinFeature.EMERALD_VALUE;
-	public static final int NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
+	public static final long COPPER_VALUE = CoinFeature.COPPER_VALUE;
+	public static final long IRON_VALUE = CoinFeature.IRON_VALUE;
+	public static final long GOLD_VALUE = CoinFeature.GOLD_VALUE;
+	public static final long EMERALD_VALUE = CoinFeature.EMERALD_VALUE;
+	public static final long NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
 	
 	public static void execute(){}
 	
@@ -42,7 +42,7 @@ public class CoinStackBlocksFeature {
 		);
 	}
 	
-	public static Block registerCoinStackBlock( String id, Block block, int value ) {
+	public static Block registerCoinStackBlock( String id, Block block, long value ) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
 		
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
@@ -52,7 +52,7 @@ public class CoinStackBlocksFeature {
 		return block;
 	}
 	
-	public static Block registerCraftableCoinStackBlock( CoinType type, String id, Block block, int value ) {
+	public static Block registerCraftableCoinStackBlock( CoinType type, String id, Block block, long value ) {
 		Block registeredBlock = registerCoinStackBlock( id, block, value );
 		
 		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, registeredBlock, value );

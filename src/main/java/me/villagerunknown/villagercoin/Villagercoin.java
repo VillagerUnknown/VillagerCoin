@@ -32,8 +32,8 @@ public class Villagercoin implements ModInitializer {
 	public static Logger LOGGER = MOD.getLogger();
 	public static VillagercoinConfigData CONFIG = MOD.getConfig();
 	
-	public static final int MAX_COUNT_CAP = 1073741822;
-	public static int MAX_COUNT = 5000;
+	public static final int MAX_STACK_COUNT_CAP = 1073741822;
+	public static int MAX_STACK_COUNT = 5000;
 	
 	public static final ComponentType<CoinComponent> COIN_COMPONENT;
 	
@@ -54,13 +54,13 @@ public class Villagercoin implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		MAX_COUNT = CONFIG.maximumCoinStackSize;
+		MAX_STACK_COUNT = CONFIG.maximumCoinStackSize;
 		
-		if( CONFIG.maximumCoinStackSize > MAX_COUNT_CAP ) {
-			Villagercoin.LOGGER.warn( "Maximum Coin Stack Size exceeds limit of " + MAX_COUNT_CAP );
-			Villagercoin.LOGGER.info( "Maximum Coin Stack Size has been set to: " + MAX_COUNT_CAP );
+		if( CONFIG.maximumCoinStackSize > MAX_STACK_COUNT_CAP ) {
+			Villagercoin.LOGGER.warn( "Maximum Coin Stack Size exceeds limit of " + MAX_STACK_COUNT_CAP );
+			Villagercoin.LOGGER.info( "Maximum Coin Stack Size has been set to: " + MAX_STACK_COUNT_CAP );
 			
-			MAX_COUNT = MAX_COUNT_CAP;
+			MAX_STACK_COUNT = MAX_STACK_COUNT_CAP;
 		} // if
 		
 		// # Initialize Mod
@@ -98,6 +98,13 @@ public class Villagercoin implements ModInitializer {
 	public static Comparator<Integer> reverseSort = new Comparator<Integer>() {
 		@Override
 		public int compare(Integer num1, Integer num2) {
+			return num2.compareTo(num1);
+		}
+	};
+	
+	public static Comparator<Long> reverseSortLong = new Comparator<Long>() {
+		@Override
+		public int compare(Long num1, Long num2) {
 			return num2.compareTo(num1);
 		}
 	};

@@ -108,7 +108,7 @@ public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implem
 		CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
 		
 		if( null != currencyComponent ) {
-			NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+			NumberFormat numberFormat = NumberFormat.getNumberInstance();
 			
 			tooltip.add(
 					Text.translatable(

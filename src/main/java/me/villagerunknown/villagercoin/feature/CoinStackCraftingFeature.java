@@ -26,7 +26,7 @@ public class CoinStackCraftingFeature {
 	
 	private static Item RECIPE_CARRIER_ITEM = Items.STRING;
 	
-	private static HashMap<CoinType, TreeMap<Integer, Item>> CRAFTING_RESULT_COIN_STACKS = new HashMap<>(Map.ofEntries(
+	private static HashMap<CoinType, TreeMap<Long, Item>> CRAFTING_RESULT_COIN_STACKS = new HashMap<>(Map.ofEntries(
 			entry( CoinType.COPPER, new TreeMap<>() ),
 			entry( CoinType.IRON, new TreeMap<>() ),
 			entry( CoinType.GOLD, new TreeMap<>() ),
@@ -40,9 +40,9 @@ public class CoinStackCraftingFeature {
 	
 	public static void execute() {}
 	
-	public static void registerCraftingResultCoinStack( CoinType type, Block block, int value ) {
+	public static void registerCraftingResultCoinStack( CoinType type, Block block, long value ) {
 		if( CRAFTING_RESULT_COIN_STACKS.containsKey( type ) ) {
-			TreeMap<Integer, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get( type );
+			TreeMap<Long, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get( type );
 			
 			typeMap.put( value, block.asItem() );
 			
@@ -69,7 +69,7 @@ public class CoinStackCraftingFeature {
 	
 	public static Collection<Item> getCraftingResultCoinStacks( CoinType type ) {
 		if( CRAFTING_RESULT_COIN_STACKS.containsKey( type ) ) {
-			TreeMap<Integer, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get(type);
+			TreeMap<Long, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get(type);
 			
 			return typeMap.values();
 		} // if
@@ -77,14 +77,14 @@ public class CoinStackCraftingFeature {
 		return null;
 	}
 	
-	public static ItemStack getLargestCoinStack( CoinType type, int coinStackValue) {
+	public static ItemStack getLargestCoinStack( CoinType type, long coinStackValue) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coinStack = null;
 		
 		if( CRAFTING_RESULT_COIN_STACKS.containsKey( type ) ) {
-			TreeMap<Integer, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get(type);
+			TreeMap<Long, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get(type);
 			
-			for (Integer value : typeMap.keySet()) {
+			for (Long value : typeMap.keySet()) {
 				if( coinStackValue >= value ) {
 					Item item = typeMap.get( value );
 					
@@ -102,19 +102,23 @@ public class CoinStackCraftingFeature {
 		return returnStack;
 	}
 	
-	public static ItemStack getSmallestCoinStack( CoinType type, int coinStackValue) {
+	public static ItemStack getSmallestCoinStack( CoinType type, long coinStackValue) {
 		if( coinStackValue > 0 ) {
 			if( CRAFTING_RESULT_COIN_STACKS.containsKey( type ) ) {
-				TreeMap<Integer, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get(type);
+				TreeMap<Long, Item> typeMap = CRAFTING_RESULT_COIN_STACKS.get(type);
 				
-				return new ItemStack( typeMap.get( 1 ), coinStackValue );
+				if( coinStackValue > Integer.MAX_VALUE ) {
+					coinStackValue = Integer.MAX_VALUE;
+				} // if
+				
+				return new ItemStack( typeMap.get( 1L ), CoinCraftingFeature.toIntSafely(coinStackValue) );
 			} // if
 		} // if
 		
 		return ItemStack.EMPTY;
 	}
 	
-	public static void subtractCarrierFromIngredients( RecipeInputInventory craftingInput, int amount ) {
+	public static void subtractCarrierFromIngredients( RecipeInputInventory craftingInput, long amount ) {
 		CraftingRecipeInput.Positioned positioned = craftingInput.createPositionedRecipeInput();
 		CraftingRecipeInput craftingRecipeInput = positioned.input();
 		int left = positioned.left();
@@ -126,7 +130,11 @@ public class CoinStackCraftingFeature {
 				ItemStack ingredientStack = craftingInput.getStack(m);
 				
 				if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) ) {
-					craftingInput.removeStack( m, amount );
+					if( amount > Integer.MAX_VALUE ) {
+						amount = Integer.MAX_VALUE;
+					} // if
+					
+					craftingInput.removeStack( m, CoinCraftingFeature.toIntSafely(amount) );
 				} // if
 			} // for
 		} // for

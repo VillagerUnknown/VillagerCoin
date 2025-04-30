@@ -8,46 +8,50 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 
-public record CurrencyComponent(int value) {
+public record CurrencyComponent(long value) {
 	
 	public static final Codec<CurrencyComponent> CODEC = RecordCodecBuilder.create((instance) -> {
 		return instance.group(
-				Codec.INT.fieldOf( "value" ).forGetter(CurrencyComponent::value)
+				Codec.LONG.fieldOf( "value" ).forGetter(CurrencyComponent::value)
 		).apply(instance, CurrencyComponent::new);
 	});
 	public static final PacketCodec<RegistryByteBuf, CurrencyComponent> PACKET_CODEC;
 	
-	public CurrencyComponent(int value) {
+	public CurrencyComponent(long value) {
 		this.value = value;
 	}
 	
-	public int value() {
+	public long value() {
 		return value;
 	}
 	
-	public ItemStack getLargestCoin( int coinValue, boolean singleCount ) {
+	public ItemStack getLargestCoin( long coinValue, boolean singleCount ) {
 		return CoinCraftingFeature.getLargestCoin( coinValue, singleCount );
 	}
 	
-	public ItemStack getLargerCoin( int coinValue, boolean singleCount ) {
+	public ItemStack getLargerCoin( long coinValue, boolean singleCount ) {
 		return CoinCraftingFeature.getLargerCoin( coinValue, singleCount );
 	}
 	
-	public ItemStack getSmallerCoin( int coinValue ) {
+	public ItemStack getSmallerCoin( long coinValue ) {
 		return CoinCraftingFeature.getSmallerCoin( coinValue );
 	}
 	
-	public int getConversionValue( int fromValue, CurrencyComponent toCurrencyComponent ) {
+	public long getConversionValue( long fromValue, CurrencyComponent toCurrencyComponent ) {
 		return CoinCraftingFeature.getConversionValue( fromValue, toCurrencyComponent.value());
 	}
 	
-	public int getConversionValue( int fromValue, int toValue ) {
+	public long getConversionValue( int fromValue, int toValue ) {
+		return CoinCraftingFeature.getConversionValue( fromValue, toValue );
+	}
+	
+	public long getConversionValue( long fromValue, long toValue ) {
 		return CoinCraftingFeature.getConversionValue( fromValue, toValue );
 	}
 	
 	static {
 		PACKET_CODEC = PacketCodec.tuple(
-				PacketCodecs.INTEGER, CurrencyComponent::value,
+				PacketCodecs.VAR_LONG, CurrencyComponent::value,
 				CurrencyComponent::new
 		);
 	}

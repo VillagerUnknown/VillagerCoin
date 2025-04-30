@@ -47,12 +47,12 @@ public class CoinBankBlocksFeature {
 		BlockEntity blockEntity = world.getBlockEntity( pos );
 		
 		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
-			int value = coinBankBlockEntity.getTotalCurrencyValue();
+			long value = coinBankBlockEntity.getTotalCurrencyValue();
 			if( value > 0 ) {
-				if( Integer.MAX_VALUE == value ) {
+				if( Long.MAX_VALUE == value ) {
 					return 15;
 				} else {
-					return Math.max(1, (int) Math.ceil(Math.log(value) / Math.log(Integer.MAX_VALUE) * 14));
+					return Math.max(1, (int) Math.ceil(Math.log(value) / Math.log(Long.MAX_VALUE) * 14));
 				} // if, else
 			} // if
 		} // if

@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
@@ -71,13 +72,13 @@ public class CrafterBlockMixin {
 							
 							// This ingredients map doesn't require as much information as the others.
 							// ItemStack is used instead of coinFeature.CoinIngredient
-							AtomicReference<TreeMap<Integer, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>(Villagercoin.reverseSort));
+							AtomicReference<TreeMap<Long, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>(Villagercoin.reverseSortLong));
 							
 							crafterBlockEntity.getHeldStacks().forEach((stack) -> {
 								ingredientsMap.set(CoinCraftingFeature.updateCoinIngredientsMap(ingredientsMap.get(), stack));
 							});
 							
-							AtomicInteger totalCost = new AtomicInteger(itemStack.getCount() * currencyComponent.value());
+							AtomicLong totalCost = new AtomicLong((long) itemStack.getCount() * currencyComponent.value());
 							
 							ingredientsMap.get().forEach((order, ingredient) -> {
 								totalCost.set(CoinCraftingFeature.subtractCoinValueFromTotalCost(ingredient, totalCost, crafterBlockEntity.getHeldStacks()));
