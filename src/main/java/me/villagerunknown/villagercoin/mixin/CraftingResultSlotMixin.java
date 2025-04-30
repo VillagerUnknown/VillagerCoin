@@ -2,6 +2,7 @@ package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -41,7 +42,7 @@ public class CraftingResultSlotMixin {
 			return;
 		} // if
 		
-		if( CoinCraftingFeature.isCraftingResultCoin( stack.getItem() ) ) {
+		if( CoinCraftingFeature.isCraftingResultCoin( stack.getItem() ) || CoinStackCraftingFeature.isCraftingResultCoinStack( stack.getItem() ) ) {
 			CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
 			CraftingRecipeInput craftingRecipeInput = positioned.input();
 			DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());
@@ -49,6 +50,10 @@ public class CraftingResultSlotMixin {
 			CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
 			
 			if( null != currencyComponent ) {
+				if( CoinStackCraftingFeature.isCraftingResultCoinStack( stack.getItem() ) ) {
+					CoinStackCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
+				} // if
+				
 				AtomicInteger totalCost = new AtomicInteger(stack.getCount() * currencyComponent.value());
 				TreeMap<Integer, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap( this.input );
 				

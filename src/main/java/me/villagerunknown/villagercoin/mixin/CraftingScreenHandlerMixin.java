@@ -2,6 +2,7 @@ package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -55,7 +56,7 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 		if( 0 == slot ) {
 			ItemStack craftedItemStack = this.result.getStack( slot );
 			
-			if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) ) {
+			if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) || CoinStackCraftingFeature.isCraftingResultCoinStack( craftedItemStack.getItem() ) ) {
 				CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
 				CraftingRecipeInput craftingRecipeInput = positioned.input();
 				DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());
@@ -63,13 +64,16 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 				CurrencyComponent currencyComponent = craftedItemStack.get( CURRENCY_COMPONENT );
 				
 				if( null != currencyComponent ) {
+					if( CoinStackCraftingFeature.isCraftingResultCoinStack( craftedItemStack.getItem() ) ) {
+						CoinStackCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
+					} // if
+					
 					AtomicInteger totalCost = new AtomicInteger(craftedItemStack.getCount() * currencyComponent.value());
 					TreeMap<Integer, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap( this.input );
 					
 					ingredientsMap.forEach(( order, coinIngredient ) -> {
 						int ingredientSlot = coinIngredient.slot;
 						ItemStack ingredient = coinIngredient.stack;
-						ItemStack itemStack2 = (ItemStack)defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.getWidth());
 						
 						totalCost.set( CoinCraftingFeature.subtractCoinValueFromTotalCost( ingredient, totalCost, this.input, ingredientSlot ) );
 						

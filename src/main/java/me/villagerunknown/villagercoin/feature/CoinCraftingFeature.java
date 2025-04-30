@@ -281,7 +281,7 @@ public class CoinCraftingFeature {
 				} // if
 			} // if
 		} // for
-		LOGGER.info( "total cost: " + totalCost.get() );
+		
 		return totalCost.get();
 	}
 	

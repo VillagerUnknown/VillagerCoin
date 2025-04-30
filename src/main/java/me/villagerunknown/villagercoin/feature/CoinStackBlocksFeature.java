@@ -4,6 +4,7 @@ import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.type.CoinType;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -42,12 +43,14 @@ public class CoinStackBlocksFeature {
 		);
 	}
 	
-	public static Block registerCoinStackBlock(String id, Block block, int value) {
+	public static Block registerCoinStackBlock( CoinType type, String id, Block block, int value ) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
 		
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
+		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, block, value );
 		
 		return block;
 	}

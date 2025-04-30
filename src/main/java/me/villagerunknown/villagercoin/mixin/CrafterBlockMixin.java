@@ -3,6 +3,7 @@ package me.villagerunknown.villagercoin.mixin;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CrafterBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -47,12 +48,14 @@ public class CrafterBlockMixin {
 				if (itemStack.isEmpty()) {
 					world.syncWorldEvent(1050, pos, 0);
 				} else {
-					Collection<Item> coins = CoinCraftingFeature.getCraftingResultCoins();
-					
-					if( coins.contains( itemStack.getItem() ) ) {
+					if( CoinCraftingFeature.isCraftingResultCoin( itemStack.getItem() ) || CoinStackCraftingFeature.isCraftingResultCoinStack( itemStack.getItem() ) ) {
 						CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 						
 						if( null != currencyComponent ) {
+							if( CoinStackCraftingFeature.isCraftingResultCoinStack( itemStack.getItem() ) ) {
+								CoinStackCraftingFeature.subtractCarrierFromIngredients( crafterBlockEntity.getHeldStacks(), 1 );
+							} // if
+							
 							crafterBlockEntity.setCraftingTicksRemaining(6);
 							world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
 							itemStack.onCraftByCrafter(world);
