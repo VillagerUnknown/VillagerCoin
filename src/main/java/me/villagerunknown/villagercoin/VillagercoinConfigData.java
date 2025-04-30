@@ -155,6 +155,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public float chanceDiamondBecomesEmeraldTrade = 0.5F;
 	
 	/**
+	 * Coin Stacks
+	 */
+	
+	@ConfigEntry.Category("CoinStacks")
+	public boolean enableCoinStacksBreakOnCollision = true;
+	
+	/**
 	 * Collectable Coins
 	 */
 	

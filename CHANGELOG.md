@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Added coin specific subtitles.
 - Added value tooltip to coin items with a currency component.
 - Added option to allow coin entities to sink, instead of float, in water and lava.
+- Added option to toggle Coin Stacks breaking on collision.
 
 ### Changed
 
@@ -16,6 +17,7 @@ All notable changes to this project will be documented in this file.
 _This change is to make it easier for mapmakers to work with the Coin Stacks._
 - Coin flips now send a signal to sculk sensors.
 - Inserting coins in Coin Banks now sends a signal to sculk sensors.
+- Coin Stacks no longer drop coins if a player collides with them while sneaking/crouched.
 
 ## [1.0.5]
 

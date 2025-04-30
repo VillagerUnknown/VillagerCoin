@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.block;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
@@ -25,7 +26,7 @@ public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock
 	
 	@Override
 	protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-		if( !world.isClient && entity instanceof PlayerEntity playerEntity && !playerEntity.isInCreativeMode() ) {
+		if( !world.isClient && Villagercoin.CONFIG.enableCoinStacksBreakOnCollision && entity instanceof PlayerEntity playerEntity && !playerEntity.isInCreativeMode() && !playerEntity.isSneaking() ) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			
 			if (blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity) {

@@ -81,6 +81,7 @@
   "text.autoconfig.villagerunknown-villagercoin.option.goldForDiamond": "Gold Coins for Diamond Trades",
   "text.autoconfig.villagerunknown-villagercoin.option.goldForEmerald": "Gold Coins for Emerald Trades",
   "text.autoconfig.villagerunknown-villagercoin.option.chanceDiamondBecomesEmeraldTrade": "Chance Diamond Trade Becomes Emerald Trade",
+  "text.autoconfig.villagerunknown-villagercoin.option.enableCoinStacksBreakOnCollision": "Enable Coin Stacks Break On Collision",
 
   "sound.villagerunknown-villagercoin.coin": "Coins jingle",
   "sound.villagerunknown-villagercoin.coin_flip": "Coin flips",
