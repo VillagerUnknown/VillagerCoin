@@ -52,8 +52,26 @@ public class CoinStackBlocksFeature {
 		return block;
 	}
 	
+	public static Block registerFireproofCoinStackBlock( String id, Block block, long value ) {
+		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
+		
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
+		
+		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
+		return block;
+	}
+	
 	public static Block registerCraftableCoinStackBlock( CoinType type, String id, Block block, long value ) {
 		Block registeredBlock = registerCoinStackBlock( id, block, value );
+		
+		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, registeredBlock, value );
+		
+		return block;
+	}
+	
+	public static Block registerCraftableFireproofCoinStackBlock( CoinType type, String id, Block block, long value ) {
+		Block registeredBlock = registerFireproofCoinStackBlock( id, block, value );
 		
 		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, registeredBlock, value );
 		
