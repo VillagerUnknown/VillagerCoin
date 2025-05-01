@@ -43,16 +43,26 @@ public class CoinBankBlocksFeature {
 		return block;
 	}
 	
+	public static Block registerFireproofCoinBankBlock(String id, Block block) {
+		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
+		
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), Villagercoin.MOD_ID);
+		
+		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
+		return block;
+	}
+	
 	public static int getComparatorOutput(BlockState state, World world, BlockPos pos) {
 		BlockEntity blockEntity = world.getBlockEntity( pos );
 		
 		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
-			int value = coinBankBlockEntity.getTotalCurrencyValue();
+			long value = coinBankBlockEntity.getTotalCurrencyValue();
 			if( value > 0 ) {
-				if( Integer.MAX_VALUE == value ) {
+				if( Long.MAX_VALUE == value ) {
 					return 15;
 				} else {
-					return Math.max(1, (int) Math.ceil(Math.log(value) / Math.log(Integer.MAX_VALUE) * 14));
+					return Math.max(1, (int) Math.ceil(Math.log(value) / Math.log(Long.MAX_VALUE) * 14));
 				} // if, else
 			} // if
 		} // if

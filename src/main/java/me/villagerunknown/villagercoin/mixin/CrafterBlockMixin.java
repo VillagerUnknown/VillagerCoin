@@ -3,6 +3,8 @@ package me.villagerunknown.villagercoin.mixin;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
+import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
+import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CrafterBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -22,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
@@ -47,12 +50,25 @@ public class CrafterBlockMixin {
 				if (itemStack.isEmpty()) {
 					world.syncWorldEvent(1050, pos, 0);
 				} else {
-					Collection<Item> coins = CoinCraftingFeature.getCraftingResultCoins();
-					
-					if( coins.contains( itemStack.getItem() ) ) {
+					if( ReceiptCraftingFeature.isCraftingResultReceipt( itemStack.getItem() ) ) {
+						ReceiptCraftingFeature.subtractCarrierFromIngredients( crafterBlockEntity.getHeldStacks(), 1 );
+						
+						this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
+						
+						crafterBlockEntity.markDirty();
+						
+						ci.cancel();
+					} else if(
+							CoinCraftingFeature.isCraftingResultCoin( itemStack.getItem() )
+							|| CoinStackCraftingFeature.isCraftingResultCoinStack( itemStack.getItem() )
+					) {
 						CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 						
 						if( null != currencyComponent ) {
+							if( CoinStackCraftingFeature.isCraftingResultCoinStack( itemStack.getItem() ) ) {
+								CoinStackCraftingFeature.subtractCarrierFromIngredients( crafterBlockEntity.getHeldStacks(), 1 );
+							} // if
+							
 							crafterBlockEntity.setCraftingTicksRemaining(6);
 							world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
 							itemStack.onCraftByCrafter(world);
@@ -68,13 +84,13 @@ public class CrafterBlockMixin {
 							
 							// This ingredients map doesn't require as much information as the others.
 							// ItemStack is used instead of coinFeature.CoinIngredient
-							AtomicReference<TreeMap<Integer, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>(Villagercoin.reverseSort));
+							AtomicReference<TreeMap<Long, ItemStack>> ingredientsMap = new AtomicReference<>(new TreeMap<>(Villagercoin.reverseSortLong));
 							
 							crafterBlockEntity.getHeldStacks().forEach((stack) -> {
 								ingredientsMap.set(CoinCraftingFeature.updateCoinIngredientsMap(ingredientsMap.get(), stack));
 							});
 							
-							AtomicInteger totalCost = new AtomicInteger(itemStack.getCount() * currencyComponent.value());
+							AtomicLong totalCost = new AtomicLong((long) itemStack.getCount() * currencyComponent.value());
 							
 							ingredientsMap.get().forEach((order, ingredient) -> {
 								totalCost.set(CoinCraftingFeature.subtractCoinValueFromTotalCost(ingredient, totalCost, crafterBlockEntity.getHeldStacks()));

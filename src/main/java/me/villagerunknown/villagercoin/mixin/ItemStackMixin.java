@@ -20,7 +20,7 @@ public abstract class ItemStackMixin {
 	@Shadow
 	public static final Codec<ItemStack> CODEC = Codec.lazyInitialized(() -> {
 		return RecordCodecBuilder.create((instance) -> {
-			return instance.group(ITEM_CODEC.fieldOf("id").forGetter(ItemStack::getRegistryEntry), Codecs.rangedInt(1, Villagercoin.MAX_COUNT).fieldOf("count").orElse(1).forGetter(ItemStack::getCount), ComponentChanges.CODEC.optionalFieldOf("components", ComponentChanges.EMPTY).forGetter((stack) -> {
+			return instance.group(ITEM_CODEC.fieldOf("id").forGetter(ItemStack::getRegistryEntry), Codecs.rangedInt(1, Villagercoin.MAX_STACK_COUNT).fieldOf("count").orElse(1).forGetter(ItemStack::getCount), ComponentChanges.CODEC.optionalFieldOf("components", ComponentChanges.EMPTY).forGetter((stack) -> {
 				return stack.getComponentChanges();
 			})).apply(instance, ItemStack::new);
 		});
@@ -31,7 +31,7 @@ public abstract class ItemStackMixin {
 		ItemStack stack = (ItemStack) (Object) this;
 		
 		if (!stack.isEmpty() && stack.getCount() > maxCount) {
-			stack.setCount( Villagercoin.MAX_COUNT );
+			stack.setCount( Villagercoin.MAX_STACK_COUNT );
 		}
 		
 		ci.cancel();

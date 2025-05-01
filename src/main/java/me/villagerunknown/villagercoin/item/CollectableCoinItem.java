@@ -24,7 +24,7 @@ public class CollectableCoinItem extends AbstractCollectableCoinItem {
 		);
 	}
 	
-	public CollectableCoinItem(Settings settings, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer) {
+	public CollectableCoinItem(Settings settings, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer) {
 		super(
 				settings
 						.maxCount( maximumAllowedInServer )

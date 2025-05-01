@@ -12,6 +12,7 @@
     "DoubleInventoryMixin",
     "HopperBlockEntityAccessor",
     "HopperBlockEntityMixin",
+    "ItemEntityMixin",
     "ItemMixin",
     "ItemStackMixin",
     "LootableContainerBlockEntityMixin",

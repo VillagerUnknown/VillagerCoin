@@ -19,6 +19,16 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	@ConfigEntry.Category("Coins")
 	public boolean enableCoinFlipping = true;
 	
+	@ConfigEntry.Category("Coins")
+	public boolean coinsSinkInLiquids = false;
+	
+	/**
+	 * Receipts
+	 */
+	
+	@ConfigEntry.Category("Receipts")
+	public String receiptThankYouMessage  = "Thank you for shopping with us!";
+	
 	/**
 	 * Loot Tables
 	 */
@@ -150,6 +160,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	
 	@ConfigEntry.Category("Trades")
 	public float chanceDiamondBecomesEmeraldTrade = 0.5F;
+	
+	/**
+	 * Coin Stacks
+	 */
+	
+	@ConfigEntry.Category("CoinStacks")
+	public boolean enableCoinStacksBreakOnCollision = false;
 	
 	/**
 	 * Collectable Coins

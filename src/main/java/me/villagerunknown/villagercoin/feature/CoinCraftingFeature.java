@@ -18,18 +18,19 @@ import net.minecraft.util.collection.DefaultedList;
 import java.util.Collection;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static me.villagerunknown.villagercoin.Villagercoin.*;
 
 public class CoinCraftingFeature {
 	
-	private static TreeMap<Integer, Item> CRAFTING_RESULT_COINS = new TreeMap<>();
+	private static TreeMap<Long, Item> CRAFTING_RESULT_COINS = new TreeMap<>();
 	
 	public static RecipeSerializer<VillagerCoinRecipe> RECIPE_SERIALIZER;
 	
 	public static void execute() {}
 	
-	public static void registerCraftingResultCoin(Item item, int value ) {
+	public static void registerCraftingResultCoin(Item item, long value ) {
 		CRAFTING_RESULT_COINS.put( value, item );
 	}
 	
@@ -45,11 +46,11 @@ public class CoinCraftingFeature {
 		return CRAFTING_RESULT_COINS.values();
 	}
 	
-	public static ItemStack getLargestCoin( int coinValue, boolean singleCount ) {
+	public static ItemStack getLargestCoin( long coinValue, boolean singleCount ) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
-		for (Integer value : CRAFTING_RESULT_COINS.keySet()) {
+		for (long value : CRAFTING_RESULT_COINS.keySet()) {
 			if( coinValue >= value ) {
 				Item item = CRAFTING_RESULT_COINS.get( value );
 				
@@ -65,18 +66,18 @@ public class CoinCraftingFeature {
 			returnStack = new ItemStack(coin, 1);
 			
 			if( !singleCount && null != currencyComponent ) {
-				returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
+				returnStack = new ItemStack(coin, getConversionValueSafelyFromLong(coinValue, currencyComponent.value()));
 			} // if
 		} // if
 		
 		return returnStack;
 	}
 	
-	public static ItemStack getLargerCoin( int coinValue, boolean singleCount ) {
+	public static ItemStack getLargerCoin( long coinValue, boolean singleCount ) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
-		for (Integer value : CRAFTING_RESULT_COINS.keySet()) {
+		for (long value : CRAFTING_RESULT_COINS.keySet()) {
 			if( value > coinValue ) {
 				Item item = CRAFTING_RESULT_COINS.get( value );
 				
@@ -90,21 +91,21 @@ public class CoinCraftingFeature {
 		if( null != coin ) {
 			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
 			
-			returnStack = new ItemStack(coin, getConversionValue(coinValue, 1));
+			returnStack = new ItemStack(coin, getConversionValueSafelyFromLong(coinValue, 1));
 			
 			if( !singleCount && null != currencyComponent ) {
-				returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
+				returnStack = new ItemStack(coin, getConversionValueSafelyFromLong(coinValue, currencyComponent.value()));
 			} // if
 		} // if
 		
 		return returnStack;
 	}
 	
-	public static ItemStack getSmallerCoin( int coinValue ) {
+	public static ItemStack getSmallerCoin( long coinValue ) {
 		ItemStack returnStack = ItemStack.EMPTY;
 		Item coin = null;
 		
-		for (Integer value : CRAFTING_RESULT_COINS.keySet()) {
+		for (Long value : CRAFTING_RESULT_COINS.keySet()) {
 			if( value < coinValue ) {
 				Item item = CRAFTING_RESULT_COINS.get( value );
 				
@@ -119,7 +120,7 @@ public class CoinCraftingFeature {
 			
 			if( null != currencyComponent ) {
 				if( getConversionValue( coinValue, currencyComponent.value() ) > 1 ) {
-					returnStack = new ItemStack(coin, getConversionValue(coinValue, currencyComponent.value()));
+					returnStack = new ItemStack(coin, getConversionValueSafelyFromLong( coinValue, currencyComponent.value()));
 				} // if
 			} // if
 		} // if
@@ -135,6 +136,20 @@ public class CoinCraftingFeature {
 		return ItemStack.EMPTY;
 	}
 	
+	public static int toIntSafely( long number ) {
+		try {
+			if( number > Integer.MAX_VALUE ) {
+				number = Integer.MAX_VALUE;
+			} // if
+			
+			return Math.toIntExact( number );
+		} catch(ArithmeticException e) {
+			LOGGER.warn( e.getMessage() );
+		} // try, catch
+		
+		return 0;
+	}
+	
 	public static int getConversionValue(int fromValue, int toValue) {
 		int result;
 		
@@ -147,13 +162,37 @@ public class CoinCraftingFeature {
 		return result;
 	}
 	
-	public static TreeMap<Integer, CoinIngredient> getCoinIngredientsMap( RecipeInputInventory input ) {
+	public static long getConversionValue(long fromValue, long toValue) {
+		long result;
+		
+		if( fromValue > toValue ) {
+			result = fromValue / toValue;
+		} else {
+			result = toValue / fromValue;
+		} // if, else
+		
+		return result;
+	}
+	
+	public static int getConversionValueSafelyFromLong(long fromValue, long toValue) {
+		long result;
+		
+		if( fromValue > toValue ) {
+			result = fromValue / toValue;
+		} else {
+			result = toValue / fromValue;
+		} // if, else
+		
+		return toIntSafely( result );
+	}
+	
+	public static TreeMap<Long, CoinIngredient> getCoinIngredientsMap( RecipeInputInventory input ) {
 		CraftingRecipeInput.Positioned positioned = input.createPositionedRecipeInput();
 		CraftingRecipeInput craftingRecipeInput = positioned.input();
 		int left = positioned.left();
 		int top = positioned.top();
 		
-		TreeMap<Integer, CoinIngredient> ingredientsMap = new TreeMap<>(Villagercoin.reverseSort);
+		TreeMap<Long, CoinIngredient> ingredientsMap = new TreeMap<>(Villagercoin.reverseSortLong);
 		
 		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
 			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
@@ -166,11 +205,11 @@ public class CoinCraftingFeature {
 		return ingredientsMap;
 	}
 	
-	public static TreeMap<Integer, CoinIngredient> updateCoinIngredientsMap( TreeMap<Integer, CoinIngredient> ingredientsMap, ItemStack itemStack, int slot, int x, int y ) {
+	public static TreeMap<Long, CoinIngredient> updateCoinIngredientsMap( TreeMap<Long, CoinIngredient> ingredientsMap, ItemStack itemStack, int slot, int x, int y ) {
 		CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 		
 		if( null != currencyComponent ) {
-			int currencyValue = currencyComponent.value();
+			long currencyValue = currencyComponent.value();
 			
 			if( ingredientsMap.containsKey( currencyValue ) ) {
 				currencyValue = currencyValue + ingredientsMap.size();
@@ -182,12 +221,12 @@ public class CoinCraftingFeature {
 		return ingredientsMap;
 	}
 	
-	public static TreeMap<Integer, ItemStack> updateCoinIngredientsMap(TreeMap<Integer, ItemStack> ingredientsMap, ItemStack coinItemStack ) {
+	public static TreeMap<Long, ItemStack> updateCoinIngredientsMap(TreeMap<Long, ItemStack> ingredientsMap, ItemStack coinItemStack ) {
 		if(!coinItemStack.isEmpty()) {
 			CurrencyComponent currencyComponent = coinItemStack.get( CURRENCY_COMPONENT );
 			
 			if( null != currencyComponent ) {
-				int currencyValue = currencyComponent.value();
+				long currencyValue = currencyComponent.value();
 				
 				if (ingredientsMap.containsKey(currencyValue)) {
 					currencyValue = currencyValue + ingredientsMap.size();
@@ -211,14 +250,14 @@ public class CoinCraftingFeature {
 	 * @param totalCost
 	 * @param craftingInput
 	 * @param ingredientSlot
-	 * @return int - Total Cost
+	 * @return long - Total Cost
 	 */
-	public static int subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicInteger totalCost, RecipeInputInventory craftingInput, int ingredientSlot ) {
+	public static long subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicLong totalCost, RecipeInputInventory craftingInput, int ingredientSlot ) {
 		CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
 		
 		if( null != currencyComponent ) {
-			int ingredientCoinValue = currencyComponent.value();
-			int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
+			long ingredientCoinValue = currencyComponent.value();
+			long ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
 			
 			if( ingredientCoinValue == totalCost.get()) {
 				craftingInput.removeStack(ingredientSlot, 1 );
@@ -227,7 +266,7 @@ public class CoinCraftingFeature {
 				craftingInput.removeStack(ingredientSlot, ingredient.getCount());
 				totalCost.addAndGet(-ingredientCoinStackValue);
 			} else if( ingredientCoinValue < totalCost.get()) {
-				int amount = totalCost.get() / ingredientCoinValue;
+				int amount = CoinCraftingFeature.getConversionValueSafelyFromLong( totalCost.get(), ingredientCoinValue );
 				
 				if( amount >= ingredient.getCount() ) {
 					craftingInput.removeStack(ingredientSlot, ingredient.getCount());
@@ -250,16 +289,16 @@ public class CoinCraftingFeature {
 	 * @param ingredient
 	 * @param totalCost
 	 * @param ingredients
-	 * @return int - Total Cost
+	 * @return long - Total Cost
 	 */
-	public static int subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicInteger totalCost, DefaultedList<ItemStack> ingredients ) {
+	public static long subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicLong totalCost, DefaultedList<ItemStack> ingredients ) {
 		for( ItemStack stack : ingredients ) {
 			if( stack.equals(ingredient) ) {
 				CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
 				
 				if( null != currencyComponent ) {
-					int ingredientCoinValue = currencyComponent.value();
-					int ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
+					long ingredientCoinValue = currencyComponent.value();
+					long ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
 					
 					if (ingredientCoinValue == totalCost.get()) {
 						stack.decrement(1);
@@ -268,7 +307,7 @@ public class CoinCraftingFeature {
 						stack.decrement(ingredient.getCount());
 						totalCost.addAndGet(-ingredientCoinStackValue);
 					} else if (ingredientCoinValue < totalCost.get()) {
-						int amount = totalCost.get() / ingredientCoinValue;
+						int amount = CoinCraftingFeature.getConversionValueSafelyFromLong( totalCost.get(), ingredientCoinValue );
 						
 						if (amount >= ingredient.getCount()) {
 							stack.decrement(ingredient.getCount());
@@ -281,7 +320,7 @@ public class CoinCraftingFeature {
 				} // if
 			} // if
 		} // for
-		LOGGER.info( "total cost: " + totalCost.get() );
+		
 		return totalCost.get();
 	}
 	

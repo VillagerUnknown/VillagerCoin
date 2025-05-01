@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.6]
+
+### Added
+
+- Added craftable Villager Coin Receipts. Place a piece of paper in a crafting table with a stack of coins to craft a receipt.
+- Added coin specific subtitles.
+- Added value tooltip to coin items with a currency component.
+- Added option to allow coin entities to sink, instead of float, in water and lava.
+- Added option to toggle Coin Stacks breaking on collision. _The default value prevents breaking on collision. 
+This is to match the expected functionality of Minecraft blocks._
+- Added `CoinStackCraftingFeature` to allow crafting Coin Stacks.
+
+### Changed
+
+- Changed Currency values to use a Long number type instead of an Integer. This to allow larger values. 
+Safety measures have been put in place for instances where an integer is required. 
+Coin Banks are still capped at the maximum Integer value.
+- Players in Creative mode no longer break Coin Stacks by walking over them. 
+_This change is to make it easier for mapmakers to work with the Coin Stacks._
+- Flipping a coin now sends a signal to sculk sensors.
+- Inserting coins in Coin Banks now sends a signal to sculk sensors.
+- If collisions are enabled, Coin Stacks no longer drop coins when a player collides with them while sneaking/crouched.
+- Coin Stacks now drop their item form when broken with Silk Touch.
+
 ## [1.0.5]
 
 ### Added

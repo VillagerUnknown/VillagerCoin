@@ -32,8 +32,8 @@ public class Villagercoin implements ModInitializer {
 	public static Logger LOGGER = MOD.getLogger();
 	public static VillagercoinConfigData CONFIG = MOD.getConfig();
 	
-	public static final int MAX_COUNT_CAP = 1073741822;
-	public static int MAX_COUNT = 5000;
+	public static final int MAX_STACK_COUNT_CAP = 1073741822;
+	public static int MAX_STACK_COUNT = 5000;
 	
 	public static final ComponentType<CoinComponent> COIN_COMPONENT;
 	
@@ -45,6 +45,10 @@ public class Villagercoin implements ModInitializer {
 	
 	public static final ComponentType<CollectableComponent> COLLECTABLE_COMPONENT;
 	
+	public static final ComponentType<ReceiptValueComponent> RECEIPT_VALUE_COMPONENT;
+	
+	public static final ComponentType<DateComponent> DATE_COMPONENT;
+	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
 	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
@@ -54,13 +58,13 @@ public class Villagercoin implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		MAX_COUNT = CONFIG.maximumCoinStackSize;
+		MAX_STACK_COUNT = CONFIG.maximumCoinStackSize;
 		
-		if( CONFIG.maximumCoinStackSize > MAX_COUNT_CAP ) {
-			Villagercoin.LOGGER.warn( "Maximum Coin Stack Size exceeds limit of " + MAX_COUNT_CAP );
-			Villagercoin.LOGGER.info( "Maximum Coin Stack Size has been set to: " + MAX_COUNT_CAP );
+		if( CONFIG.maximumCoinStackSize > MAX_STACK_COUNT_CAP ) {
+			Villagercoin.LOGGER.warn( "Maximum Coin Stack Size exceeds limit of " + MAX_STACK_COUNT_CAP );
+			Villagercoin.LOGGER.info( "Maximum Coin Stack Size has been set to: " + MAX_STACK_COUNT_CAP );
 			
-			MAX_COUNT = MAX_COUNT_CAP;
+			MAX_STACK_COUNT = MAX_STACK_COUNT_CAP;
 		} // if
 		
 		// # Initialize Mod
@@ -72,13 +76,16 @@ public class Villagercoin implements ModInitializer {
 		
 		// # Activate Features
 		featureManager.addFeature( "coinCrafting", CoinCraftingFeature::execute );
+		featureManager.addFeature( "coinStackCrafting", CoinStackCraftingFeature::execute );
+		featureManager.addFeature( "receiptCrafting", ReceiptCraftingFeature::execute );
+		
 		featureManager.addFeature( "coin", CoinFeature::execute );
 		
 		featureManager.addFeature( "structuresIncludeCoins", StructuresIncludeCoinsFeature::execute );
 		featureManager.addFeature( "mobsDropCoins", MobsDropCoinsFeature::execute );
 		featureManager.addFeature( "merchantCoinTrading", MerchantCoinTradingFeature::execute );
 		
-		featureManager.addFeature( "inventoryEffectCoins", InventoryEffectCoinFeature::execute );
+//		featureManager.addFeature( "inventoryEffectCoins", InventoryEffectCoinFeature::execute );
 	}
 	
 	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
@@ -100,6 +107,13 @@ public class Villagercoin implements ModInitializer {
 		}
 	};
 	
+	public static Comparator<Long> reverseSortLong = new Comparator<Long>() {
+		@Override
+		public int compare(Long num1, Long num2) {
+			return num2.compareTo(num1);
+		}
+	};
+	
 	static{
 		COIN_COMPONENT = registerComponentType("coin", (builder) -> {
 			return builder.codec(CoinComponent.CODEC).packetCodec(CoinComponent.PACKET_CODEC).cache();
@@ -115,6 +129,12 @@ public class Villagercoin implements ModInitializer {
 		});
 		COLLECTABLE_COMPONENT = Villagercoin.registerComponentType("collectable", (builder) -> {
 			return builder.codec(CollectableComponent.CODEC).packetCodec(CollectableComponent.PACKET_CODEC).cache();
+		});
+		RECEIPT_VALUE_COMPONENT = Villagercoin.registerComponentType("receipt_value", (builder) -> {
+			return builder.codec(ReceiptValueComponent.CODEC).packetCodec(ReceiptValueComponent.PACKET_CODEC).cache();
+		});
+		DATE_COMPONENT = Villagercoin.registerComponentType("date", (builder) -> {
+			return builder.codec(DateComponent.CODEC).packetCodec(DateComponent.PACKET_CODEC).cache();
 		});
 	}
 	

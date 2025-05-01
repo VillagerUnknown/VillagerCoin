@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class ItemMixin {
 	
 	@Shadow
-	public static final int MAX_MAX_COUNT = Villagercoin.MAX_COUNT;
+	public static final int MAX_MAX_COUNT = Villagercoin.MAX_STACK_COUNT;
 	
 }

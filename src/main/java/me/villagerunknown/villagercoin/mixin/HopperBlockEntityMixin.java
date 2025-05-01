@@ -36,7 +36,7 @@ public abstract class HopperBlockEntityMixin {
 								CurrencyComponent currencyComponent = itemStack.get(CURRENCY_COMPONENT);
 								
 								if (null != currencyComponent) {
-									int currencyValue = currencyComponent.value();
+									long currencyValue = currencyComponent.value();
 									
 									if (coinBankBlockEntity.canIncrementCurrencyValue(currencyValue)) {
 										itemStack.decrement(1);

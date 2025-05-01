@@ -3,6 +3,7 @@
   "text.autoconfig.villagerunknown-villagercoin.title": "VillagerUnknown's Villager Coin",
 
   "text.autoconfig.villagerunknown-villagercoin.category.Coins": "Coins",
+  "text.autoconfig.villagerunknown-villagercoin.category.Receipts": "Receipts",
   "text.autoconfig.villagerunknown-villagercoin.category.EffectCoins": "Effect Coins",
   "text.autoconfig.villagerunknown-villagercoin.category.CollectableCoins": "Collectable Coins",
   "text.autoconfig.villagerunknown-villagercoin.category.EdibleCoins": "Edible Coins",
@@ -11,6 +12,7 @@
   "text.autoconfig.villagerunknown-villagercoin.category.Trades": "Trades",
   "text.autoconfig.villagerunknown-villagercoin.category.CoinStacks": "Coin Stacks",
 
+  "text.autoconfig.villagerunknown-villagercoin.option.receiptThankYouMessage": "Receipt Thank You Message",
   "text.autoconfig.villagerunknown-villagercoin.option.currencyConversionMultiplier": "Currency Conversion Multiplier",
   "text.autoconfig.villagerunknown-villagercoin.option.copperDropMinimum": "Minimum Copper Drop Amount",
   "text.autoconfig.villagerunknown-villagercoin.option.ironDropMinimum": "Minimum Iron Drop Amount",
@@ -72,6 +74,7 @@
   "text.autoconfig.villagerunknown-villagercoin.option.addCoinsToMobDrops": "Add Coins to Mob Drops",
   "text.autoconfig.villagerunknown-villagercoin.option.enableBreedableMobDrops": "Enable Breedable Mob Coin Drops",
   "text.autoconfig.villagerunknown-villagercoin.option.enableCoinFlipping": "Enable Coin Flipping",
+  "text.autoconfig.villagerunknown-villagercoin.option.coinsSinkInLiquids": "Coins Sink In Liquids",
   "text.autoconfig.villagerunknown-villagercoin.option.enableTradeModifications": "Enable Trade Modifications",
   "text.autoconfig.villagerunknown-villagercoin.option.lootingBonusPerLevel": "Looting Bonus per Level",
   "text.autoconfig.villagerunknown-villagercoin.option.maximumCoinStackSize": "Maximum Coin Stack Size",
@@ -80,6 +83,10 @@
   "text.autoconfig.villagerunknown-villagercoin.option.goldForDiamond": "Gold Coins for Diamond Trades",
   "text.autoconfig.villagerunknown-villagercoin.option.goldForEmerald": "Gold Coins for Emerald Trades",
   "text.autoconfig.villagerunknown-villagercoin.option.chanceDiamondBecomesEmeraldTrade": "Chance Diamond Trade Becomes Emerald Trade",
+  "text.autoconfig.villagerunknown-villagercoin.option.enableCoinStacksBreakOnCollision": "Enable Coin Stacks Break On Collision",
+
+  "sound.villagerunknown-villagercoin.coin": "Coins jingle",
+  "sound.villagerunknown-villagercoin.coin_flip": "Coin flips",
 
   "item.villagerunknown-villagercoin.villager_coin.flip.heads": "%s flipped a coin and it landed heads up.",
   "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",
@@ -103,11 +110,17 @@
 
   "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s).",
 
+  "item.villagerunknown-villagercoin.receipt.tooltip.merchant": "Receipt from %s",
+  "item.villagerunknown-villagercoin.receipt.tooltip.date": "Date: %s",
+  "item.villagerunknown-villagercoin.receipt.tooltip.value": "Total: %d %s(s)",
+
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",
   "item.villagerunknown-villagercoin.gold_villager_coin": "Gold Villager Coin",
   "item.villagerunknown-villagercoin.emerald_villager_coin": "Emerald Villager Coin",
   "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin",
+
+  "item.villagerunknown-villagercoin.villager_coin_receipt": "Villager Coin Receipt",
 
   "advancements.villagerunknown-villagercoin.root.title": "Villager Coin",
   "advancements.villagerunknown-villagercoin.root.description": "Accepted by Villagers everywhere",

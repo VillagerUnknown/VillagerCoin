@@ -40,7 +40,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup lookup) {
-		int totalValue = 0;
+		long totalValue = 0;
 		ItemStack returnStack = ItemStack.EMPTY;
 		
 		if( craftingRecipeInput.getStackCount() > 1 ) {
