@@ -28,15 +28,17 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
-		int containsCoin = 0;
+		int containsCurrencyComponent = 0;
 		int containsCarrier = 0;
 		
 		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
 				if( !itemStack.isEmpty() ) {
-					if( CoinStackCraftingFeature.canCraftResult( itemStack.getItem() ) ) {
-						containsCoin++;
+					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
+					
+					if( null != currencyComponent ) {
+						containsCurrencyComponent++;
 					} else if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM) ) {
 						containsCarrier++;
 					} else if( !itemStack.isOf( Items.AIR ) ) {
@@ -46,7 +48,7 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 			} // for
 		} // for
 		
-		return ( containsCoin > 0 && 1 == containsCarrier );
+		return ( containsCurrencyComponent > 0 && 1 == containsCarrier );
 	}
 	
 	@Override
@@ -66,12 +68,10 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 			} // if
 		} // for
 		
-		if( totalValue > 0 ) {
-			HashSet<Item> receiptResults = ReceiptCraftingFeature.getCraftingResultReceipts();
-			returnStack = new ItemStack(receiptResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, receiptResults.size() )), 1);
-			
-			returnStack.set( RECEIPT_VALUE_COMPONENT, new ReceiptValueComponent( totalValue ));
-		} // if
+		HashSet<Item> receiptResults = ReceiptCraftingFeature.getCraftingResultReceipts();
+		returnStack = new ItemStack(receiptResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, receiptResults.size() )), 1);
+		
+		returnStack.set( RECEIPT_VALUE_COMPONENT, new ReceiptValueComponent( totalValue ));
 		
 		return returnStack;
 	}
