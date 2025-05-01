@@ -29,7 +29,7 @@ public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock
 	
 	public AbstractCoinStackBlock(Settings settings) {
 		super(
-				( Villagercoin.CONFIG.enableCoinStacksBreakOnCollision ) ? settings.breakInstantly().noCollision() : settings.breakInstantly()
+				( Villagercoin.CONFIG.enableCoinStacksBreakOnCollision ) ? settings.noCollision() : settings
 		);
 	}
 	
