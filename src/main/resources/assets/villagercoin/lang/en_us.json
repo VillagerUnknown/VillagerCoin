@@ -109,7 +109,9 @@
   "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s).",
 
   "item.villagerunknown-villagercoin.receipt.tooltip.merchant": "Receipt from %s",
-  "item.villagerunknown-villagercoin.receipt.tooltip.value": "Total: %d %s(s).",
+  "item.villagerunknown-villagercoin.receipt.tooltip.date": "Date: %s",
+  "item.villagerunknown-villagercoin.receipt.tooltip.value": "Total: %d %s(s)",
+  "item.villagerunknown-villagercoin.receipt.tooltip.thankyou": "Thank you for shopping with us!",
 
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",

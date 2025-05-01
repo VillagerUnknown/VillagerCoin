@@ -47,6 +47,8 @@ public class Villagercoin implements ModInitializer {
 	
 	public static final ComponentType<ReceiptValueComponent> RECEIPT_VALUE_COMPONENT;
 	
+	public static final ComponentType<DateComponent> DATE_COMPONENT;
+	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
 	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
@@ -130,6 +132,9 @@ public class Villagercoin implements ModInitializer {
 		});
 		RECEIPT_VALUE_COMPONENT = Villagercoin.registerComponentType("receipt_value", (builder) -> {
 			return builder.codec(ReceiptValueComponent.CODEC).packetCodec(ReceiptValueComponent.PACKET_CODEC).cache();
+		});
+		DATE_COMPONENT = Villagercoin.registerComponentType("date", (builder) -> {
+			return builder.codec(DateComponent.CODEC).packetCodec(DateComponent.PACKET_CODEC).cache();
 		});
 	}
 	

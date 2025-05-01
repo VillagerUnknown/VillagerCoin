@@ -71,7 +71,8 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 		HashSet<Item> receiptResults = ReceiptCraftingFeature.getCraftingResultReceipts();
 		returnStack = new ItemStack(receiptResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, receiptResults.size() )), 1);
 		
-		returnStack.set( RECEIPT_VALUE_COMPONENT, new ReceiptValueComponent( totalValue ));
+		ReceiptCraftingFeature.setReceiptValue( returnStack, totalValue );
+		ReceiptCraftingFeature.setCraftedDate( returnStack );
 		
 		return returnStack;
 	}

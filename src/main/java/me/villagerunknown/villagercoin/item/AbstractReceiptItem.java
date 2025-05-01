@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.item;
 
+import me.villagerunknown.villagercoin.component.DateComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,6 +11,7 @@ import net.minecraft.util.Formatting;
 import java.text.NumberFormat;
 import java.util.List;
 
+import static me.villagerunknown.villagercoin.Villagercoin.DATE_COMPONENT;
 import static me.villagerunknown.villagercoin.Villagercoin.RECEIPT_VALUE_COMPONENT;
 
 
@@ -21,6 +23,17 @@ public class AbstractReceiptItem extends Item {
 	
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
+		DateComponent dateComponent = stack.get( DATE_COMPONENT );
+		
+		if( null != dateComponent ) {
+			tooltip.add(
+					Text.translatable(
+							"item.villagerunknown-villagercoin.receipt.tooltip.date",
+							dateComponent.date()
+					).formatted(Formatting.GRAY)
+			);
+		} // if
+		
 		ReceiptValueComponent receiptValueComponent = stack.get( RECEIPT_VALUE_COMPONENT );
 		
 		if( null != receiptValueComponent ) {
@@ -31,9 +44,15 @@ public class AbstractReceiptItem extends Item {
 							"item.villagerunknown-villagercoin.receipt.tooltip.value",
 							numberFormat.format(receiptValueComponent.value() * stack.getCount() ),
 							CoinItems.COPPER_COIN.getName().getString()
-					).formatted(Formatting.ITALIC, Formatting.GRAY)
+					).formatted(Formatting.GRAY)
 			);
 		} // if
+		
+		tooltip.add(
+				Text.translatable(
+						"item.villagerunknown-villagercoin.receipt.tooltip.thankyou"
+				).formatted(Formatting.ITALIC, Formatting.GRAY)
+		);
 		
 		super.appendTooltip(stack, context, tooltip, options);
 	}

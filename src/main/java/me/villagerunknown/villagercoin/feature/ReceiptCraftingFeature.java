@@ -2,6 +2,8 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.DateComponent;
+import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
 import me.villagerunknown.villagercoin.item.ReceiptItem;
 import me.villagerunknown.villagercoin.item.ReceiptItems;
 import me.villagerunknown.villagercoin.recipe.CoinStackRecipe;
@@ -18,13 +20,14 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 
-import static me.villagerunknown.villagercoin.Villagercoin.LOGGER;
-import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.Villagercoin.*;
 
 public class ReceiptCraftingFeature {
 	
@@ -62,8 +65,18 @@ public class ReceiptCraftingFeature {
 		return CRAFTING_RESULT_RECEIPTS;
 	}
 	
-	public static ItemStack setCustomName(PlayerEntity player, ItemStack itemStack ) {
-		itemStack.set( DataComponentTypes.CUSTOM_NAME, Text.translatable( "item.villagerunknown-villagercoin.receipt.tooltip.merchant", player.getNameForScoreboard() ) );
+	public static ItemStack setReceiptValue( ItemStack itemStack, long totalValue ) {
+		itemStack.set( RECEIPT_VALUE_COMPONENT, new ReceiptValueComponent( totalValue ));
+		return itemStack;
+	}
+	
+	public static ItemStack setCustomName( PlayerEntity player, ItemStack itemStack ) {
+		itemStack.set( DataComponentTypes.ITEM_NAME, Text.translatable( "item.villagerunknown-villagercoin.receipt.tooltip.merchant", player.getNameForScoreboard() ) );
+		return itemStack;
+	}
+	
+	public static ItemStack setCraftedDate( ItemStack itemStack ) {
+		itemStack.set( DATE_COMPONENT, new DateComponent( LocalDate.now().toString() ) );
 		return itemStack;
 	}
 	
