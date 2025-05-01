@@ -24,6 +24,7 @@ Learn how to customize Villager Coin with addon mods and the developer wiki at t
 * Optionally earn coins by killing breedable mobs. (For easier coins.)
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 * Optionally allow players to flip individual coins for a heads or tails result in chat.
+* Additional features can be added with addon mods like Coin Banks, Coin Stacks, custom structures, and loot integrations.
 
 ### Coin Currency
 
