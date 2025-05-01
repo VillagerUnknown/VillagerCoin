@@ -3,6 +3,7 @@ package me.villagerunknown.villagercoin.mixin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
+import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.Villagercoin.LOGGER;
 
 @Mixin(CraftingResultSlot.class)
 public class CraftingResultSlotMixin {
@@ -43,7 +45,14 @@ public class CraftingResultSlotMixin {
 			return;
 		} // if
 		
-		if( CoinCraftingFeature.isCraftingResultCoin( stack.getItem() ) || CoinStackCraftingFeature.isCraftingResultCoinStack( stack.getItem() ) ) {
+		if( ReceiptCraftingFeature.isCraftingResultReceipt( stack.getItem() ) ) {
+			ReceiptCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
+			ReceiptCraftingFeature.setCustomName( player, stack );
+			ci.cancel();
+		} else if(
+				CoinCraftingFeature.isCraftingResultCoin( stack.getItem() )
+				|| CoinStackCraftingFeature.isCraftingResultCoinStack( stack.getItem() )
+		) {
 			CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
 			CraftingRecipeInput craftingRecipeInput = positioned.input();
 			DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());
@@ -53,7 +62,7 @@ public class CraftingResultSlotMixin {
 			if( null != currencyComponent ) {
 				if( CoinStackCraftingFeature.isCraftingResultCoinStack( stack.getItem() ) ) {
 					CoinStackCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
-				} // if
+				}
 				
 				AtomicLong totalCost = new AtomicLong((long) stack.getCount() * currencyComponent.value());
 				TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap( this.input );

@@ -108,11 +108,16 @@
 
   "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s).",
 
+  "item.villagerunknown-villagercoin.receipt.tooltip.merchant": "Receipt from %s",
+  "item.villagerunknown-villagercoin.receipt.tooltip.value": "Total: %d %s(s).",
+
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",
   "item.villagerunknown-villagercoin.gold_villager_coin": "Gold Villager Coin",
   "item.villagerunknown-villagercoin.emerald_villager_coin": "Emerald Villager Coin",
   "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin",
+
+  "item.villagerunknown-villagercoin.villager_coin_receipt": "Villager Coin Receipt",
 
   "advancements.villagerunknown-villagercoin.root.title": "Villager Coin",
   "advancements.villagerunknown-villagercoin.root.description": "Accepted by Villagers everywhere",

@@ -3,6 +3,7 @@ package me.villagerunknown.villagercoin.mixin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
+import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -28,6 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.Villagercoin.LOGGER;
 
 @Mixin(CraftingScreenHandler.class)
 public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
@@ -57,7 +59,23 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 		if( 0 == slot ) {
 			ItemStack craftedItemStack = this.result.getStack( slot );
 			
-			if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) || CoinStackCraftingFeature.isCraftingResultCoinStack( craftedItemStack.getItem() ) ) {
+			if( ReceiptCraftingFeature.isCraftingResultReceipt( craftedItemStack.getItem() ) ) {
+				ReceiptCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
+				ReceiptCraftingFeature.setCustomName( player, craftedItemStack );
+				
+				if( !craftedItemStack.isEmpty() ) {
+					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
+						player.dropItem(craftedItemStack, false);
+					} // if
+					
+					cir.setReturnValue( craftedItemStack );
+				} // if
+				
+				cir.setReturnValue( ItemStack.EMPTY );
+			} else if(
+					CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() )
+					|| CoinStackCraftingFeature.isCraftingResultCoinStack( craftedItemStack.getItem() )
+			) {
 				CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
 				CraftingRecipeInput craftingRecipeInput = positioned.input();
 				DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());

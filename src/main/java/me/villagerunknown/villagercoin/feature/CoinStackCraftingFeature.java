@@ -24,7 +24,7 @@ import static me.villagerunknown.villagercoin.Villagercoin.*;
 
 public class CoinStackCraftingFeature {
 	
-	private static Item RECIPE_CARRIER_ITEM = Items.STRING;
+	public static Item RECIPE_CARRIER_ITEM = Items.STRING;
 	
 	private static HashMap<CoinType, TreeMap<Long, Item>> CRAFTING_RESULT_COIN_STACKS = new HashMap<>(Map.ofEntries(
 			entry( CoinType.COPPER, new TreeMap<>() ),

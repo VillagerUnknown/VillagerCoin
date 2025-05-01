@@ -3,6 +3,7 @@ package me.villagerunknown.villagercoin.mixin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
+import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -48,7 +49,20 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 		if( 0 == slot ) {
 			ItemStack craftedItemStack = this.craftingResult.getStack( slot );
 			
-			if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) ) {
+			if( ReceiptCraftingFeature.isCraftingResultReceipt( craftedItemStack.getItem() ) ) {
+				ReceiptCraftingFeature.subtractCarrierFromIngredients( this.craftingInput, 1 );
+				ReceiptCraftingFeature.setCustomName( player, craftedItemStack );
+				
+				if( !craftedItemStack.isEmpty() ) {
+					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
+						player.dropItem(craftedItemStack, false);
+					} // if
+					
+					cir.setReturnValue( craftedItemStack );
+				} // if
+				
+				cir.setReturnValue( ItemStack.EMPTY );
+			} if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) ) {
 				CraftingRecipeInput.Positioned positioned = this.craftingInput.createPositionedRecipeInput();
 				CraftingRecipeInput craftingRecipeInput = positioned.input();
 				DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());

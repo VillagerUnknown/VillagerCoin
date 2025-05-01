@@ -17,6 +17,7 @@ Learn how to customize Villager Coin with addon mods and the developer wiki at t
 * Convert between the different coins with the crafting tables.
 * Smelt down Copper, Iron, and Gold coins for their respective resources.
 * Adds advancements for obtaining coins.
+* Adds a craftable Receipt. Craftable with a stack of coins and a piece of paper. _The coins will not be consumed._
 * Options for fully customizing the coin value, chances, and amounts.
 * Optionally find coins in vanilla structures.
 * Optionally earn coins by killing some vanilla mobs.

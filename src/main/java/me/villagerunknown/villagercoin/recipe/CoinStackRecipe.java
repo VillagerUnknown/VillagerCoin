@@ -26,7 +26,7 @@ public class CoinStackRecipe extends SpecialCraftingRecipe {
 	@Override
 	public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
 		boolean containsCoinInCenter = false;
-		int containsString = 0;
+		int containsCarrier = 0;
 		
 		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
@@ -34,8 +34,8 @@ public class CoinStackRecipe extends SpecialCraftingRecipe {
 				if( !itemStack.isEmpty() ) {
 					if( 1 == i && 1 == j && CoinStackCraftingFeature.canCraftResult( itemStack.getItem() ) ) {
 						containsCoinInCenter = true;
-					} else if( itemStack.isOf( Items.STRING ) && ( 0 == i && 1 == j || 1 == i && 0 == j || 1 == i && 2 == j || 2 == i && 1 == j ) ) {
-						containsString++;
+					} else if( itemStack.isOf( CoinStackCraftingFeature.RECIPE_CARRIER_ITEM ) && ( 0 == i && 1 == j || 1 == i && 0 == j || 1 == i && 2 == j || 2 == i && 1 == j ) ) {
+						containsCarrier++;
 					} else if( !itemStack.isOf( Items.AIR ) ) {
 						return false;
 					} // if, else
@@ -43,7 +43,7 @@ public class CoinStackRecipe extends SpecialCraftingRecipe {
 			} // for
 		} // for
 		
-		return ( containsCoinInCenter && 4 == containsString );
+		return ( containsCoinInCenter && 4 == containsCarrier );
 	}
 	
 	@Override

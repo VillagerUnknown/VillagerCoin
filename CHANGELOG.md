@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Added craftable Villager Coin Receipts. Place a piece of paper in a crafting table with a stack of coins to craft a receipt.
 - Added coin specific subtitles.
 - Added value tooltip to coin items with a currency component.
 - Added option to allow coin entities to sink, instead of float, in water and lava.

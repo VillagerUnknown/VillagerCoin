@@ -45,6 +45,8 @@ public class Villagercoin implements ModInitializer {
 	
 	public static final ComponentType<CollectableComponent> COLLECTABLE_COMPONENT;
 	
+	public static final ComponentType<ReceiptValueComponent> RECEIPT_VALUE_COMPONENT;
+	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
 	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
@@ -73,6 +75,7 @@ public class Villagercoin implements ModInitializer {
 		// # Activate Features
 		featureManager.addFeature( "coinCrafting", CoinCraftingFeature::execute );
 		featureManager.addFeature( "coinStackCrafting", CoinStackCraftingFeature::execute );
+		featureManager.addFeature( "receiptCrafting", ReceiptCraftingFeature::execute );
 		
 		featureManager.addFeature( "coin", CoinFeature::execute );
 		
@@ -124,6 +127,9 @@ public class Villagercoin implements ModInitializer {
 		});
 		COLLECTABLE_COMPONENT = Villagercoin.registerComponentType("collectable", (builder) -> {
 			return builder.codec(CollectableComponent.CODEC).packetCodec(CollectableComponent.PACKET_CODEC).cache();
+		});
+		RECEIPT_VALUE_COMPONENT = Villagercoin.registerComponentType("receipt_value", (builder) -> {
+			return builder.codec(ReceiptValueComponent.CODEC).packetCodec(ReceiptValueComponent.PACKET_CODEC).cache();
 		});
 	}
 	

@@ -4,6 +4,7 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
+import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CrafterBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -49,7 +50,18 @@ public class CrafterBlockMixin {
 				if (itemStack.isEmpty()) {
 					world.syncWorldEvent(1050, pos, 0);
 				} else {
-					if( CoinCraftingFeature.isCraftingResultCoin( itemStack.getItem() ) || CoinStackCraftingFeature.isCraftingResultCoinStack( itemStack.getItem() ) ) {
+					if( ReceiptCraftingFeature.isCraftingResultReceipt( itemStack.getItem() ) ) {
+						ReceiptCraftingFeature.subtractCarrierFromIngredients( crafterBlockEntity.getHeldStacks(), 1 );
+						
+						this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
+						
+						crafterBlockEntity.markDirty();
+						
+						ci.cancel();
+					} else if(
+							CoinCraftingFeature.isCraftingResultCoin( itemStack.getItem() )
+							|| CoinStackCraftingFeature.isCraftingResultCoinStack( itemStack.getItem() )
+					) {
 						CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 						
 						if( null != currencyComponent ) {
