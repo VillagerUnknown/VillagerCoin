@@ -23,6 +23,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public boolean coinsSinkInLiquids = false;
 	
 	/**
+	 * Receipts
+	 */
+	
+	@ConfigEntry.Category("Receipts")
+	public String receiptThankYouMessage  = "Thank you for shopping with us!";
+	
+	/**
 	 * Loot Tables
 	 */
 	

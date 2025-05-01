@@ -3,6 +3,7 @@
   "text.autoconfig.villagerunknown-villagercoin.title": "VillagerUnknown's Villager Coin",
 
   "text.autoconfig.villagerunknown-villagercoin.category.Coins": "Coins",
+  "text.autoconfig.villagerunknown-villagercoin.category.Receipts": "Receipts",
   "text.autoconfig.villagerunknown-villagercoin.category.EffectCoins": "Effect Coins",
   "text.autoconfig.villagerunknown-villagercoin.category.CollectableCoins": "Collectable Coins",
   "text.autoconfig.villagerunknown-villagercoin.category.EdibleCoins": "Edible Coins",
@@ -11,6 +12,7 @@
   "text.autoconfig.villagerunknown-villagercoin.category.Trades": "Trades",
   "text.autoconfig.villagerunknown-villagercoin.category.CoinStacks": "Coin Stacks",
 
+  "text.autoconfig.villagerunknown-villagercoin.option.receiptThankYouMessage": "Receipt Thank You Message",
   "text.autoconfig.villagerunknown-villagercoin.option.currencyConversionMultiplier": "Currency Conversion Multiplier",
   "text.autoconfig.villagerunknown-villagercoin.option.copperDropMinimum": "Minimum Copper Drop Amount",
   "text.autoconfig.villagerunknown-villagercoin.option.ironDropMinimum": "Minimum Iron Drop Amount",
@@ -111,7 +113,6 @@
   "item.villagerunknown-villagercoin.receipt.tooltip.merchant": "Receipt from %s",
   "item.villagerunknown-villagercoin.receipt.tooltip.date": "Date: %s",
   "item.villagerunknown-villagercoin.receipt.tooltip.value": "Total: %d %s(s)",
-  "item.villagerunknown-villagercoin.receipt.tooltip.thankyou": "Thank you for shopping with us!",
 
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",

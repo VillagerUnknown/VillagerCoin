@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.item;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.DateComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
 import net.minecraft.item.Item;
@@ -48,11 +49,13 @@ public class AbstractReceiptItem extends Item {
 			);
 		} // if
 		
-		tooltip.add(
-				Text.translatable(
-						"item.villagerunknown-villagercoin.receipt.tooltip.thankyou"
-				).formatted(Formatting.ITALIC, Formatting.GRAY)
-		);
+		if( !Villagercoin.CONFIG.receiptThankYouMessage.isEmpty() ) {
+			tooltip.add(
+					Text.literal(
+							Villagercoin.CONFIG.receiptThankYouMessage
+					).formatted(Formatting.ITALIC, Formatting.GRAY)
+			);
+		} // if
 		
 		super.appendTooltip(stack, context, tooltip, options);
 	}
