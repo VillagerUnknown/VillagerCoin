@@ -63,14 +63,6 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
 		super.readNbt(nbt, registryLookup);
 		
-//		NbtElement nbtValue = nbt.get("totalCurrencyValue");
-//
-//		if( null != nbtValue ) {
-//			this.totalCurrencyValue = Long.parseLong(nbtValue.toString());
-//		} else {
-//			this.totalCurrencyValue = nbt.get("totalCurrencyValue");
-//		} // if, else
-		
 		this.totalCurrencyValue = nbt.getLong("totalCurrencyValue");
 	}
 	

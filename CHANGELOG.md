@@ -15,11 +15,15 @@ This is to match the expected functionality of Minecraft blocks._
 
 ### Changed
 
+- Changed Currency values to use a Long number type instead of an Integer. This to allow larger values. 
+Safety measures have been put in place for instances where an integer is required. 
+Coin Banks are still capped at the maximum Integer value.
 - Players in Creative mode no longer break Coin Stacks by walking over them. 
 _This change is to make it easier for mapmakers to work with the Coin Stacks._
-- Flipping a coin now send a signal to sculk sensors.
+- Flipping a coin now sends a signal to sculk sensors.
 - Inserting coins in Coin Banks now sends a signal to sculk sensors.
-- Coin Stacks no longer drop coins if a player collides with them while sneaking/crouched.
+- If collisions are enabled, Coin Stacks no longer drop coins when a player collides with them while sneaking/crouched.
+- Coin Stacks now drop their item form when broken with Silk Touch.
 
 ## [1.0.5]
 
