@@ -27,7 +27,7 @@ Learn how to customize Villager Coin with addon mods and the developer wiki at t
 * Additional features can be added with addon mods like Coin Banks, Coin Stacks, custom structures, 
 and loot integrations with mods like the Graveyards & Ghosts and Better Archeology mods.
 
-### Coin Currency
+## Coin Currency
 
 The value of coins can be configured through a Currency Multiplier option, with a default multiplier of 100. 
 Copper coins are used as the base value of 1 with each coin above it multiplying by the Currency Multipler.
@@ -78,7 +78,11 @@ Copper, Iron, and Gold Villager Coins can be smelted down to their respective re
 _Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) will only craft once. 
 Use the auto-crafter to convert large amounts of coins._
 
-### Loot Tables
+## Receipts
+
+Players can craft receipts for transactions by placing the payment amount of coins in the crafting table with paper. When a receipt is crafted, the date, amount, and player name will be added to the receipt. Receipts from the same player and date will stack and sum the totals. This is a fun and easy way for multiplayer servers to make transactions feel more realistic.
+
+## Loot Tables
 
 Coins can be optionally included in the loot tables. 
 The value of the coins will vary depending on the loot table rarity. 
@@ -90,7 +94,7 @@ If Emerald or Netherite coins are configured to drop, they will only be included
 
 Loot table weights and rolls can be configured through the options.
 
-### Mob Drops
+## Mob Drops
 
 Coins can optionally drop when a player kills Humanoid mobs, Bosses, and Shulkers. 
 
@@ -101,7 +105,7 @@ The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Ske
 
 Mob drop chances, minimums, and maximums can be configured through the options.
 
-### Trade Modifications
+## Trade Modifications
 
 Coins can optionally be used for trading with Villagers and Wandering Traders by replacing Emerald trades with Coin trades. 
 
@@ -120,7 +124,7 @@ but at half of the original emerald amount. These are the most expensive trades.
 * The Diamond trade, giving 16 Gold Villager Coins (by default), has a 50% chance of being an Emerald trade giving 8 Gold Villager Coins (by default). 
 These are the most rewarding trades available and they're configurable.
 
-### Additional Notes
+## Additional Notes
 
 * If you have a single coin in your hand and interact (right-click) you can optionally flip a coin, for a heads or tails result in chat.
 * Trades are modified for both vanilla and modded Villagers.
