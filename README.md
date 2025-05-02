@@ -36,7 +36,7 @@ By default, Villager Coin includes Copper, Iron, and Gold coins in the loot tabl
 
 _Unless configured otherwise, Emerald and Netherite coins are only available through currency conversion crafting due to their high values. 
 This includes any Emerald or Netherite coins included by addon mods. Learn how to enable emerald and netherite coins 
-at https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy _
+at https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy_
 
 #### Currency Values
 
@@ -51,6 +51,8 @@ With the default currency multiplier of 100:
 Collectable coins can have modified values configurable through the options.
 
 #### Currency Conversions
+
+With the default currency multiplier of 100:
 
 * 100 Copper Coins = 1 Iron Coin
 * 100 Iron Coins = 1 Gold Coin
@@ -71,7 +73,7 @@ The crafting table will calculate the total value of the coins and allow you to 
 You can optionally configure the crafting table to craft the maximum amount of coins when placing multiple stacks of coins in the crafting table together.
 
 Additionally, coins will only appear as a crafting result if registered as such. 
-Meaning: Coins added by addon mods won't appear as a crafting result unless registered as a crafting result. 
+Meaning: Coins added by addon mods won't appear as a crafting result unless registered as a crafting result by the addon.
 
 Copper, Iron, and Gold Villager Coins can be smelted down to their respective resources using the Furnace or Blast Furnace.
 
@@ -81,6 +83,8 @@ Use the auto-crafter to convert large amounts of coins._
 ## Receipts
 
 Players can craft receipts for transactions by placing the payment amount of coins in the crafting table with paper. When a receipt is crafted, the date, amount, and player name will be added to the receipt. Receipts from the same player and date will stack and sum the totals. This is a fun and easy way for multiplayer servers to make transactions feel more realistic.
+
+_Quick-crafting (shift-clicking crafted items to craft the maximum) will work as expected with receipts._
 
 ## Loot Tables
 
@@ -94,6 +98,9 @@ If Emerald or Netherite coins are configured to drop, they will only be included
 
 Loot table weights and rolls can be configured through the options.
 
+_While some mods may include vanilla loot tables, coins will only be included in structures added by mods if they have included coins in the loot tables. 
+You can find data packs that provide compatibility at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons_
+
 ## Mob Drops
 
 Coins can optionally drop when a player kills Humanoid mobs, Bosses, and Shulkers. 
@@ -104,6 +111,8 @@ The value of the coins will vary depending on the difficulty of the mob.
 The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Skeleton, or Piglin.
 
 Mob drop chances, minimums, and maximums can be configured through the options.
+
+_Coins will only drop from mobs added by mods if they have included coins in the loot tables. You can find data packs that provide compatibility at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility_
 
 ## Trade Modifications
 
@@ -124,8 +133,11 @@ but at half of the original emerald amount. These are the most expensive trades.
 * The Diamond trade, giving 16 Gold Villager Coins (by default), has a 50% chance of being an Emerald trade giving 8 Gold Villager Coins (by default). 
 These are the most rewarding trades available and they're configurable.
 
+_Trade modifications scale appropriately with the Vanilla trading values for professions. Some mods may use exagerated values resulting in trades offering high value coins at a lower level. It is important for Villager Coin economies to use modded Villagers with appropriate trade values for the appropriate profession. If you are a fellow mod-maker and would like your custom Villagers to be compatible with Villager Coin please make sure you use the appropriate values for the appropriate levels._
+
 ## Additional Notes
 
+* I recommend grabbing the Coin Banks and Coin Stacks addons for Villager Coin as they allow players to store their wealth physically in the world. This not only allows players to create cool looking treasure stashes and vaults but it also offers the opportunity for heists on multiplayer servers.
 * If you have a single coin in your hand and interact (right-click) you can optionally flip a coin, for a heads or tails result in chat.
 * Trades are modified for both vanilla and modded Villagers.
 * This mod will change the significance of farms and general pacing of the game. 
@@ -157,3 +169,10 @@ Learn more about customizing Villager Coin at https://github.com/VillagerUnknown
 
 * Request features and report bugs at https://github.com/VillagerUnknown/VillagerCoin/issues
 * View the changelog at https://github.com/VillagerUnknown/VillagerCoin/blob/main/CHANGELOG.md
+
+### Compatibility
+
+Compatibility data packs for the following mods can be found at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility
+
+* VillagerUnknown's Graveyards & Ghosts
+* Pandarix's Better Archeology
