@@ -174,9 +174,19 @@ Learn more about customizing Villager Coin at https://github.com/VillagerUnknown
 
 I can confirm that the following mods include coins in their loot tables without any modifications:
 
+* Lootr
 * Farmer's Delight Refabricated
 
 Compatibility data packs for the following mods can be found at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility
 
 * VillagerUnknown's Graveyards & Ghosts
 * Pandarix's Better Archeology
+
+### Planned Compatibility
+
+I hope, but cannot garauntee, to provide compatibility with the following mods:
+
+* JEI
+* Dungeons and Taverns
+* Illager Invasion
+* Structory
