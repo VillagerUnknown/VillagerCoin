@@ -80,12 +80,6 @@ Copper, Iron, and Gold Villager Coins can be smelted down to their respective re
 _Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) will only craft once. 
 Use the auto-crafter to convert large amounts of coins._
 
-## Receipts
-
-Players can craft receipts for transactions by placing the payment amount of coins in the crafting table with paper. When a receipt is crafted, the date, amount, and player name will be added to the receipt. Receipts from the same player and date will stack and sum the totals. This is a fun and easy way for multiplayer servers to make transactions feel more realistic.
-
-_Quick-crafting (shift-clicking crafted items to craft the maximum) will work as expected with receipts._
-
 ## Loot Tables
 
 Coins can be optionally included in the loot tables. 
