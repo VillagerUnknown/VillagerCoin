@@ -172,7 +172,7 @@ Learn more about customizing Villager Coin at https://github.com/VillagerUnknown
 
 ### Compatibility
 
-Compatibility has been confirmed with the following mods:
+I can confirm that the following mods include coins in their loot tables without any modifications:
 
 * Farmer's Delight Refabricated
 
