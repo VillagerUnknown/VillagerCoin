@@ -172,6 +172,10 @@ Learn more about customizing Villager Coin at https://github.com/VillagerUnknown
 
 ### Compatibility
 
+Compatibility has been confirmed with the following mods:
+
+* Farmer's Delight Refabricated
+
 Compatibility data packs for the following mods can be found at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility
 
 * VillagerUnknown's Graveyards & Ghosts
