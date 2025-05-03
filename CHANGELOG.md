@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.7]
+
+### Removed
+
+- Removed receipts from core and into their own addon: Bookkeeping for Villager Coin. 
+This allows players to choose which receipts they want in their world, the official ones or other modded ones. 
+The Bookkeeping addon also includes more related items, like a Ledger. 
+Villager Coin still provides the core shared functionality for receipts.
+
 ## [1.0.6]
 
 ### Added

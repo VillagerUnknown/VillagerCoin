@@ -106,6 +106,8 @@
   "tag.block.villagerunknown-villagercoin.coin_bank": "Coin Bank",
   "tag.block.villagerunknown-villagercoin.coin_stack": "Coin Stack",
 
+  "tag.item.villagerunknown-villagercoin.receipt": "Receipt",
+
   "itemGroup.villagerunknown-villagercoin": "Villager Coin",
 
   "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s).",
@@ -119,8 +121,6 @@
   "item.villagerunknown-villagercoin.gold_villager_coin": "Gold Villager Coin",
   "item.villagerunknown-villagercoin.emerald_villager_coin": "Emerald Villager Coin",
   "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin",
-
-  "item.villagerunknown-villagercoin.villager_coin_receipt": "Villager Coin Receipt",
 
   "advancements.villagerunknown-villagercoin.root.title": "Villager Coin",
   "advancements.villagerunknown-villagercoin.root.description": "Accepted by Villagers everywhere",
