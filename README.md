@@ -36,7 +36,7 @@ By default, Villager Coin includes Copper, Iron, and Gold coins in the loot tabl
 
 _Unless configured otherwise, Emerald and Netherite coins are only available through currency conversion crafting due to their high values. 
 This includes any Emerald or Netherite coins included by addon mods. Learn how to enable emerald and netherite coins 
-at https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy_
+at [https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy](https://github.com/VillagerUnknown/VillagerCoin/wiki/Customize-Your-Coin-Economy)_
 
 #### Currency Values
 
@@ -99,7 +99,7 @@ If Emerald or Netherite coins are configured to drop, they will only be included
 Loot table weights and rolls can be configured through the options.
 
 _While some mods may include vanilla loot tables, coins will only be included in structures added by mods if they have included coins in the loot tables. 
-You can find data packs that provide compatibility at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons_
+You can find data packs that provide compatibility at [https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons](https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons)_
 
 ## Mob Drops
 
@@ -112,7 +112,7 @@ The Ender Dragon, Warden, and Wither will reward players more than a Zombie, Ske
 
 Mob drop chances, minimums, and maximums can be configured through the options.
 
-_Coins will only drop from mobs added by mods if they have included coins in the loot tables. You can find data packs that provide compatibility at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility_
+_Coins will only drop from mobs added by mods if they have included coins in the loot tables. You can find data packs that provide compatibility at [https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility](https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility)_
 
 ## Trade Modifications
 
@@ -133,7 +133,7 @@ but at half of the original emerald amount. These are the most expensive trades.
 * The Diamond trade, giving 16 Gold Villager Coins (by default), has a 50% chance of being an Emerald trade giving 8 Gold Villager Coins (by default). 
 These are the most rewarding trades available and they're configurable.
 
-_Trade modifications scale appropriately with the Vanilla trading values for professions. Some mods may use exagerated values resulting in trades offering high value coins at a lower level. It is important for Villager Coin economies to use modded Villagers with appropriate trade values for the appropriate profession. If you are a fellow mod-maker and would like your custom Villagers to be compatible with Villager Coin please make sure you use the appropriate values for the appropriate levels._
+_Trade modifications scale appropriately with the Vanilla trading values for professions. Some mods may use exaggerated values resulting in trades offering high value coins at a lower level. It is important for Villager Coin economies to use modded Villagers with appropriate trade values for the appropriate profession. If you are a fellow mod-maker and would like your custom Villagers to be compatible with Villager Coin please make sure you use the appropriate values for the appropriate levels._
 
 ## Additional Notes
 
