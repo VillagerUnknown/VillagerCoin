@@ -3,6 +3,7 @@ package me.villagerunknown.villagercoin.block;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.feature.CoinBankBlocksFeature;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,6 +17,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -48,6 +50,8 @@ public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock 
 			if( blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity && currencyValueBlockEntity.incrementBlockEntityCurrencyValue( blockEntity, currencyComponent ) ) {
 				CoinFeature.playCoinSound( player );
 				stack.decrementUnlessCreative(1, player);
+				
+				player.incrementStat( CoinBankBlocksFeature.COINS_INSERTED_STAT_ID );
 				
 				return ItemActionResult.CONSUME;
 			} // if

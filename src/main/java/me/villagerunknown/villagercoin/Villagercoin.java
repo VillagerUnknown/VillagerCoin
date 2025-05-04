@@ -47,6 +47,8 @@ public class Villagercoin implements ModInitializer {
 	
 	public static final ComponentType<ReceiptValueComponent> RECEIPT_VALUE_COMPONENT;
 	
+	public static final ComponentType<ReceiptMessageComponent> RECEIPT_MESSAGE_COMPONENT;
+	
 	public static final ComponentType<DateComponent> DATE_COMPONENT;
 	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
@@ -78,6 +80,7 @@ public class Villagercoin implements ModInitializer {
 		featureManager.addFeature( "coinCrafting", CoinCraftingFeature::execute );
 		featureManager.addFeature( "coinStackCrafting", CoinStackCraftingFeature::execute );
 		featureManager.addFeature( "receiptCrafting", ReceiptCraftingFeature::execute );
+		featureManager.addFeature( "ledgerCrafting", LedgerCraftingFeature::execute );
 		
 		featureManager.addFeature( "coin", CoinFeature::execute );
 		
@@ -112,6 +115,13 @@ public class Villagercoin implements ModInitializer {
 		}
 	};
 	
+	public static Comparator<String> reverseSortString = new Comparator<String>() {
+		@Override
+		public int compare(String string1, String string2) {
+			return Integer.valueOf( string2 ).compareTo(Integer.valueOf( string1 ));
+		}
+	};
+	
 	static{
 		COIN_COMPONENT = registerComponentType("coin", (builder) -> {
 			return builder.codec(CoinComponent.CODEC).packetCodec(CoinComponent.PACKET_CODEC).cache();
@@ -130,6 +140,9 @@ public class Villagercoin implements ModInitializer {
 		});
 		RECEIPT_VALUE_COMPONENT = Villagercoin.registerComponentType("receipt_value", (builder) -> {
 			return builder.codec(ReceiptValueComponent.CODEC).packetCodec(ReceiptValueComponent.PACKET_CODEC).cache();
+		});
+		RECEIPT_MESSAGE_COMPONENT = Villagercoin.registerComponentType("receipt_message", (builder) -> {
+			return builder.codec(ReceiptMessageComponent.CODEC).packetCodec(ReceiptMessageComponent.PACKET_CODEC).cache();
 		});
 		DATE_COMPONENT = Villagercoin.registerComponentType("date", (builder) -> {
 			return builder.codec(DateComponent.CODEC).packetCodec(DateComponent.PACKET_CODEC).cache();

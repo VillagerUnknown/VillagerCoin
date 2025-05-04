@@ -20,6 +20,7 @@
     "MerchantInventoryMixin",
     "PlayerInventoryMixin",
     "PlayerScreenHandlerMixin",
+    "ServerPlayerEntityMixin",
     "SimpleInventoryMixin",
     "SlotMixin",
     "TradeOfferMixin"

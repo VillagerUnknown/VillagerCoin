@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.7]
 
+### Added
+
+- Added missing player stats for inserting coins in Coin Banks, crafting Villager Coins, crafting Receipts, and crafting Coin Stacks.
+
+### Changed
+
+- Changed Coin Bank crafting recipe to add the value of the ingredient coin to the crafted Coin Bank. The recipe will still only consume 1 Coin per Coin Bank.
+- The thank-you message on receipts can now be changed by renaming the paper ingredient with an anvil before crafting the receipt.
+
 ### Removed
 
 - Removed receipts from core and into their own addon: Bookkeeping for Villager Coin. 

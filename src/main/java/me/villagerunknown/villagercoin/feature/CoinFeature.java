@@ -62,6 +62,36 @@ public class CoinFeature {
 		new CoinItems();
 	}
 	
+	public static String humanReadableNumber( int number ) {
+		String text = Integer.toString(number);
+		int digits = text.length();
+		
+		if (digits > 9) {
+			// >999,999,999
+			text = number / 1000000000 + "b+";
+		} else if (digits > 6) {
+			// >999,999
+			text = number / 1000000 + "m+";
+		} else if (digits > 4) {
+			// >9999 prints >10k
+			text = number / 1000 + "k+";
+		} // if, else if ...
+		
+		return text;
+	}
+	
+	public static float humanReadableNumberScale( int digits ) {
+		float scale = 0.8F;
+		
+		if( digits > 4 ) {
+			scale = 0.5F;
+		} else if( digits > 3 ) {
+			scale = 0.6F;
+		} // if, else if
+		
+		return scale;
+	}
+	
 	private static void registerItemGroup() {
 		Registry.register(Registries.ITEM_GROUP, Villagercoin.ITEM_GROUP_KEY, Villagercoin.ITEM_GROUP);
 	}

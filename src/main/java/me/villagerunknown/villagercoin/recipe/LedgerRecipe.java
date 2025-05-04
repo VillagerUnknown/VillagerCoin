@@ -1,8 +1,10 @@
 package me.villagerunknown.villagercoin.recipe;
 
 import me.villagerunknown.platform.util.MathUtil;
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
+import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,27 +20,25 @@ import java.util.HashSet;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
-public class ReceiptRecipe extends SpecialCraftingRecipe {
+public class LedgerRecipe extends SpecialCraftingRecipe {
 	
-	public ReceiptRecipe(CraftingRecipeCategory category) {
+	public LedgerRecipe(CraftingRecipeCategory category) {
 		super(category);
 	}
 	
 	@Override
 	public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
-		int containsCurrencyComponent = 0;
+		int containsReceipts = 0;
 		int containsCarrier = 0;
 		
 		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
 				if( !itemStack.isEmpty() ) {
-					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
-					
-					if( null != currencyComponent ) {
-						containsCurrencyComponent++;
-					} else if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+					if( LedgerCraftingFeature.isCraftingResultLedger( itemStack.getItem() ) || itemStack.isOf( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 						containsCarrier++;
+					} else if( itemStack.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+						containsReceipts++;
 					} else if( !itemStack.isOf( Items.AIR ) ) {
 						return false;
 					} // if, else
@@ -46,7 +46,7 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 			} // for
 		} // for
 		
-		return ( containsCurrencyComponent > 0 && 1 == containsCarrier );
+		return ( containsReceipts > 0 && 1 == containsCarrier );
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 			ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 			
 			if( !itemStack.isEmpty() ) {
-				if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+				if( itemStack.isOf( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 					carrierStack = itemStack;
 				} else {
 					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
@@ -71,18 +71,11 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 			} // if
 		} // for
 		
-		HashSet<Item> receiptResults = ReceiptCraftingFeature.getCraftingResultReceipts();
+		HashSet<Item> ledgerResults = LedgerCraftingFeature.getCraftingResultLedgers();
 		ItemStack returnStack = ItemStack.EMPTY;
 		
-		if( !receiptResults.isEmpty() ) {
-			returnStack = new ItemStack(receiptResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, receiptResults.size() )), 1);
-			
-			ReceiptCraftingFeature.setReceiptValue( returnStack, totalValue );
-			ReceiptCraftingFeature.setCraftedDate( returnStack );
-			
-			if( null != carrierStack) {
-				ReceiptCraftingFeature.setReceiptMessage( returnStack, carrierStack);
-			} // if
+		if( !ledgerResults.isEmpty() ) {
+			returnStack = new ItemStack(ledgerResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, ledgerResults.size() )), 1);
 		} // if
 		
 		return returnStack;

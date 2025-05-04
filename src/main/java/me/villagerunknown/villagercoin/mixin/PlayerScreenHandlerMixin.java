@@ -1,8 +1,10 @@
 package me.villagerunknown.villagercoin.mixin;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
+import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
@@ -23,9 +25,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
 
@@ -46,60 +50,97 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 	
 	@Inject(method = "quickMove", at = @At("HEAD"), cancellable = true)
 	public void quickMove(PlayerEntity player, int slot, CallbackInfoReturnable<ItemStack> cir) {
-		if( 0 == slot ) {
+		Slot slot2 = (Slot) this.slots.get(slot);
+		if( 0 == slot && slot2.hasStack() ) {
 			ItemStack craftedItemStack = this.craftingResult.getStack( slot );
 			
-			if( ReceiptCraftingFeature.isCraftingResultReceipt( craftedItemStack.getItem() ) ) {
-				ReceiptCraftingFeature.subtractCarrierFromIngredients( this.craftingInput, 1 );
-				ReceiptCraftingFeature.setCustomName( player, craftedItemStack );
-				
-				if( !craftedItemStack.isEmpty() ) {
+			if( !craftedItemStack.isEmpty() ) {
+				if( ReceiptCraftingFeature.isCraftingResultReceipt( craftedItemStack.getItem() ) ) {
+					// # Receipts - Remove the paper
+					
+					ReceiptCraftingFeature.subtractCarrierFromIngredients( this.craftingInput, 1 );
+					ReceiptCraftingFeature.setCustomName( player, craftedItemStack );
+					
+					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
+					
 					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
-						player.dropItem(craftedItemStack, false);
+						player.dropItem(craftedItemStack, true);
 					} // if
+					
+					slot2.onQuickTransfer(craftedItemStack, this.craftingResult.getStack( slot ));
+					
+					slot2.markDirty();
+					
+					// This can allow quick-crafting but requires extra work
+					//slot2.onTakeItem(player, craftedItemStack);
 					
 					cir.setReturnValue( craftedItemStack );
-				} // if
-				
-				cir.setReturnValue( ItemStack.EMPTY );
-			} if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) ) {
-				CraftingRecipeInput.Positioned positioned = this.craftingInput.createPositionedRecipeInput();
-				CraftingRecipeInput craftingRecipeInput = positioned.input();
-				DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());
-				
-				CurrencyComponent currencyComponent = craftedItemStack.get( CURRENCY_COMPONENT );
-				
-				if( null != currencyComponent ) {
-					AtomicLong totalCost = new AtomicLong((long) craftedItemStack.getCount() * currencyComponent.value());
-					TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap( this.craftingInput );
 					
-					ingredientsMap.forEach( ( order, coinIngredient ) -> {
-						int ingredientSlot = coinIngredient.slot;
-						ItemStack ingredient = coinIngredient.stack;
-						ItemStack itemStack2 = (ItemStack)defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.getWidth());
-						
-						totalCost.set( CoinCraftingFeature.subtractCoinValueFromTotalCost( ingredient, totalCost, this.craftingInput, ingredientSlot ) );
-						
-						if (!craftedItemStack.isEmpty()) {
-							craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
-							
-							if (!this.insertItem(craftedItemStack, 9, 45, true)) {
-								player.dropItem(craftedItemStack, false);
-							}
-							
-							Slot slot2 = (Slot) this.slots.get(slot);
-							slot2.onQuickTransfer(craftedItemStack, craftedItemStack);
-							
-							slot2.markDirty();
-						} // if
-					} );
+				} else if( LedgerCraftingFeature.isCraftingResultLedger( craftedItemStack.getItem() ) ) {
+					// # Ledgers - Remove the written book and receipts and add each receipt as a page in the ledger
 					
-					if( !craftedItemStack.isEmpty() ) {
+					AtomicReference<TreeMap<String, HashSet<ItemStack>>> ingredientsMap = new AtomicReference<>(new TreeMap<>());
+					
+					ItemStack existingLedger = null;
+					
+					for(ItemStack ingredient : this.craftingInput.getHeldStacks()) {
+						if( ingredient.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+							ingredientsMap.set( LedgerCraftingFeature.updateIngredientsMap( ingredientsMap, ingredient ) );
+						} else if( ingredient.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
+							existingLedger = ingredient;
+						} // if, else if
+					} // for
+					
+					LedgerCraftingFeature.updateLedger( craftedItemStack, ingredientsMap, existingLedger );
+					
+					LedgerCraftingFeature.subtractCarrierFromIngredients( this.craftingInput, 1 );
+					LedgerCraftingFeature.removeReceiptsFromIngredients( this.craftingInput.getHeldStacks() );
+					
+					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
+					
+					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
+						player.dropItem(craftedItemStack, true);
+					} // if
+					
+					slot2.onQuickTransfer(craftedItemStack, this.craftingInput.getStack( slot ));
+					
+					slot2.markDirty();
+					
+					cir.setReturnValue( craftedItemStack );
+					
+				} else if( CoinCraftingFeature.isCraftingResultCoin( craftedItemStack.getItem() ) ) {
+					// # Coins - Convert up and down between the currencies
+					
+					CurrencyComponent currencyComponent = craftedItemStack.get( CURRENCY_COMPONENT );
+					
+					if( null != currencyComponent ) {
+						AtomicLong totalCost = new AtomicLong((long) craftedItemStack.getCount() * currencyComponent.value());
+						TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap( this.craftingInput );
+						
+						ingredientsMap.forEach( ( order, coinIngredient ) -> {
+							int ingredientSlot = coinIngredient.slot;
+							ItemStack ingredient = coinIngredient.stack;
+							
+							totalCost.set( CoinCraftingFeature.subtractCoinValueFromTotalCost( ingredient, totalCost, this.craftingInput, ingredientSlot ) );
+						} );
+						
+						craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
+						
+						if (!this.insertItem(craftedItemStack, 9, 45, true)) {
+							player.dropItem(craftedItemStack, true);
+						}
+						
+						slot2.onQuickTransfer(craftedItemStack, this.craftingResult.getStack( slot ));
+						
+						slot2.markDirty();
+						
+						// This can allow the quick-crafting but requires extra work
+						// slot2.onTakeItem(player, craftedItemStack);
+						
 						cir.setReturnValue( craftedItemStack );
+						
 					} // if
 				} // if
-				
-				cir.setReturnValue( ItemStack.EMPTY );
 			} // if
 		} // if
 	}

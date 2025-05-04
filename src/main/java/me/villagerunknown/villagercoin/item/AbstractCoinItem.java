@@ -7,6 +7,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.stat.StatFormatter;
+import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Formatting;
@@ -35,7 +37,7 @@ public abstract class AbstractCoinItem extends Item {
 	
 	@Override
 	public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
-		if( !player.getWorld().isClient() ) {
+		if( !world.isClient() ) {
 			playCoinSound(player);
 		} // if
 		

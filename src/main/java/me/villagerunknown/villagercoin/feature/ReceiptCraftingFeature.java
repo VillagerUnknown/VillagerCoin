@@ -1,6 +1,8 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.DateComponent;
+import me.villagerunknown.villagercoin.component.ReceiptMessageComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
 import me.villagerunknown.villagercoin.recipe.ReceiptRecipe;
 import net.minecraft.component.DataComponentTypes;
@@ -47,6 +49,21 @@ public class ReceiptCraftingFeature {
 	
 	public static ItemStack setReceiptValue( ItemStack itemStack, long totalValue ) {
 		itemStack.set( RECEIPT_VALUE_COMPONENT, new ReceiptValueComponent( totalValue ));
+		return itemStack;
+	}
+	
+	public static ItemStack setReceiptMessage( ItemStack itemStack, ItemStack ingredientStack ) {
+		Text customNameComponent = ingredientStack.get(DataComponentTypes.CUSTOM_NAME);
+		String message = "";
+		
+		if( null != customNameComponent ) {
+			message = customNameComponent.getString();
+		} else {
+			message = CONFIG.defaultReceiptThankYouMessage;
+		} // if, else
+		
+		itemStack.set( RECEIPT_MESSAGE_COMPONENT, new ReceiptMessageComponent( message ));
+		
 		return itemStack;
 	}
 	

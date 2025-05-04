@@ -1,15 +1,14 @@
 package me.villagerunknown.villagercoin.item;
 
-import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.DateComponent;
 import me.villagerunknown.villagercoin.component.ReceiptMessageComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.WritableBookItem;
 import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.stat.StatFormatter;
-import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
@@ -19,11 +18,20 @@ import java.util.List;
 
 import static me.villagerunknown.villagercoin.Villagercoin.*;
 
-
-public class AbstractReceiptItem extends Item {
+public class AbstractLedgerItem extends WritableBookItem {
 	
-	public AbstractReceiptItem(Settings settings) {
+	public AbstractLedgerItem(Settings settings) {
 		super(settings);
+	}
+	
+	@Override
+	public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
+		stack.set( DataComponentTypes.ITEM_NAME, Text.translatable(
+				"item.villagerunknown-villagercoin.ledger.name",
+				player.getNameForScoreboard()
+		) );
+		
+		super.onCraftByPlayer(stack, world, player);
 	}
 	
 	@Override
@@ -33,33 +41,9 @@ public class AbstractReceiptItem extends Item {
 		if( null != dateComponent ) {
 			tooltip.add(
 					Text.translatable(
-							"item.villagerunknown-villagercoin.receipt.tooltip.date",
+							"item.villagerunknown-villagercoin.ledger.tooltip.date",
 							dateComponent.date()
 					).formatted(Formatting.GRAY)
-			);
-		} // if
-		
-		ReceiptValueComponent receiptValueComponent = stack.get( RECEIPT_VALUE_COMPONENT );
-		
-		if( null != receiptValueComponent ) {
-			NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-			
-			tooltip.add(
-					Text.translatable(
-							"item.villagerunknown-villagercoin.receipt.tooltip.value",
-							numberFormat.format(receiptValueComponent.value() * stack.getCount() ),
-							CoinItems.COPPER_COIN.getName().getString()
-					).formatted(Formatting.GRAY)
-			);
-		} // if
-		
-		ReceiptMessageComponent receiptMessageComponent = stack.get( RECEIPT_MESSAGE_COMPONENT );
-		
-		if( null != receiptMessageComponent ) {
-			tooltip.add(
-					Text.literal(
-							receiptMessageComponent.message()
-					).formatted(Formatting.ITALIC, Formatting.GRAY)
 			);
 		} // if
 		
