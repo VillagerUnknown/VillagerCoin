@@ -2,10 +2,15 @@ package me.villagerunknown.villagercoin.recipe;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.AccumulatingValueComponent;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
+import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.WritableBookContentComponent;
+import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -18,7 +23,7 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.Villagercoin.*;
 
 public class LedgerRecipe extends SpecialCraftingRecipe {
 	
@@ -31,20 +36,45 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 		int containsReceipts = 0;
 		int containsCarrier = 0;
 		
+		long receiptsAccumulatedValue = 0L;
+		
+		ItemStack existingLedger = null;
+		
 		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
 			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
 				if( !itemStack.isEmpty() ) {
-					if( LedgerCraftingFeature.isCraftingResultLedger( itemStack.getItem() ) || itemStack.isOf( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+					if( LedgerCraftingFeature.isCraftingResultLedger( itemStack.getItem() ) ) {
+						existingLedger = itemStack;
+					} else if( itemStack.isOf( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 						containsCarrier++;
 					} else if( itemStack.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
-						containsReceipts++;
+						ReceiptValueComponent receiptValueComponent = itemStack.get( RECEIPT_VALUE_COMPONENT );
+						
+						if( null != receiptValueComponent ) {
+							receiptsAccumulatedValue += receiptValueComponent.value();
+							containsReceipts++;
+						} // if
 					} else if( !itemStack.isOf( Items.AIR ) ) {
 						return false;
 					} // if, else
 				} // if
 			} // for
 		} // for
+		
+		if( null != existingLedger ) {
+			WritableBookContentComponent writableBookContentComponent = existingLedger.get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
+			
+			if( null != writableBookContentComponent ) {
+				if( writableBookContentComponent.pages().size() < WritableBookContentComponent.MAX_PAGE_COUNT ) {
+					AccumulatingValueComponent accumulatingValueComponent = existingLedger.get( ACCUMULATING_VALUE_COMPONENT );
+					
+					if( null != accumulatingValueComponent && accumulatingValueComponent.value() + receiptsAccumulatedValue < Long.MAX_VALUE ) {
+						containsCarrier++;
+					} // if
+				} // if
+			} // if
+		} // if
 		
 		return ( containsReceipts > 0 && 1 == containsCarrier );
 	}

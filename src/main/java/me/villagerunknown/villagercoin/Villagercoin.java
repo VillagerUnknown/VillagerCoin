@@ -51,6 +51,10 @@ public class Villagercoin implements ModInitializer {
 	
 	public static final ComponentType<DateComponent> DATE_COMPONENT;
 	
+	public static final ComponentType<UpdatedDateComponent> UPDATED_DATE_COMPONENT;
+	
+	public static final ComponentType<AccumulatingValueComponent> ACCUMULATING_VALUE_COMPONENT;
+	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
 	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
@@ -115,13 +119,6 @@ public class Villagercoin implements ModInitializer {
 		}
 	};
 	
-	public static Comparator<String> reverseSortString = new Comparator<String>() {
-		@Override
-		public int compare(String string1, String string2) {
-			return Integer.valueOf( string2 ).compareTo(Integer.valueOf( string1 ));
-		}
-	};
-	
 	static{
 		COIN_COMPONENT = registerComponentType("coin", (builder) -> {
 			return builder.codec(CoinComponent.CODEC).packetCodec(CoinComponent.PACKET_CODEC).cache();
@@ -146,6 +143,12 @@ public class Villagercoin implements ModInitializer {
 		});
 		DATE_COMPONENT = Villagercoin.registerComponentType("date", (builder) -> {
 			return builder.codec(DateComponent.CODEC).packetCodec(DateComponent.PACKET_CODEC).cache();
+		});
+		UPDATED_DATE_COMPONENT = Villagercoin.registerComponentType("updated_date", (builder) -> {
+			return builder.codec(UpdatedDateComponent.CODEC).packetCodec(UpdatedDateComponent.PACKET_CODEC).cache();
+		});
+		ACCUMULATING_VALUE_COMPONENT = Villagercoin.registerComponentType("accumulating_value", (builder) -> {
+			return builder.codec(AccumulatingValueComponent.CODEC).packetCodec(AccumulatingValueComponent.PACKET_CODEC).cache();
 		});
 	}
 	

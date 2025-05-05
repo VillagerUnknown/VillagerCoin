@@ -1,8 +1,10 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.AccumulatingValueComponent;
 import me.villagerunknown.villagercoin.component.DateComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
+import me.villagerunknown.villagercoin.component.UpdatedDateComponent;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import me.villagerunknown.villagercoin.recipe.LedgerRecipe;
 import net.minecraft.component.DataComponentTypes;
@@ -25,6 +27,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.villagerunknown.villagercoin.Villagercoin.*;
@@ -157,7 +160,13 @@ public class LedgerCraftingFeature {
 	public static ItemStack updateLedgerFromSlot(ItemStack itemStack, TreeMap<String, HashSet<CoinCraftingFeature.CoinIngredient>> ingredientsMap, @Nullable ItemStack existingLedger) {
 		Item item = itemStack.getItem();
 		
-		itemStack.set( DATE_COMPONENT, new DateComponent( LocalDate.now().toString() ) );
+		DateComponent dateComponent = itemStack.get( DATE_COMPONENT );
+		
+		if( null == dateComponent ) {
+			itemStack.set(DATE_COMPONENT, new DateComponent(LocalDate.now().toString()));
+		} // if
+		
+		itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( LocalDate.now().toString() ) );
 		
 		AtomicInteger pageCount = new AtomicInteger();
 		
@@ -175,6 +184,9 @@ public class LedgerCraftingFeature {
 		} // if, else
 		
 		Set<RawFilteredPair<String>> newPages = new HashSet<>();
+		
+		AtomicLong totalAmount = new AtomicLong();
+		totalAmount.set(0);
 		
 		ingredientsMap.forEach(( date, itemStacks ) -> {
 			for (CoinCraftingFeature.CoinIngredient ingredient : itemStacks) {
@@ -194,9 +206,13 @@ public class LedgerCraftingFeature {
 						
 						Text dateText = Text.translatable( "item.villagerunknown-villagercoin.ledger.content.date", date );
 						
+						long value = receiptValueComponent.value() * stack.getCount();
+						
+						totalAmount.addAndGet(value);
+						
 						Text valueText = Text.translatable(
 								"item.villagerunknown-villagercoin.ledger.content.total",
-								numberFormat.format(receiptValueComponent.value() * stack.getCount() ),
+								numberFormat.format(value ),
 								CoinItems.COPPER_COIN.getName().getString()
 						);
 						
@@ -228,13 +244,29 @@ public class LedgerCraftingFeature {
 		
 		itemStack.set( DataComponentTypes.WRITABLE_BOOK_CONTENT, newWritableBookContentComponent );
 		
+		if( null != existingLedger ) {
+			AccumulatingValueComponent accumulatingValueComponent = existingLedger.get(ACCUMULATING_VALUE_COMPONENT);
+			
+			if (null != accumulatingValueComponent) {
+				totalAmount.addAndGet(accumulatingValueComponent.value());
+			} // if
+		} // if
+		
+		itemStack.set( ACCUMULATING_VALUE_COMPONENT, new AccumulatingValueComponent(totalAmount.longValue()) );
+		
 		return itemStack;
 	}
 	
 	public static ItemStack updateLedger(ItemStack itemStack, AtomicReference<TreeMap<String, HashSet<ItemStack>>> ingredientsMap, @Nullable ItemStack existingLedger) {
 		Item item = itemStack.getItem();
-
-		itemStack.set( DATE_COMPONENT, new DateComponent( LocalDate.now().toString() ) );
+		
+		DateComponent dateComponent = itemStack.get( DATE_COMPONENT );
+		
+		if( null == dateComponent ) {
+			itemStack.set(DATE_COMPONENT, new DateComponent(LocalDate.now().toString()));
+		} // if
+		
+		itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( LocalDate.now().toString() ) );
 		
 		AtomicInteger pageCount = new AtomicInteger();
 		
@@ -253,6 +285,9 @@ public class LedgerCraftingFeature {
 		
 		Set<RawFilteredPair<String>> newPages = new HashSet<>();
 		
+		AtomicLong totalAmount = new AtomicLong();
+		totalAmount.set(0);
+		
 		ingredientsMap.get().forEach(( date, itemStacks ) -> {
 			for (ItemStack stack : itemStacks) {
 				if( pageCount.get() < WritableBookContentComponent.MAX_PAGE_COUNT ) {
@@ -269,9 +304,13 @@ public class LedgerCraftingFeature {
 						
 						Text dateText = Text.translatable( "item.villagerunknown-villagercoin.ledger.content.date", date );
 						
+						long value = receiptValueComponent.value() * stack.getCount();
+						
+						totalAmount.addAndGet(value);
+						
 						Text valueText = Text.translatable(
 								"item.villagerunknown-villagercoin.ledger.content.total",
-								numberFormat.format(receiptValueComponent.value() * stack.getCount() ),
+								numberFormat.format(value ),
 								CoinItems.COPPER_COIN.getName().getString()
 						);
 						
@@ -302,6 +341,16 @@ public class LedgerCraftingFeature {
 		);
 		
 		itemStack.set( DataComponentTypes.WRITABLE_BOOK_CONTENT, newWritableBookContentComponent );
+		
+		if( null != existingLedger ) {
+			AccumulatingValueComponent accumulatingValueComponent = existingLedger.get(ACCUMULATING_VALUE_COMPONENT);
+			
+			if (null != accumulatingValueComponent) {
+				totalAmount.addAndGet(accumulatingValueComponent.value());
+			} // if
+		} // if
+		
+		itemStack.set( ACCUMULATING_VALUE_COMPONENT, new AccumulatingValueComponent(totalAmount.longValue()) );
 		
 		return itemStack;
 	}

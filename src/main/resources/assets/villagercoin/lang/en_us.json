@@ -123,9 +123,12 @@
   "item.villagerunknown-villagercoin.receipt.tooltip.value": "Total: %d %s(s)",
 
   "item.villagerunknown-villagercoin.ledger.name": "Ledger of %s",
-  "item.villagerunknown-villagercoin.ledger.tooltip.date": "Date Created: %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.date": "Created: %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.updated": "Updated: %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.pages": "Records: %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.amount": "Total: %s",
   "item.villagerunknown-villagercoin.ledger.content.date": "Date: %s",
-  "item.villagerunknown-villagercoin.ledger.content.total": "Total: %s",
+  "item.villagerunknown-villagercoin.ledger.content.total": "Total:\n\n%s\n%s(s)",
 
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",

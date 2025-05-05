@@ -1,9 +1,9 @@
 package me.villagerunknown.villagercoin.item;
 
-import me.villagerunknown.villagercoin.component.DateComponent;
-import me.villagerunknown.villagercoin.component.ReceiptMessageComponent;
-import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
+import me.villagerunknown.villagercoin.component.*;
+import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.WritableBookContentComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,6 +36,8 @@ public class AbstractLedgerItem extends WritableBookItem {
 	
 	@Override
 	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
+		NumberFormat numberFormat = NumberFormat.getNumberInstance();
+		
 		DateComponent dateComponent = stack.get( DATE_COMPONENT );
 		
 		if( null != dateComponent ) {
@@ -43,6 +45,39 @@ public class AbstractLedgerItem extends WritableBookItem {
 					Text.translatable(
 							"item.villagerunknown-villagercoin.ledger.tooltip.date",
 							dateComponent.date()
+					).formatted(Formatting.GRAY)
+			);
+		} // if
+		
+		UpdatedDateComponent updatedDateComponent = stack.get( UPDATED_DATE_COMPONENT );
+		
+		if( null != updatedDateComponent ) {
+			tooltip.add(
+					Text.translatable(
+							"item.villagerunknown-villagercoin.ledger.tooltip.updated",
+							updatedDateComponent.date()
+					).formatted(Formatting.GRAY)
+			);
+		} // if
+		
+		WritableBookContentComponent writableBookContentComponent = stack.get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
+		
+		if( null != writableBookContentComponent ) {
+			tooltip.add(
+					Text.translatable(
+							"item.villagerunknown-villagercoin.ledger.tooltip.pages",
+							numberFormat.format( writableBookContentComponent.pages().size() )
+					).formatted(Formatting.GRAY)
+			);
+		} // if
+		
+		AccumulatingValueComponent accumulatingValueComponent = stack.get( ACCUMULATING_VALUE_COMPONENT );
+		
+		if( null != accumulatingValueComponent ) {
+			tooltip.add(
+					Text.translatable(
+							"item.villagerunknown-villagercoin.ledger.tooltip.amount",
+							CoinFeature.humanReadableNumber( accumulatingValueComponent.value(), true )
 					).formatted(Formatting.GRAY)
 			);
 		} // if

@@ -51,6 +51,23 @@ public class CrafterBlockMixin {
 						
 						ReceiptCraftingFeature.subtractCarrierFromIngredients( crafterBlockEntity.getHeldStacks(), 1 );
 						
+						crafterBlockEntity.setCraftingTicksRemaining(6);
+						world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
+						itemStack.onCraftByCrafter(world);
+						this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
+						Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRemainder(craftingRecipeInput).iterator();
+						
+						while(var9.hasNext()) {
+							ItemStack itemStack2 = (ItemStack)var9.next();
+							if (!itemStack2.isEmpty()) {
+								this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack2, state, recipeEntry);
+							}
+						} // while
+						
+						crafterBlockEntity.markDirty();
+						
+						ci.cancel();
+						
 					} else if( LedgerCraftingFeature.isCraftingResultLedger( itemStack.getItem() ) ) {
 						// # Ledgers - Remove the written book and receipts and add each receipt as a page in the ledger
 						
@@ -83,7 +100,6 @@ public class CrafterBlockMixin {
 								this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack2, state, recipeEntry);
 							}
 						} // while
-						
 					} else if( CoinBankCraftingFeature.isCraftingResultCoinBank( itemStack ) ) {
 						// # Coin Banks - Receive the currency value of the ingredients
 						

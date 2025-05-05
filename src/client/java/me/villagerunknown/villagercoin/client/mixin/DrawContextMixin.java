@@ -22,7 +22,7 @@ public abstract class DrawContextMixin {
 	@Inject(method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"), cancellable = true)
 	private void drawItemInSlot(TextRenderer textRenderer, ItemStack stack, int x, int y, String countOverride, CallbackInfo ci) {
 		if( null == countOverride && !stack.isEmpty() && stack.getMaxCount() > 99 && stack.getCount() > 99 ) {
-			String text = CoinFeature.humanReadableNumber( stack.getCount() );
+			String text = CoinFeature.humanReadableNumber( stack.getCount(), false );
 			float scale = CoinFeature.humanReadableNumberScale( text.length() );
 			
 			this.matrices.push();
