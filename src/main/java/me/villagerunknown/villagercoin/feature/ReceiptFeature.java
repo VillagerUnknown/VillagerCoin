@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
-public class ReceiptItemsFeature {
+public class ReceiptFeature {
 	
 	public static final String RECEIPT_STRING = "receipt";
 	

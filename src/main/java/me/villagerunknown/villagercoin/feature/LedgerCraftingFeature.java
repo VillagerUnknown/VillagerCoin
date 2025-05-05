@@ -79,10 +79,7 @@ public class LedgerCraftingFeature {
 	
 	public static void removeCarrierFromIngredients(List<ItemStack> ingredients ) {
 		for (ItemStack ingredientStack : ingredients) {
-			if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) || ingredientStack.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
-				ingredientStack.decrement( ingredientStack.getCount() );
-				break;
-			} // if
+			subtractCarrierFromIngredients( List.of(ingredientStack), ingredientStack.getCount() );
 		} // for
 	}
 	
@@ -97,9 +94,7 @@ public class LedgerCraftingFeature {
 	
 	public static void removeReceiptsFromIngredients(List<ItemStack> ingredients ) {
 		for (ItemStack ingredientStack : ingredients) {
-			if( ingredientStack.isIn( Villagercoin.getItemTagKey("receipt") ) ) {
-				ingredientStack.decrement( ingredientStack.getCount() );
-			} // if
+			subtractReceiptsFromIngredients( List.of(ingredientStack), ingredientStack.getCount() );
 		} // for
 	}
 	

@@ -7,18 +7,30 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Added missing player stats for inserting coins in Coin Banks, crafting Villager Coins, crafting Receipts, and crafting Coin Stacks.
+- Added `LedgerCraftingFeature` to allow addons to provide craftable Ledgers that allows players to catalogue their receipts.
 
 ### Changed
 
-- Changed Coin Bank crafting recipe to add the value of the ingredient coin to the crafted Coin Bank. The recipe will still only consume 1 Coin per Coin Bank.
+- Changed default `maximumCoinStackSize` to 1,000.
+This is to be more inline with the Coin Stack recipes for full blocks. 
+This also makes it clearer how many coins are in a stack rather than an obscured amount. ("1250" appears as "1k+")
+_This value can still be controlled through the config._
+- Changed Coin Bank crafting recipe to add the value of the ingredient coin to the crafted Coin Bank. 
+The recipe will still only consume 1 Coin per Coin Bank. 
+This makes it meaningful to use higher value coins in the recipe.
 - The thank-you message on receipts can now be changed by renaming the paper ingredient with an anvil before crafting the receipt.
 
 ### Removed
 
 - Removed receipts from core and into their own addon: Bookkeeping for Villager Coin. 
 This allows players to choose which receipts they want in their world, the official ones or other modded ones. 
-The Bookkeeping addon also includes more related items, like a Ledger. 
-Villager Coin still provides the core shared functionality for receipts.
+The Bookkeeping addon also introduces related items, like a Ledger that allows players to catalogue their receipts. 
+_Villager Coin still provides the core shared `ReceiptFeature` and `ReceiptCraftingFeature` functionality of receipts for addons._
+
+### Fixed
+
+- Fixed an issue with modded containers, not implementing vanilla methods, causing a fatal crash when saving stacks greater than 99. 
+This was resolved by forcing `Codecs.rangedInt` to set the max value to the `Integer.MAX_VALUE` if the max is greater than 99.
 
 ## [1.0.6]
 
@@ -28,7 +40,8 @@ Villager Coin still provides the core shared functionality for receipts.
 - Added coin specific subtitles.
 - Added value tooltip to coin items with a currency component.
 - Added option to allow coin entities to sink, instead of float, in water and lava.
-- Added option to toggle Coin Stacks breaking on collision. _The default value prevents breaking on collision. 
+- Added option to toggle Coin Stacks breaking on collision. 
+_The default value prevents breaking on collision. 
 This is to match the expected functionality of Minecraft blocks._
 - Added `CoinStackCraftingFeature` to allow crafting Coin Stacks.
 

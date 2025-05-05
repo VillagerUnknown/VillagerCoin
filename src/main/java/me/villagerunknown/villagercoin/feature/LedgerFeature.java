@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
-public class LedgerItemsFeature {
+public class LedgerFeature {
 	
 	public static final String LEDGER_STRING = "ledger";
 	
