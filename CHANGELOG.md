@@ -19,7 +19,8 @@ and you can download it to keep your Receipts intact._
 
 - Changed default `maximumCoinStackSize` to 1,000.
 This is to be more inline with the Coin Stack recipes for full blocks. 
-This also makes it clearer how many coins are in a stack rather than an obscured amount. ("1250" appears as "1k+")
+This also makes it clearer how many coins are in a stack rather than an obscured amount. ("1250" appears as "1k+") 
+Additionally, this reduces the overall chances of amounts exceeding the maximum long value.
 _Existing stacks remain capped at 5,000 and, when over 1,000, can be picked up but will only place 1,000 when trying to place back in an inventory slot. 
 This value can still be controlled through the config. It will remain at 5000, per the config, for existing worlds._
 - Changed Coin Bank crafting recipe to add the value of the ingredient coin to the crafted Coin Bank. 

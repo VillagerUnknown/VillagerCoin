@@ -359,10 +359,14 @@ public class LedgerCraftingFeature {
 			if( null != receiptValueComponent ) {
 				NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 				
-				Text receiptText = ingredient.get( DataComponentTypes.ITEM_NAME );
+				Text receiptText = ingredient.get( DataComponentTypes.CUSTOM_NAME );
 				
 				if( null == receiptText ) {
-					receiptText = ingredient.getName();
+					receiptText = ingredient.get( DataComponentTypes.ITEM_NAME );
+					
+					if( null == receiptText ) {
+						receiptText = ingredient.getName();
+					} // if
 				} // if
 				
 				Text dateText = Text.translatable( "item.villagerunknown-villagercoin.ledger.content.date", date );
@@ -377,12 +381,22 @@ public class LedgerCraftingFeature {
 						CoinItems.COPPER_COIN.getName().getString()
 				);
 				
+				ReceiptMessageComponent receiptMessageComponent = ingredient.get( RECEIPT_MESSAGE_COMPONENT );
+				
+				Text receiptMessage = Text.empty();
+				
+				if( null != receiptMessageComponent && !Objects.equals(receiptMessageComponent.message(), Villagercoin.CONFIG.defaultReceiptThankYouMessage) ) {
+					receiptMessage = Text.empty().append( "\n\n" + receiptMessageComponent.message() );
+				} // if
+				
 				Text pageText = Text.empty()
 						.append( dateText ).append("\n\n")
 						.append( receiptText ).append("\n\n")
-						.append( valueText );
+						.append( valueText )
+						.append( receiptMessage );
 				
-				RawFilteredPair<String> pair = new RawFilteredPair<>( pageText.getString(), Optional.of( pageText.getString() ) );
+				String truncatedPageText = pageText.asTruncatedString(WritableBookContentComponent.MAX_PAGE_LENGTH);
+				RawFilteredPair<String> pair = new RawFilteredPair<>( truncatedPageText, Optional.of( truncatedPageText ) );
 				
 				this.pages.add( pair );
 				pageCount.getAndIncrement();

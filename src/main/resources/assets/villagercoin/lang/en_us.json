@@ -130,7 +130,7 @@
   "item.villagerunknown-villagercoin.ledger.tooltip.copy": "Copy of original",
   "item.villagerunknown-villagercoin.ledger.tooltip.copyOfCopy": "Copy of a copy",
   "item.villagerunknown-villagercoin.ledger.content.date": "Date: %s",
-  "item.villagerunknown-villagercoin.ledger.content.total": "Total:\n\n%s\n%s(s)",
+  "item.villagerunknown-villagercoin.ledger.content.total": "%s\n%s(s)",
 
   "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s)",
 

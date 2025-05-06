@@ -19,6 +19,7 @@ import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -105,7 +106,17 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 		ItemStack returnStack = ItemStack.EMPTY;
 		
 		if( !ledgerResults.isEmpty() ) {
-			returnStack = new ItemStack(ledgerResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, ledgerResults.size() )), 1);
+			Item ledgerItem = ledgerResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, ledgerResults.size() ));
+			
+			returnStack = new ItemStack(ledgerItem, 1);
+			
+			if( null != carrierStack ) {
+				Text carrierCustomName = carrierStack.get( DataComponentTypes.CUSTOM_NAME );
+				
+				if( null != carrierCustomName ) {
+					returnStack.set(DataComponentTypes.CUSTOM_NAME, carrierCustomName);
+				} // if
+			} // if
 		} // if
 		
 		return returnStack;
