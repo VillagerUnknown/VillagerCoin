@@ -130,7 +130,8 @@ _Trade modifications scale appropriately with the Vanilla trading values for pro
 
 ## Additional Notes
 
-* I recommend grabbing the Coin Banks and Coin Stacks addons for Villager Coin as they allow players to store their wealth physically in the world. This not only allows players to create cool looking treasure stashes and vaults but it also offers the opportunity for heists on multiplayer servers.
+* I recommend installing a Bookkeeping addon if you're on a multiplayer server.
+* I also highly recommend installing a Coin Banks and Coin Stacks addons as they allow players to store their wealth physically in the world. This not only allows players to create cool looking treasure stashes and vaults but it also offers the opportunity for heists on multiplayer servers.
 * If you have a single coin in your hand and interact (right-click) you can optionally flip a coin, for a heads or tails result in chat.
 * Trades are modified for both vanilla and modded Villagers.
 * This mod will change the significance of farms and general pacing of the game. 
