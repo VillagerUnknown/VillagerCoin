@@ -67,7 +67,7 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 					
 					this.context.run((world, pos) -> craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, world, player));
 					
-					if (!this.insertItem(craftedItemStack, 10, 45, true)) {
+					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
 						player.dropItem(craftedItemStack, true);
 					} // if
 					
@@ -108,7 +108,7 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 						
 						this.context.run((world, pos) -> craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, world, player));
 						
-						if (!this.insertItem(craftedItemStack, 10, 45, true)) {
+						if (!this.insertItem(craftedItemStack, 10, 46, true)) {
 							player.dropItem(craftedItemStack, true);
 						} // if
 						
@@ -162,7 +162,7 @@ public abstract class CraftingScreenHandlerMixin extends ScreenHandler {
 							
 							this.context.run((world, pos) -> craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, world, player));
 							
-							if (!this.insertItem(craftedItemStack, 10, 45, true)) {
+							if (!this.insertItem(craftedItemStack, 10, 46, true)) {
 								player.dropItem(craftedItemStack, true);
 							}
 							

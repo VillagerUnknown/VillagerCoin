@@ -67,7 +67,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 					
 					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
 					
-					if (!this.insertItem(craftedItemStack, 10, 45, true)) {
+					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
 						player.dropItem(craftedItemStack, true);
 					} // if
 					
@@ -109,7 +109,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 					
 					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
 					
-					if (!this.insertItem(craftedItemStack, 10, 45, true)) {
+					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
 						player.dropItem(craftedItemStack, true);
 					} // if
 					
@@ -137,7 +137,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 						
 						craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
 						
-						if (!this.insertItem(craftedItemStack, 9, 45, true)) {
+						if (!this.insertItem(craftedItemStack, 9, 46, true)) {
 							player.dropItem(craftedItemStack, true);
 						}
 						
