@@ -286,7 +286,7 @@ public class LedgerCraftingFeature {
 			DateComponent dateComponent = existingLedger.get( DATE_COMPONENT );
 			
 			if( dateComponent != null ) {
-				itemStack.set( DATE_COMPONENT, new DateComponent( dateComponent.date() ) );
+				itemStack.set( DATE_COMPONENT, dateComponent );
 			} // if
 			
 			if( !copying ) {
@@ -295,7 +295,7 @@ public class LedgerCraftingFeature {
 				UpdatedDateComponent updatedDateComponent = existingLedger.get( UPDATED_DATE_COMPONENT );
 				
 				if( null != updatedDateComponent ) {
-					itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( updatedDateComponent.date() ) );
+					itemStack.set( UPDATED_DATE_COMPONENT, updatedDateComponent );
 				} // if
 			} // if, else
 			
@@ -310,11 +310,7 @@ public class LedgerCraftingFeature {
 			CopyCountComponent copyCountComponent = existingLedger.get(COPY_COUNT_COMPONENT);
 			
 			if( null != copyCountComponent ) {
-				if( copying ) {
-					itemStack.set( COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count() + 1) );
-				} else {
-					itemStack.set( COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count()) );
-				} // if, else
+				itemStack.set( COPY_COUNT_COMPONENT, copyCountComponent );
 			} // if
 			
 			// Copy custom name
@@ -323,7 +319,13 @@ public class LedgerCraftingFeature {
 			if (null != customNameComponent) {
 				itemStack.set( DataComponentTypes.CUSTOM_NAME, customNameComponent );
 			} else if( copying ) {
-				itemStack.set( DataComponentTypes.CUSTOM_NAME, Text.translatable("item.villagerunknown-villagercoin.ledger.copiedName", itemStack.getName().getString()) );
+				itemStack.set(
+						DataComponentTypes.CUSTOM_NAME,
+						Text.translatable(
+								"item.villagerunknown-villagercoin.ledger.copiedName",
+								itemStack.getName().getString()
+						)
+				);
 			} // if, else
 		} else {
 			// # Instructions for new ledgers

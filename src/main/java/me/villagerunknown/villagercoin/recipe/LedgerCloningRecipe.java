@@ -1,6 +1,7 @@
 package me.villagerunknown.villagercoin.recipe;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.CopyCountComponent;
 import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.component.DataComponentTypes;
@@ -16,6 +17,8 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
+
+import static me.villagerunknown.villagercoin.component.Components.COPY_COUNT_COMPONENT;
 
 public class LedgerCloningRecipe extends SpecialCraftingRecipe {
 	
@@ -74,7 +77,17 @@ public class LedgerCloningRecipe extends SpecialCraftingRecipe {
 		
 		WritableBookContentComponent writableBookContentComponent = itemStack.get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
 		if (!itemStack.isEmpty() && i >= 1 && writableBookContentComponent != null) {
-			return itemStack.copyWithCount(i);
+			ItemStack returnStack = itemStack.copyWithCount(i);
+			
+			CopyCountComponent copyCountComponent = itemStack.get(COPY_COUNT_COMPONENT);
+			
+			if( null != copyCountComponent ) {
+				returnStack.set( COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count() + 1) );
+			} else {
+				returnStack.set( COPY_COUNT_COMPONENT, new CopyCountComponent(1) );
+			} // if, else
+			
+			return returnStack;
 		} else {
 			return ItemStack.EMPTY;
 		}
