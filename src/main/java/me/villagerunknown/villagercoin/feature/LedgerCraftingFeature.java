@@ -1,11 +1,9 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.component.AccumulatingValueComponent;
-import me.villagerunknown.villagercoin.component.DateComponent;
-import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
-import me.villagerunknown.villagercoin.component.UpdatedDateComponent;
+import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.item.CoinItems;
+import me.villagerunknown.villagercoin.recipe.LedgerCloningRecipe;
 import me.villagerunknown.villagercoin.recipe.LedgerRecipe;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WritableBookContentComponent;
@@ -30,7 +28,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class LedgerCraftingFeature {
 	
@@ -39,6 +38,7 @@ public class LedgerCraftingFeature {
 	private static HashSet<Item> CRAFTING_RESULT_LEDGERS = new HashSet<>();
 	
 	public static RecipeSerializer<LedgerRecipe> RECIPE_SERIALIZER;
+	public static RecipeSerializer<LedgerCloningRecipe> CLONING_RECIPE_SERIALIZER;
 	
 	public static void execute(){}
 	
@@ -65,7 +65,7 @@ public class LedgerCraftingFeature {
 				int m = x + left + (y + top) * craftingInput.getWidth();
 				ItemStack ingredientStack = craftingInput.getStack(m);
 				
-				if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) || ingredientStack.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
+				if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) ) {
 					if( amount > Integer.MAX_VALUE ) {
 						amount = Integer.MAX_VALUE;
 					} // if
@@ -85,7 +85,45 @@ public class LedgerCraftingFeature {
 	
 	public static void subtractCarrierFromIngredients(List<ItemStack> ingredients, int amount ) {
 		for (ItemStack ingredientStack : ingredients) {
-			if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) || ingredientStack.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
+			if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) ) {
+				ingredientStack.decrement( amount );
+				break;
+			} // if
+		} // for
+	}
+	
+	public static void subtractLedgerFromIngredients(RecipeInputInventory craftingInput, long amount ) {
+		CraftingRecipeInput.Positioned positioned = craftingInput.createPositionedRecipeInput();
+		CraftingRecipeInput craftingRecipeInput = positioned.input();
+		int left = positioned.left();
+		int top = positioned.top();
+		
+		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
+			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
+				int m = x + left + (y + top) * craftingInput.getWidth();
+				ItemStack ingredientStack = craftingInput.getStack(m);
+				
+				if( ingredientStack.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
+					if( amount > Integer.MAX_VALUE ) {
+						amount = Integer.MAX_VALUE;
+					} // if
+					
+					craftingInput.removeStack( m, CoinCraftingFeature.toIntSafely(amount) );
+					break;
+				} // if
+			} // for
+		} // for
+	}
+	
+	public static void removeLedgerFromIngredients(List<ItemStack> ingredients ) {
+		for (ItemStack ingredientStack : ingredients) {
+			subtractLedgerFromIngredients( List.of(ingredientStack), ingredientStack.getCount() );
+		} // for
+	}
+	
+	public static void subtractLedgerFromIngredients(List<ItemStack> ingredients, int amount ) {
+		for (ItemStack ingredientStack : ingredients) {
+			if( ingredientStack.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
 				ingredientStack.decrement( amount );
 				break;
 			} // if
@@ -152,121 +190,75 @@ public class LedgerCraftingFeature {
 		return ingredientsMap.get();
 	}
 	
-	public static ItemStack updateLedgerFromSlot(ItemStack itemStack, TreeMap<String, HashSet<CoinCraftingFeature.CoinIngredient>> ingredientsMap, @Nullable ItemStack existingLedger) {
-		Item item = itemStack.getItem();
-		
-		DateComponent dateComponent = itemStack.get( DATE_COMPONENT );
-		
-		if( null == dateComponent ) {
-			itemStack.set(DATE_COMPONENT, new DateComponent(LocalDate.now().toString()));
-		} // if
-		
-		itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( LocalDate.now().toString() ) );
-		
+	public static ItemStack updateLedgerFromSlot(ItemStack itemStack, TreeMap<String, HashSet<CoinCraftingFeature.CoinIngredient>> ingredientsMap, @Nullable ItemStack existingLedger,boolean copying) {
+		// Get page count from existing ledger item
 		AtomicInteger pageCount = new AtomicInteger();
 		
-		WritableBookContentComponent writableBookContentComponent = item.getComponents().get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
+		WritableBookContentComponent writableBookContentComponent = itemStack.get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
 		
+		List<RawFilteredPair<String>> newPages = new ArrayList<>();
+		
+		// Add pages from existing writable component
 		if( null != existingLedger ) {
-			writableBookContentComponent = existingLedger.get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
+			writableBookContentComponent = existingLedger.get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
+			
 			if( null != writableBookContentComponent ) {
-				pageCount.set(writableBookContentComponent.pages().size());
+				newPages.addAll(writableBookContentComponent.pages());
 			} // if
 		} // if
 		
-		if( null == writableBookContentComponent ) {
-			pageCount.set(0);
-		} // if, else
+		setPageCount( writableBookContentComponent, existingLedger, pageCount );
 		
-		Set<RawFilteredPair<String>> newPages = new HashSet<>();
+		// Create new ledger object
+		Ledger ledger = new Ledger( newPages, new AtomicLong(0) );
 		
-		AtomicLong totalAmount = new AtomicLong();
-		totalAmount.set(0);
-		
-		ingredientsMap.forEach(( date, itemStacks ) -> {
-			for (CoinCraftingFeature.CoinIngredient ingredient : itemStacks) {
+		// Add pages to ledger object
+		ingredientsMap.forEach(( date, ingredients ) -> {
+			for( CoinCraftingFeature.CoinIngredient ingredient : ingredients ) {
 				if( pageCount.get() < WritableBookContentComponent.MAX_PAGE_COUNT ) {
-					ItemStack stack = ingredient.stack;
-					
-					ReceiptValueComponent receiptValueComponent = stack.get( RECEIPT_VALUE_COMPONENT );
-					
-					if( null != receiptValueComponent ) {
-						NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-						
-						Text receiptText = stack.get( DataComponentTypes.ITEM_NAME );
-						
-						if( null == receiptText ) {
-							receiptText = stack.getName();
-						} // if
-						
-						Text dateText = Text.translatable( "item.villagerunknown-villagercoin.ledger.content.date", date );
-						
-						long value = receiptValueComponent.value() * stack.getCount();
-						
-						totalAmount.addAndGet(value);
-						
-						Text valueText = Text.translatable(
-								"item.villagerunknown-villagercoin.ledger.content.total",
-								numberFormat.format(value ),
-								CoinItems.COPPER_COIN.getName().getString()
-						);
-						
-						Text pageText = Text.empty()
-								.append( dateText ).append("\n\n")
-								.append( receiptText ).append("\n\n")
-								.append( valueText );
-						
-						RawFilteredPair<String> pair = new RawFilteredPair<>( pageText.getString(), Optional.of( pageText.getString() ) );
-						
-						newPages.add( pair );
-						pageCount.getAndIncrement();
-					} // if
+					ledger.addPage( pageCount, ingredient.stack, date );
 				} // if
 			} // for
 		});
 		
-		List<RawFilteredPair<String>> newWrittenPages = new ArrayList<>();
-		
-		if( null != writableBookContentComponent ) {
-			newWrittenPages.addAll(writableBookContentComponent.pages());
-		} // if
-		
-		newWrittenPages.addAll( newPages );
-		
-		WritableBookContentComponent newWritableBookContentComponent = new WritableBookContentComponent(
-				newWrittenPages
-		);
-		
-		itemStack.set( DataComponentTypes.WRITABLE_BOOK_CONTENT, newWritableBookContentComponent );
-		
-		if( null != existingLedger ) {
-			AccumulatingValueComponent accumulatingValueComponent = existingLedger.get(ACCUMULATING_VALUE_COMPONENT);
-			
-			if (null != accumulatingValueComponent) {
-				totalAmount.addAndGet(accumulatingValueComponent.value());
-			} // if
-		} // if
-		
-		itemStack.set( ACCUMULATING_VALUE_COMPONENT, new AccumulatingValueComponent(totalAmount.longValue()) );
-		
-		return itemStack;
+		return writeLedger( ledger, itemStack, existingLedger, copying );
 	}
 	
-	public static ItemStack updateLedger(ItemStack itemStack, AtomicReference<TreeMap<String, HashSet<ItemStack>>> ingredientsMap, @Nullable ItemStack existingLedger) {
-		Item item = itemStack.getItem();
-		
-		DateComponent dateComponent = itemStack.get( DATE_COMPONENT );
-		
-		if( null == dateComponent ) {
-			itemStack.set(DATE_COMPONENT, new DateComponent(LocalDate.now().toString()));
-		} // if
-		
-		itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( LocalDate.now().toString() ) );
-		
+	public static ItemStack updateLedger(ItemStack itemStack, AtomicReference<TreeMap<String, HashSet<ItemStack>>> ingredientsMap, @Nullable ItemStack existingLedger,boolean copying) {
+		// Get page count from existing ledger item
 		AtomicInteger pageCount = new AtomicInteger();
 		
-		WritableBookContentComponent writableBookContentComponent = item.getComponents().get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
+		WritableBookContentComponent writableBookContentComponent = itemStack.get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
 		
+		List<RawFilteredPair<String>> newPages = new ArrayList<>();
+		
+		// Add pages from existing writable component
+		if( null != existingLedger ) {
+			writableBookContentComponent = existingLedger.get(DataComponentTypes.WRITABLE_BOOK_CONTENT);
+			
+			if( null != writableBookContentComponent ) {
+				newPages.addAll(writableBookContentComponent.pages());
+			} // if
+		} // if
+		
+		setPageCount( writableBookContentComponent, existingLedger, pageCount );
+		
+		// Create new ledger object
+		Ledger ledger = new Ledger( newPages, new AtomicLong(0) );
+		
+		// Add pages to ledger object
+		ingredientsMap.get().forEach(( date, itemStacks ) -> {
+			for( ItemStack stack : itemStacks ) {
+				if( pageCount.get() < WritableBookContentComponent.MAX_PAGE_COUNT ) {
+					ledger.addPage( pageCount, stack, date );
+				} // if
+			} // for
+		});
+		
+		return writeLedger( ledger, itemStack, existingLedger, copying );
+	}
+	
+	protected static void setPageCount(WritableBookContentComponent writableBookContentComponent, ItemStack existingLedger, AtomicInteger pageCount ) {
 		if( null != existingLedger ) {
 			writableBookContentComponent = existingLedger.get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
 			if( null != writableBookContentComponent ) {
@@ -274,84 +266,116 @@ public class LedgerCraftingFeature {
 			} // if
 		} // if
 		
+		// Page count is 0 if we don't have a writable component
 		if( null == writableBookContentComponent ) {
 			pageCount.set(0);
 		} // if, else
+	}
+	
+	protected static ItemStack writeLedger( Ledger ledger, ItemStack itemStack, @Nullable ItemStack existingLedger, boolean copying ) {
+		DateComponent dateComponent = itemStack.get( DATE_COMPONENT );
 		
-		Set<RawFilteredPair<String>> newPages = new HashSet<>();
-		
-		AtomicLong totalAmount = new AtomicLong();
-		totalAmount.set(0);
-		
-		ingredientsMap.get().forEach(( date, itemStacks ) -> {
-			for (ItemStack stack : itemStacks) {
-				if( pageCount.get() < WritableBookContentComponent.MAX_PAGE_COUNT ) {
-					ReceiptValueComponent receiptValueComponent = stack.get( RECEIPT_VALUE_COMPONENT );
-					
-					if( null != receiptValueComponent ) {
-						NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-						
-						Text receiptText = stack.get( DataComponentTypes.ITEM_NAME );
-						
-						if( null == receiptText ) {
-							receiptText = stack.getName();
-						} // if
-						
-						Text dateText = Text.translatable( "item.villagerunknown-villagercoin.ledger.content.date", date );
-						
-						long value = receiptValueComponent.value() * stack.getCount();
-						
-						totalAmount.addAndGet(value);
-						
-						Text valueText = Text.translatable(
-								"item.villagerunknown-villagercoin.ledger.content.total",
-								numberFormat.format(value ),
-								CoinItems.COPPER_COIN.getName().getString()
-						);
-						
-						Text pageText = Text.empty()
-								.append( dateText ).append("\n\n")
-								.append( receiptText ).append("\n\n")
-								.append( valueText );
-						
-						RawFilteredPair<String> pair = new RawFilteredPair<>( pageText.getString(), Optional.of( pageText.getString() ) );
-						
-						newPages.add( pair );
-						pageCount.getAndIncrement();
-					} // if
-				} // if
-			} // for
-		});
-		
-		List<RawFilteredPair<String>> newWrittenPages = new ArrayList<>();
-		
-		if( null != writableBookContentComponent ) {
-			newWrittenPages.addAll(writableBookContentComponent.pages());
+		// Set a date component if one isn't already created
+		if( null == dateComponent ) {
+			itemStack.set(DATE_COMPONENT, new DateComponent(LocalDate.now().toString()));
 		} // if
 		
-		newWrittenPages.addAll( newPages );
+		// Always update the updated date component
+		itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( LocalDate.now().toString() ) );
 		
-		WritableBookContentComponent newWritableBookContentComponent = new WritableBookContentComponent(
-				newWrittenPages
-		);
-		
-		itemStack.set( DataComponentTypes.WRITABLE_BOOK_CONTENT, newWritableBookContentComponent );
+		// Add pages from ledger object to writable book
+		itemStack.set( DataComponentTypes.WRITABLE_BOOK_CONTENT, new WritableBookContentComponent(
+				ledger.pages.stream().toList()
+		) );
 		
 		if( null != existingLedger ) {
+			// Add total value of receipts to ledger total
 			AccumulatingValueComponent accumulatingValueComponent = existingLedger.get(ACCUMULATING_VALUE_COMPONENT);
 			
 			if (null != accumulatingValueComponent) {
-				totalAmount.addAndGet(accumulatingValueComponent.value());
+				ledger.totalAmount.addAndGet(accumulatingValueComponent.value());
 			} // if
+			
+			// Copy or set the Copy Count
+			CopyCountComponent copyCountComponent = existingLedger.get(COPY_COUNT_COMPONENT);
+			
+			if( null != copyCountComponent ) {
+				if( copying ) {
+					itemStack.set(COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count() + 1));
+				} else {
+					itemStack.set(COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count()));
+				} // if, else
+			} else {
+				itemStack.set(COPY_COUNT_COMPONENT, new CopyCountComponent(1));
+			} // if, else
+			
+			// Copy custom name
+			Text customNameComponent = existingLedger.get(DataComponentTypes.CUSTOM_NAME);
+			
+			if (null != customNameComponent) {
+				itemStack.set(DataComponentTypes.CUSTOM_NAME, customNameComponent);
+			} else if( copying ) {
+				itemStack.set(DataComponentTypes.CUSTOM_NAME, Text.translatable("item.villagerunknown-villagercoin.ledger.copiedName", itemStack.getName().getString()));
+			} // if, else
 		} // if
 		
-		itemStack.set( ACCUMULATING_VALUE_COMPONENT, new AccumulatingValueComponent(totalAmount.longValue()) );
+		itemStack.set( ACCUMULATING_VALUE_COMPONENT, new AccumulatingValueComponent(ledger.totalAmount.longValue()) );
 		
 		return itemStack;
 	}
 	
 	static {
 		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_ledger" ), new SpecialRecipeSerializer(LedgerRecipe::new));
+		CLONING_RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_ledgercloning" ), new SpecialRecipeSerializer(LedgerCloningRecipe::new));
+	}
+	
+	public static class Ledger {
+		
+		public List<RawFilteredPair<String>> pages;
+		
+		public AtomicLong totalAmount;
+		
+		Ledger( List<RawFilteredPair<String>> pages, AtomicLong totalAmount ) {
+			this.pages = pages;
+			this.totalAmount = totalAmount;
+		}
+		
+		protected void addPage( AtomicInteger pageCount, ItemStack ingredient, String date ) {
+			ReceiptValueComponent receiptValueComponent = ingredient.get( RECEIPT_VALUE_COMPONENT );
+			
+			if( null != receiptValueComponent ) {
+				NumberFormat numberFormat = NumberFormat.getIntegerInstance();
+				
+				Text receiptText = ingredient.get( DataComponentTypes.ITEM_NAME );
+				
+				if( null == receiptText ) {
+					receiptText = ingredient.getName();
+				} // if
+				
+				Text dateText = Text.translatable( "item.villagerunknown-villagercoin.ledger.content.date", date );
+				
+				long value = receiptValueComponent.value() * ingredient.getCount();
+				
+				this.totalAmount.addAndGet( value );
+				
+				Text valueText = Text.translatable(
+						"item.villagerunknown-villagercoin.ledger.content.total",
+						numberFormat.format( value ),
+						CoinItems.COPPER_COIN.getName().getString()
+				);
+				
+				Text pageText = Text.empty()
+						.append( dateText ).append("\n\n")
+						.append( receiptText ).append("\n\n")
+						.append( valueText );
+				
+				RawFilteredPair<String> pair = new RawFilteredPair<>( pageText.getString(), Optional.of( pageText.getString() ) );
+				
+				this.pages.add( pair );
+				pageCount.getAndIncrement();
+			} // if
+		}
+		
 	}
 	
 }

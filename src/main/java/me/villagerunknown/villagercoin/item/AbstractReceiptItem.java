@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import java.text.NumberFormat;
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 
 public class AbstractReceiptItem extends Item {

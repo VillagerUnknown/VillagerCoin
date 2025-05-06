@@ -1,17 +1,20 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.CopyCountComponent;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CrafterBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.CrafterBlockEntity;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +26,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.COPY_COUNT_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 import static net.minecraft.block.CrafterBlock.CRAFTING;
 import static net.minecraft.block.CrafterBlock.getCraftingRecipe;
 
@@ -75,15 +79,22 @@ public class CrafterBlockMixin {
 						
 						ItemStack existingLedger = null;
 						
+						int receipts = 0;
+						
 						for(ItemStack ingredient : crafterBlockEntity.getHeldStacks()) {
 							if( ingredient.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+								receipts++;
 								ingredientsMap.set( LedgerCraftingFeature.updateIngredientsMap( ingredientsMap, ingredient ) );
 							}  else if( ingredient.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
 								existingLedger = ingredient;
 							} // if, else if
 						} // for
 						
-						LedgerCraftingFeature.updateLedger( itemStack, ingredientsMap, existingLedger );
+						LedgerCraftingFeature.updateLedger( itemStack, ingredientsMap, existingLedger, (receipts == 0) );
+						
+						if( receipts > 0 ) {
+							LedgerCraftingFeature.subtractLedgerFromIngredients( crafterBlockEntity.getHeldStacks(), 1 );
+						} // if
 						
 						LedgerCraftingFeature.subtractCarrierFromIngredients( crafterBlockEntity.getHeldStacks(), 1 );
 						LedgerCraftingFeature.removeReceiptsFromIngredients( crafterBlockEntity.getHeldStacks() );

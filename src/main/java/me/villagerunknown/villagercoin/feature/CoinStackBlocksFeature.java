@@ -13,7 +13,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public class CoinStackBlocksFeature {
 	

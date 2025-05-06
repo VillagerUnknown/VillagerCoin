@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public class ReceiptRecipe extends SpecialCraftingRecipe {
 	
@@ -95,6 +95,6 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return CoinStackCraftingFeature.RECIPE_SERIALIZER;
+		return ReceiptCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

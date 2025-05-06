@@ -21,7 +21,7 @@ import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.COIN_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.COIN_COMPONENT;
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
 public abstract class AbstractFlippableCoinItem extends AbstractCoinItem {

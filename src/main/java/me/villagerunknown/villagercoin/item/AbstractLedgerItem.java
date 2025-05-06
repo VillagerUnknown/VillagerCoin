@@ -15,8 +15,9 @@ import net.minecraft.world.World;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Objects;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class AbstractLedgerItem extends WritableBookItem {
 	
@@ -26,10 +27,18 @@ public class AbstractLedgerItem extends WritableBookItem {
 	
 	@Override
 	public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
-		stack.set( DataComponentTypes.ITEM_NAME, Text.translatable(
-				"item.villagerunknown-villagercoin.ledger.name",
-				player.getNameForScoreboard()
-		) );
+		Text nameComponent = stack.get(DataComponentTypes.ITEM_NAME);
+		Text customNameComponent = stack.get(DataComponentTypes.CUSTOM_NAME);
+		
+		if(
+			(null == nameComponent || Objects.equals( nameComponent, Text.translatable(stack.getTranslationKey()) ))
+			&& null == customNameComponent
+		) {
+			stack.set(DataComponentTypes.ITEM_NAME, Text.translatable(
+					"item.villagerunknown-villagercoin.ledger.name",
+					player.getNameForScoreboard()
+			));
+		} // if
 		
 		super.onCraftByPlayer(stack, world, player);
 	}
@@ -78,6 +87,17 @@ public class AbstractLedgerItem extends WritableBookItem {
 					Text.translatable(
 							"item.villagerunknown-villagercoin.ledger.tooltip.amount",
 							CoinFeature.humanReadableNumber( accumulatingValueComponent.value(), true )
+					).formatted(Formatting.GRAY)
+			);
+		} // if
+		
+		CopyCountComponent copyCountComponent = stack.get( COPY_COUNT_COMPONENT );
+		
+		if( null != copyCountComponent && copyCountComponent.count() > 1 ) {
+			tooltip.add(
+					Text.translatable(
+							"item.villagerunknown-villagercoin.ledger.tooltip.copy",
+							CoinFeature.humanReadableNumber( copyCountComponent.count(), false )
 					).formatted(Formatting.GRAY)
 			);
 		} // if

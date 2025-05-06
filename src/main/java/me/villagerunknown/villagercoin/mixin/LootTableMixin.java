@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Iterator;
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.COLLECTABLE_COMPONENT;
 
 @Mixin(LootTable.class)
 public class LootTableMixin {

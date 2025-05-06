@@ -1,14 +1,17 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.CopyCountComponent;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.*;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.screen.slot.CraftingResultSlot;
+import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +25,8 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.COPY_COUNT_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 @Mixin(CraftingResultSlot.class)
 public class CraftingResultSlotMixin {
@@ -69,6 +73,8 @@ public class CraftingResultSlotMixin {
 				int left = positioned.left();
 				int top = positioned.top();
 				
+				int receipts = 0;
+				
 				for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
 					for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
 						int m = x + left + (y + top) * input.getWidth();
@@ -76,6 +82,7 @@ public class CraftingResultSlotMixin {
 						ItemStack ingredient = this.input.getStack( m );
 						
 						if( ingredient.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+							receipts++;
 							ingredientsMap.set( LedgerCraftingFeature.updateIngredientsMap( ingredientsMap, ingredient, m, x, y ) );
 						}  else if( ingredient.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
 							existingLedger = ingredient;
@@ -83,7 +90,11 @@ public class CraftingResultSlotMixin {
 					} // for
 				} // for
 				
-				LedgerCraftingFeature.updateLedgerFromSlot( stack, ingredientsMap.get(), existingLedger );
+				LedgerCraftingFeature.updateLedgerFromSlot( stack, ingredientsMap.get(), existingLedger, (receipts == 0) );
+				
+				if( receipts > 0 ) {
+					LedgerCraftingFeature.subtractLedgerFromIngredients( this.input, 1 );
+				}  // if
 				
 				LedgerCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
 				LedgerCraftingFeature.removeReceiptsFromIngredients( this.input.getHeldStacks() );

@@ -15,7 +15,7 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public class CoinStackRecipe extends SpecialCraftingRecipe {
 	

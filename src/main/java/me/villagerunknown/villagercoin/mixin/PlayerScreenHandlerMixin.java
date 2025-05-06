@@ -1,11 +1,13 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.CopyCountComponent;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.RecipeInputInventory;
@@ -16,6 +18,7 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -31,7 +34,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.COPY_COUNT_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 @Mixin(PlayerScreenHandler.class)
 public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
@@ -63,7 +67,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 					
 					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
 					
-					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
+					if (!this.insertItem(craftedItemStack, 10, 45, true)) {
 						player.dropItem(craftedItemStack, true);
 					} // if
 					
@@ -83,22 +87,29 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 					
 					ItemStack existingLedger = null;
 					
+					int receipts = 0;
+					
 					for(ItemStack ingredient : this.craftingInput.getHeldStacks()) {
 						if( ingredient.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+							receipts++;
 							ingredientsMap.set( LedgerCraftingFeature.updateIngredientsMap( ingredientsMap, ingredient ) );
 						} else if( ingredient.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
 							existingLedger = ingredient;
 						} // if, else if
 					} // for
 					
-					LedgerCraftingFeature.updateLedger( craftedItemStack, ingredientsMap, existingLedger );
+					LedgerCraftingFeature.updateLedger( craftedItemStack, ingredientsMap, existingLedger, (receipts == 0) );
+					
+					if( receipts > 0 ) {
+						LedgerCraftingFeature.subtractLedgerFromIngredients( this.craftingInput, 1 );
+					}  // if
 					
 					LedgerCraftingFeature.subtractCarrierFromIngredients( this.craftingInput, 1 );
 					LedgerCraftingFeature.removeReceiptsFromIngredients( this.craftingInput.getHeldStacks() );
 					
 					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
 					
-					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
+					if (!this.insertItem(craftedItemStack, 10, 45, true)) {
 						player.dropItem(craftedItemStack, true);
 					} // if
 					

@@ -9,7 +9,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.COLLECTABLE_COMPONENT;
 
 public abstract class AbstractCollectableCoinItem extends AbstractFlippableCoinItem {
 	

@@ -7,8 +7,7 @@ import me.villagerunknown.villagercoin.feature.MobsDropCoinsFeature;
 import me.villagerunknown.villagercoin.feature.StructuresIncludeCoinsFeature;
 import net.minecraft.util.Rarity;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
-import static me.villagerunknown.villagercoin.Villagercoin.LOOT_TABLE_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class CollectableCoinItem extends AbstractCollectableCoinItem {
 	

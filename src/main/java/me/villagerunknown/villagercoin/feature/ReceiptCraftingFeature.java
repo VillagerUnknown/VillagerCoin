@@ -23,7 +23,8 @@ import net.minecraft.util.collection.DefaultedList;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class ReceiptCraftingFeature {
 	
@@ -59,7 +60,7 @@ public class ReceiptCraftingFeature {
 		if( null != customNameComponent ) {
 			message = customNameComponent.getString();
 		} else {
-			message = CONFIG.defaultReceiptThankYouMessage;
+			message = Villagercoin.CONFIG.defaultReceiptThankYouMessage;
 		} // if, else
 		
 		itemStack.set( RECEIPT_MESSAGE_COMPONENT, new ReceiptMessageComponent( message ));

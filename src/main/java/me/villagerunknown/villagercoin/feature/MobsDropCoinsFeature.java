@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class MobsDropCoinsFeature {
 	

@@ -35,26 +35,6 @@ public class Villagercoin implements ModInitializer {
 	public static final int MAX_STACK_COUNT_CAP = 1073741822;
 	public static int MAX_STACK_COUNT = 5000;
 	
-	public static final ComponentType<CoinComponent> COIN_COMPONENT;
-	
-	public static final ComponentType<DropComponent> DROP_COMPONENT;
-	
-	public static final ComponentType<LootTableComponent> LOOT_TABLE_COMPONENT;
-	
-	public static final ComponentType<CurrencyComponent> CURRENCY_COMPONENT;
-	
-	public static final ComponentType<CollectableComponent> COLLECTABLE_COMPONENT;
-	
-	public static final ComponentType<ReceiptValueComponent> RECEIPT_VALUE_COMPONENT;
-	
-	public static final ComponentType<ReceiptMessageComponent> RECEIPT_MESSAGE_COMPONENT;
-	
-	public static final ComponentType<DateComponent> DATE_COMPONENT;
-	
-	public static final ComponentType<UpdatedDateComponent> UPDATED_DATE_COMPONENT;
-	
-	public static final ComponentType<AccumulatingValueComponent> ACCUMULATING_VALUE_COMPONENT;
-	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
 	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
@@ -80,6 +60,9 @@ public class Villagercoin implements ModInitializer {
 	private static void init() {
 		Platform.init_mod( MOD );
 		
+		// # Load Components
+		new Components();
+		
 		// # Activate Features
 		featureManager.addFeature( "coinCrafting", CoinCraftingFeature::execute );
 		featureManager.addFeature( "coinStackCrafting", CoinStackCraftingFeature::execute );
@@ -91,10 +74,6 @@ public class Villagercoin implements ModInitializer {
 		featureManager.addFeature( "structuresIncludeCoins", StructuresIncludeCoinsFeature::execute );
 		featureManager.addFeature( "mobsDropCoins", MobsDropCoinsFeature::execute );
 		featureManager.addFeature( "merchantCoinTrading", MerchantCoinTradingFeature::execute );
-	}
-	
-	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-		return (ComponentType) Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MOD.getModId(), id), ((ComponentType.Builder)builderOperator.apply(ComponentType.builder())).build());
 	}
 	
 	public static TagKey<Item> getItemTagKey(String id ) {
@@ -118,38 +97,5 @@ public class Villagercoin implements ModInitializer {
 			return num2.compareTo(num1);
 		}
 	};
-	
-	static{
-		COIN_COMPONENT = registerComponentType("coin", (builder) -> {
-			return builder.codec(CoinComponent.CODEC).packetCodec(CoinComponent.PACKET_CODEC).cache();
-		});
-		DROP_COMPONENT = registerComponentType("drop", (builder) -> {
-			return builder.codec(DropComponent.CODEC).packetCodec(DropComponent.PACKET_CODEC).cache();
-		});
-		LOOT_TABLE_COMPONENT = registerComponentType("loot_table", (builder) -> {
-			return builder.codec(LootTableComponent.CODEC).packetCodec(LootTableComponent.PACKET_CODEC).cache();
-		});
-		CURRENCY_COMPONENT = registerComponentType("currency", (builder) -> {
-			return builder.codec(CurrencyComponent.CODEC).packetCodec(CurrencyComponent.PACKET_CODEC).cache();
-		});
-		COLLECTABLE_COMPONENT = Villagercoin.registerComponentType("collectable", (builder) -> {
-			return builder.codec(CollectableComponent.CODEC).packetCodec(CollectableComponent.PACKET_CODEC).cache();
-		});
-		RECEIPT_VALUE_COMPONENT = Villagercoin.registerComponentType("receipt_value", (builder) -> {
-			return builder.codec(ReceiptValueComponent.CODEC).packetCodec(ReceiptValueComponent.PACKET_CODEC).cache();
-		});
-		RECEIPT_MESSAGE_COMPONENT = Villagercoin.registerComponentType("receipt_message", (builder) -> {
-			return builder.codec(ReceiptMessageComponent.CODEC).packetCodec(ReceiptMessageComponent.PACKET_CODEC).cache();
-		});
-		DATE_COMPONENT = Villagercoin.registerComponentType("date", (builder) -> {
-			return builder.codec(DateComponent.CODEC).packetCodec(DateComponent.PACKET_CODEC).cache();
-		});
-		UPDATED_DATE_COMPONENT = Villagercoin.registerComponentType("updated_date", (builder) -> {
-			return builder.codec(UpdatedDateComponent.CODEC).packetCodec(UpdatedDateComponent.PACKET_CODEC).cache();
-		});
-		ACCUMULATING_VALUE_COMPONENT = Villagercoin.registerComponentType("accumulating_value", (builder) -> {
-			return builder.codec(AccumulatingValueComponent.CODEC).packetCodec(AccumulatingValueComponent.PACKET_CODEC).cache();
-		});
-	}
 	
 }

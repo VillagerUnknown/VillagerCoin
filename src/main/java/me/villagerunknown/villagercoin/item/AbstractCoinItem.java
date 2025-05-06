@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import java.text.NumberFormat;
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 
 public abstract class AbstractCoinItem extends Item {

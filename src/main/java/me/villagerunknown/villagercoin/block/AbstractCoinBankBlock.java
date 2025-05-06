@@ -26,7 +26,7 @@ import net.minecraft.world.event.GameEvent;
 
 import java.util.Optional;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock {
 	

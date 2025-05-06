@@ -12,8 +12,7 @@ import net.minecraft.util.Rarity;
 
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
-import static me.villagerunknown.villagercoin.Villagercoin.COLLECTABLE_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class InventoryEffectCoinItem extends AbstractInventoryEffectCoinItem {
 	

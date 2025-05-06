@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class LedgerRecipe extends SpecialCraftingRecipe {
 	
@@ -118,6 +118,6 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return CoinStackCraftingFeature.RECIPE_SERIALIZER;
+		return LedgerCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

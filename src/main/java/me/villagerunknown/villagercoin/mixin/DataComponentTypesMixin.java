@@ -1,6 +1,7 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.Components;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
@@ -24,7 +25,7 @@ public class DataComponentTypesMixin {
 	public static final ComponentMap DEFAULT_ITEM_COMPONENTS;
 	
 	@Shadow
-	public static final ComponentType<Integer> MAX_STACK_SIZE = Villagercoin.registerComponentType("max_stack_size", (builder) -> builder.codec(Codecs.rangedInt(1, Integer.MAX_VALUE)).packetCodec(PacketCodecs.VAR_INT));
+	public static final ComponentType<Integer> MAX_STACK_SIZE = Components.registerComponentType("max_stack_size", (builder) -> builder.codec(Codecs.rangedInt(1, Integer.MAX_VALUE)).packetCodec(PacketCodecs.VAR_INT));
 	
 	static {
 		DEFAULT_ITEM_COMPONENTS = ComponentMap.builder().add(MAX_STACK_SIZE, 64).add(DataComponentTypes.LORE, LoreComponent.DEFAULT).add(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT).add(DataComponentTypes.REPAIR_COST, 0).add(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT).add(DataComponentTypes.RARITY, Rarity.COMMON).build();

@@ -20,7 +20,8 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class CoinCraftingFeature {
 	
@@ -144,7 +145,7 @@ public class CoinCraftingFeature {
 			
 			return Math.toIntExact( number );
 		} catch(ArithmeticException e) {
-			LOGGER.warn( e.getMessage() );
+			Villagercoin.LOGGER.warn( e.getMessage() );
 		} // try, catch
 		
 		return 0;
