@@ -18,7 +18,7 @@ import javax.swing.text.NumberFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	

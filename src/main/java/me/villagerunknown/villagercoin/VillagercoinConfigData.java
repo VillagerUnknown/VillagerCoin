@@ -14,20 +14,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int currencyConversionMultiplier = 100;
 	
 	@ConfigEntry.Category("Coins")
-	public int maximumCoinStackSize = 5000;
+	public int maximumCoinStackSize = 1000;
 	
 	@ConfigEntry.Category("Coins")
 	public boolean enableCoinFlipping = true;
 	
 	@ConfigEntry.Category("Coins")
 	public boolean coinsSinkInLiquids = false;
-	
-	/**
-	 * Receipts
-	 */
-	
-	@ConfigEntry.Category("Receipts")
-	public String receiptThankYouMessage  = "Thank you for shopping with us!";
 	
 	/**
 	 * Loot Tables
@@ -160,6 +153,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	
 	@ConfigEntry.Category("Trades")
 	public float chanceDiamondBecomesEmeraldTrade = 0.5F;
+	
+	/**
+	 * Receipts
+	 */
+	
+	@ConfigEntry.Category("Receipts")
+	public String defaultReceiptThankYouMessage  = "Thank you for shopping with us!";
 	
 	/**
 	 * Coin Stacks

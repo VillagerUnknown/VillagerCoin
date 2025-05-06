@@ -12,15 +12,18 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.stat.StatFormatter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public class CoinBankBlocksFeature {
 	
 	public static final String COIN_BANK_STRING = "coin_bank";
+	
+	public static final Identifier COINS_INSERTED_STAT_ID = RegistryUtil.registerStat( "inserted_coins_in_banks", Villagercoin.MOD_ID, StatFormatter.DEFAULT );
 	
 	public static void execute(){}
 	

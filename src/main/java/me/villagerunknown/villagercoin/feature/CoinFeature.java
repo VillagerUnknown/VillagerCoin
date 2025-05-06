@@ -15,6 +15,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Rarity;
 
+import java.text.DecimalFormat;
 import java.util.Set;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
@@ -57,9 +58,52 @@ public class CoinFeature {
 	public static final float EMERALD_FLIP_CHANCE = 1F;
 	public static final float NETHERITE_FLIP_CHANCE = 0F;
 	
+	public static final String[] NUMBER_SUFFIXES = {"k+", "m+", "b+", "t+", "q+", "Q+"};
+	public static final long[] NUMBER_DIVISORS = {
+			1_000L,
+			1_000_000L,
+			1_000_000_000L,
+			1_000_000_000_000L,
+			1_000_000_000_000_000L,
+			1_000_000_000_000_000_000L
+	};
+	
 	public static void execute() {
 		registerItemGroup();
 		new CoinItems();
+	}
+	
+	public static String humanReadableNumber( int number, boolean includeDecimals ) {
+		return humanReadableNumber( (long) number, includeDecimals );
+	}
+	
+	public static String humanReadableNumber( long number, boolean includeDecimals) {
+		if( number >= NUMBER_DIVISORS[0] ) {
+			DecimalFormat df = includeDecimals ? new DecimalFormat("0.##") : new DecimalFormat("0");
+			
+			for (int i = NUMBER_DIVISORS.length - 1; i >= 0; i--) {
+				if (number >= NUMBER_DIVISORS[i]) {
+					double value = (double) number / NUMBER_DIVISORS[i];
+					
+					String formatted = df.format(value);
+					return formatted + NUMBER_SUFFIXES[i];
+				} // if
+			} // for
+		} // if
+		
+		return String.valueOf(number);
+	}
+	
+	public static float humanReadableNumberScale( int digits ) {
+		float scale = 0.8F;
+		
+		if( digits > 4 ) {
+			scale = 0.5F;
+		} else if( digits > 3 ) {
+			scale = 0.6F;
+		} // if, else if
+		
+		return scale;
 	}
 	
 	private static void registerItemGroup() {

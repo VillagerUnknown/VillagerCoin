@@ -2,7 +2,6 @@ package me.villagerunknown.villagercoin.recipe;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
-import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.item.Item;
@@ -17,8 +16,7 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
-import static me.villagerunknown.villagercoin.Villagercoin.RECEIPT_VALUE_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public class ReceiptRecipe extends SpecialCraftingRecipe {
 	
@@ -39,7 +37,7 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 					
 					if( null != currencyComponent ) {
 						containsCurrencyComponent++;
-					} else if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM) ) {
+					} else if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 						containsCarrier++;
 					} else if( !itemStack.isOf( Items.AIR ) ) {
 						return false;
@@ -54,25 +52,38 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 	@Override
 	public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup lookup) {
 		long totalValue = 0;
-		ItemStack returnStack = ItemStack.EMPTY;
-
+		
+		ItemStack carrierStack = null;
+		
 		for(int i = 0; i < craftingRecipeInput.getSize(); ++i) {
 			ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 			
 			if( !itemStack.isEmpty() ) {
-				CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
-				
-				if( null != currencyComponent ) {
-					totalValue += itemStack.getCount() * currencyComponent.value();
-				} // if
+				if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+					carrierStack = itemStack;
+				} else {
+					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
+					
+					if( null != currencyComponent ) {
+						totalValue += itemStack.getCount() * currencyComponent.value();
+					} // if
+				} // if, else
 			} // if
 		} // for
 		
 		HashSet<Item> receiptResults = ReceiptCraftingFeature.getCraftingResultReceipts();
-		returnStack = new ItemStack(receiptResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, receiptResults.size() )), 1);
+		ItemStack returnStack = ItemStack.EMPTY;
 		
-		ReceiptCraftingFeature.setReceiptValue( returnStack, totalValue );
-		ReceiptCraftingFeature.setCraftedDate( returnStack );
+		if( !receiptResults.isEmpty() ) {
+			returnStack = new ItemStack(receiptResults.stream().toList().get((int) MathUtil.getRandomWithinRange( 0, receiptResults.size() )), 1);
+			
+			ReceiptCraftingFeature.setReceiptValue( returnStack, totalValue );
+			ReceiptCraftingFeature.setCraftedDate( returnStack );
+			
+			if( null != carrierStack) {
+				ReceiptCraftingFeature.setReceiptMessage( returnStack, carrierStack);
+			} // if
+		} // if
 		
 		return returnStack;
 	}
@@ -84,6 +95,6 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 	
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return CoinStackCraftingFeature.RECIPE_SERIALIZER;
+		return ReceiptCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

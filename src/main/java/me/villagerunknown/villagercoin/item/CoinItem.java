@@ -15,7 +15,7 @@ import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class CoinItem extends AbstractFlippableCoinItem {
 	

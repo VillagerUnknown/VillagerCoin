@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 import java.util.Optional;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock {
 	

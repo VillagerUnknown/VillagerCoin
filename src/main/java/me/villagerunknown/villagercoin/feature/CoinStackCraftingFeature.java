@@ -20,7 +20,8 @@ import net.minecraft.util.collection.DefaultedList;
 import java.util.*;
 
 import static java.util.Map.entry;
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class CoinStackCraftingFeature {
 	
@@ -49,7 +50,7 @@ public class CoinStackCraftingFeature {
 			FLAT_CRAFTING_RESULT_COIN_STACKS.add( block.asItem() );
 			CRAFTING_RESULT_COIN_STACKS.replace( type, typeMap );
 		} else {
-			LOGGER.warn( "Attempted to register a Coin Stack crafting result with an invalid type provided." );
+			Villagercoin.LOGGER.warn( "Attempted to register a Coin Stack crafting result with an invalid type provided." );
 		} // if, else
 	}
 	

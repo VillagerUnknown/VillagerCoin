@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.text.NumberFormat;
 import java.util.List;
 
-import static me.villagerunknown.villagercoin.Villagercoin.CURRENCY_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implements Waterloggable {
 	

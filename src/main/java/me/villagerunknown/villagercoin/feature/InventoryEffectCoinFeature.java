@@ -20,7 +20,7 @@ import net.minecraft.util.Rarity;
 
 import java.util.*;
 
-import static me.villagerunknown.villagercoin.Villagercoin.COIN_COMPONENT;
+import static me.villagerunknown.villagercoin.component.Components.COIN_COMPONENT;
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
 public class InventoryEffectCoinFeature {

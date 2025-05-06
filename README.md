@@ -17,14 +17,13 @@ Learn how to customize Villager Coin with addon mods and the developer wiki at t
 * Convert between the different coins with the crafting tables.
 * Smelt down Copper, Iron, and Gold coins for their respective resources.
 * Adds advancements for obtaining coins.
-* Adds a craftable Receipt from an item with a currency value, like a stack of coins, coin stack, or coin bank, and a piece of paper. _Only the paper will be consumed. The currency items will not be consumed._
 * Options for fully customizing the coin value, chances, and amounts.
 * Optionally find coins in vanilla structures.
 * Optionally earn coins by killing some vanilla mobs.
 * Optionally earn coins by killing breedable mobs. (For easier coins.)
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 * Optionally allow players to flip individual coins for a heads or tails result in chat.
-* Additional features can be added with addons like Coin Banks, Coin Stacks, custom structures, 
+* Additional features can be added with addons like Receipts, Ledgers, Coin Banks, Coin Stacks, custom structures, 
 and loot integrations with mods like the Graveyards & Ghosts and Better Archeology mods.
 
 ## Coin Currency
@@ -79,12 +78,6 @@ Copper, Iron, and Gold Villager Coins can be smelted down to their respective re
 
 _Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) will only craft once. 
 Use the auto-crafter to convert large amounts of coins._
-
-## Receipts
-
-Players can craft receipts for transactions by placing the payment amount of coins in the crafting table with paper. When a receipt is crafted, the date, amount, and player name will be added to the receipt. Receipts from the same player and date will stack and sum the totals. This is a fun and easy way for multiplayer servers to make transactions feel more realistic.
-
-_Quick-crafting (shift-clicking crafted items to craft the maximum) will work as expected with receipts._
 
 ## Loot Tables
 
@@ -153,6 +146,9 @@ The list of configurable options, and their default values, can be found on the 
 
 ## Add-ons
 
+Additional features can be added with addons like Receipts, Ledgers, Coin Banks, Coin Stacks, custom structures,
+and loot integrations with mods like the Graveyards & Ghosts and Better Archeology mods.
+
 Check out our list of add-ons for Villager Coin at https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons
 
 ## Developer Wiki (WIP)
@@ -184,7 +180,7 @@ Compatibility data packs for the following mods can be found at https://github.c
 
 ### Planned Compatibility
 
-I hope, but cannot garauntee, to provide compatibility with the following mods:
+I hope, but cannot guarantee, to provide compatibility with the following mods:
 
 * JEI
 * Dungeons and Taverns

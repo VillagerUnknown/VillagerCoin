@@ -4,6 +4,7 @@
 
   "text.autoconfig.villagerunknown-villagercoin.category.Coins": "Coins",
   "text.autoconfig.villagerunknown-villagercoin.category.Receipts": "Receipts",
+  "text.autoconfig.villagerunknown-villagercoin.category.Ledgers": "Ledgers",
   "text.autoconfig.villagerunknown-villagercoin.category.EffectCoins": "Effect Coins",
   "text.autoconfig.villagerunknown-villagercoin.category.CollectableCoins": "Collectable Coins",
   "text.autoconfig.villagerunknown-villagercoin.category.EdibleCoins": "Edible Coins",
@@ -88,6 +89,8 @@
   "sound.villagerunknown-villagercoin.coin": "Coins jingle",
   "sound.villagerunknown-villagercoin.coin_flip": "Coin flips",
 
+  "stat.villagerunknown-villagercoin.inserted_coins_in_banks": "Inserted Coins in Banks",
+
   "item.villagerunknown-villagercoin.villager_coin.flip.heads": "%s flipped a coin and it landed heads up.",
   "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",
 
@@ -103,24 +106,39 @@
   "tag.item.villagerunknown-villagercoin.collectable_coin": "Collectable Coin",
   "tag.item.villagerunknown-villagercoin.instant_effect_coin": "Instant Effect Coin",
 
-  "tag.block.villagerunknown-villagercoin.coin_bank": "Coin Bank",
-  "tag.block.villagerunknown-villagercoin.coin_stack": "Coin Stack",
+  "tag.item.villagerunknown-villagercoin.coin_bank": "Coin Bank",
+  "tag.item.villagerunknown-villagercoin.coin_stack": "Coin Stack",
+
+  "tag.block.villagerunknown-villagercoin.currency": "Currency",
+
+  "tag.item.villagerunknown-villagercoin.receipt": "Receipt",
+  "tag.item.villagerunknown-villagercoin.ledger": "Ledgers",
 
   "itemGroup.villagerunknown-villagercoin": "Villager Coin",
-
-  "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s).",
 
   "item.villagerunknown-villagercoin.receipt.tooltip.merchant": "Receipt from %s",
   "item.villagerunknown-villagercoin.receipt.tooltip.date": "Date: %s",
   "item.villagerunknown-villagercoin.receipt.tooltip.value": "Total: %d %s(s)",
+
+  "item.villagerunknown-villagercoin.ledger.name": "Ledger of %s",
+  "item.villagerunknown-villagercoin.ledger.copiedName": "Copied %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.date": "Created: %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.updated": "Updated: %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.pages": "Records: %s",
+  "item.villagerunknown-villagercoin.ledger.tooltip.amount": "Total: %s %s(s)",
+  "item.villagerunknown-villagercoin.ledger.tooltip.original": "Original",
+  "item.villagerunknown-villagercoin.ledger.tooltip.copy": "Copy of original",
+  "item.villagerunknown-villagercoin.ledger.tooltip.copyOfCopy": "Copy of a copy",
+  "item.villagerunknown-villagercoin.ledger.content.date": "Date: %s",
+  "item.villagerunknown-villagercoin.ledger.content.total": "%s\n%s(s)",
+
+  "block.villagerunknown-villagercoin.coin_bank.tooltip": "Value: %d %s(s)",
 
   "item.villagerunknown-villagercoin.copper_villager_coin": "Copper Villager Coin",
   "item.villagerunknown-villagercoin.iron_villager_coin": "Iron Villager Coin",
   "item.villagerunknown-villagercoin.gold_villager_coin": "Gold Villager Coin",
   "item.villagerunknown-villagercoin.emerald_villager_coin": "Emerald Villager Coin",
   "item.villagerunknown-villagercoin.netherite_villager_coin": "Netherite Villager Coin",
-
-  "item.villagerunknown-villagercoin.villager_coin_receipt": "Villager Coin Receipt",
 
   "advancements.villagerunknown-villagercoin.root.title": "Villager Coin",
   "advancements.villagerunknown-villagercoin.root.description": "Accepted by Villagers everywhere",

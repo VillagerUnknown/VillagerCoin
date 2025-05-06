@@ -1,12 +1,9 @@
 package me.villagerunknown.villagercoin.feature;
 
-import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.DateComponent;
+import me.villagerunknown.villagercoin.component.ReceiptMessageComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
-import me.villagerunknown.villagercoin.item.ReceiptItem;
-import me.villagerunknown.villagercoin.item.ReceiptItems;
-import me.villagerunknown.villagercoin.recipe.CoinStackRecipe;
 import me.villagerunknown.villagercoin.recipe.ReceiptRecipe;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,14 +17,14 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class ReceiptCraftingFeature {
 	
@@ -37,24 +34,10 @@ public class ReceiptCraftingFeature {
 	
 	public static RecipeSerializer<ReceiptRecipe> RECIPE_SERIALIZER;
 	
-	public static void execute(){
-		new ReceiptItems();
-	}
+	public static void execute(){}
 	
-	public static Item registerReceipt(String id, Item.Settings settings ) {
-		Item item = RegistryUtil.registerItem( id, new ReceiptItem( settings ), MOD_ID );
-		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
-		
-		return item;
-	}
-	
-	public static Item registerCraftableReceipt(String id, Item.Settings settings ) {
-		Item item = registerReceipt( id, settings );
-		
+	public static void registerCraftingResultReceipt( Item item ) {
 		CRAFTING_RESULT_RECEIPTS.add( item );
-		
-		return item;
 	}
 	
 	public static boolean isCraftingResultReceipt( Item item ) {
@@ -67,6 +50,21 @@ public class ReceiptCraftingFeature {
 	
 	public static ItemStack setReceiptValue( ItemStack itemStack, long totalValue ) {
 		itemStack.set( RECEIPT_VALUE_COMPONENT, new ReceiptValueComponent( totalValue ));
+		return itemStack;
+	}
+	
+	public static ItemStack setReceiptMessage( ItemStack itemStack, ItemStack ingredientStack ) {
+		Text customNameComponent = ingredientStack.get(DataComponentTypes.CUSTOM_NAME);
+		String message = "";
+		
+		if( null != customNameComponent ) {
+			message = customNameComponent.getString();
+		} else {
+			message = Villagercoin.CONFIG.defaultReceiptThankYouMessage;
+		} // if, else
+		
+		itemStack.set( RECEIPT_MESSAGE_COMPONENT, new ReceiptMessageComponent( message ));
+		
 		return itemStack;
 	}
 	

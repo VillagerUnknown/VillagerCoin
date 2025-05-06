@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static me.villagerunknown.villagercoin.Villagercoin.*;
+import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class MobsDropCoinsFeature {
 	
@@ -85,7 +85,6 @@ public class MobsDropCoinsFeature {
 	
 	public static Set<EntityType<?>> NETHERITE_MOB_DROPS = new HashSet<>(Arrays.asList(
 			EntityType.ENDER_DRAGON,
-			EntityType.WARDEN,
 			EntityType.WITHER
 	));
 	
@@ -100,7 +99,8 @@ public class MobsDropCoinsFeature {
 			EntityType.PIGLIN_BRUTE,
 			EntityType.EVOKER,
 			EntityType.VINDICATOR,
-			EntityType.WITHER_SKELETON
+			EntityType.WITHER_SKELETON,
+			EntityType.WARDEN
 	)));
 	
 	public static Set<EntityType<?>> IRON_MOB_DROPS = combineEntityTypes( GOLD_MOB_DROPS, new HashSet<>(Arrays.asList(

@@ -4,11 +4,13 @@
   "package": "me.villagerunknown.villagercoin.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "CodecsMixin",
     "CrafterBlockMixin",
     "CraftingInventoryMixin",
     "CraftingResultInventoryMixin",
     "CraftingResultSlotMixin",
     "CraftingScreenHandlerMixin",
+    "DataComponentTypesMixin",
     "DoubleInventoryMixin",
     "HopperBlockEntityAccessor",
     "HopperBlockEntityMixin",
@@ -20,6 +22,7 @@
     "MerchantInventoryMixin",
     "PlayerInventoryMixin",
     "PlayerScreenHandlerMixin",
+    "ServerPlayerEntityMixin",
     "SimpleInventoryMixin",
     "SlotMixin",
     "TradeOfferMixin"
