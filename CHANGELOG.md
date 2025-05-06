@@ -26,6 +26,7 @@ This value can still be controlled through the config. It will remain at 5000, p
 The recipe will still only consume 1 Coin per Coin Bank. 
 This makes it meaningful to use higher value coins in the recipe.
 - The thank-you message on receipts can now be changed by renaming the paper ingredient with an anvil before crafting the receipt.
+- Changed Warden mob drop from Netherite to Gold as Wardens can easily be farmed in an automated way.
 
 ### Removed
 
