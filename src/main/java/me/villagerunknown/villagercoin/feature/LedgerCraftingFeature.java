@@ -273,22 +273,32 @@ public class LedgerCraftingFeature {
 	}
 	
 	protected static ItemStack writeLedger( Ledger ledger, ItemStack itemStack, @Nullable ItemStack existingLedger, boolean copying ) {
-		DateComponent dateComponent = itemStack.get( DATE_COMPONENT );
-		
-		// Set a date component if one isn't already created
-		if( null == dateComponent ) {
-			itemStack.set(DATE_COMPONENT, new DateComponent(LocalDate.now().toString()));
-		} // if
-		
-		// Always update the updated date component
-		itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( LocalDate.now().toString() ) );
-		
 		// Add pages from ledger object to writable book
 		itemStack.set( DataComponentTypes.WRITABLE_BOOK_CONTENT, new WritableBookContentComponent(
 				ledger.pages.stream().toList()
 		) );
 		
+		String date = LocalDate.now().toString();
+		
 		if( null != existingLedger ) {
+			// # Instructions for existing ledgers (including copying)
+			
+			DateComponent dateComponent = existingLedger.get( DATE_COMPONENT );
+			
+			if( dateComponent != null ) {
+				itemStack.set( DATE_COMPONENT, new DateComponent( dateComponent.date() ) );
+			} // if
+			
+			if( !copying ) {
+				itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( date ) );
+			} else {
+				UpdatedDateComponent updatedDateComponent = existingLedger.get( UPDATED_DATE_COMPONENT );
+				
+				if( null != updatedDateComponent ) {
+					itemStack.set( UPDATED_DATE_COMPONENT, new UpdatedDateComponent( updatedDateComponent.date() ) );
+				} // if
+			} // if, else
+			
 			// Add total value of receipts to ledger total
 			AccumulatingValueComponent accumulatingValueComponent = existingLedger.get(ACCUMULATING_VALUE_COMPONENT);
 			
@@ -301,23 +311,26 @@ public class LedgerCraftingFeature {
 			
 			if( null != copyCountComponent ) {
 				if( copying ) {
-					itemStack.set(COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count() + 1));
+					itemStack.set( COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count() + 1) );
 				} else {
-					itemStack.set(COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count()));
+					itemStack.set( COPY_COUNT_COMPONENT, new CopyCountComponent(copyCountComponent.count()) );
 				} // if, else
-			} else {
-				itemStack.set(COPY_COUNT_COMPONENT, new CopyCountComponent(1));
-			} // if, else
+			} // if
 			
 			// Copy custom name
 			Text customNameComponent = existingLedger.get(DataComponentTypes.CUSTOM_NAME);
 			
 			if (null != customNameComponent) {
-				itemStack.set(DataComponentTypes.CUSTOM_NAME, customNameComponent);
+				itemStack.set( DataComponentTypes.CUSTOM_NAME, customNameComponent );
 			} else if( copying ) {
-				itemStack.set(DataComponentTypes.CUSTOM_NAME, Text.translatable("item.villagerunknown-villagercoin.ledger.copiedName", itemStack.getName().getString()));
+				itemStack.set( DataComponentTypes.CUSTOM_NAME, Text.translatable("item.villagerunknown-villagercoin.ledger.copiedName", itemStack.getName().getString()) );
 			} // if, else
-		} // if
+		} else {
+			// # Instructions for new ledgers
+			
+			// Set a date component
+			itemStack.set( DATE_COMPONENT, new DateComponent( date ) );
+		} // if, else
 		
 		itemStack.set( ACCUMULATING_VALUE_COMPONENT, new AccumulatingValueComponent(ledger.totalAmount.longValue()) );
 		

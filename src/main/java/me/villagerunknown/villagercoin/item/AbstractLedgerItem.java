@@ -86,21 +86,44 @@ public class AbstractLedgerItem extends WritableBookItem {
 			tooltip.add(
 					Text.translatable(
 							"item.villagerunknown-villagercoin.ledger.tooltip.amount",
-							CoinFeature.humanReadableNumber( accumulatingValueComponent.value(), true )
+							CoinFeature.humanReadableNumber( accumulatingValueComponent.value(), true ),
+							CoinItems.COPPER_COIN.getName().getString()
 					).formatted(Formatting.GRAY)
 			);
 		} // if
 		
 		CopyCountComponent copyCountComponent = stack.get( COPY_COUNT_COMPONENT );
 		
-		if( null != copyCountComponent && copyCountComponent.count() > 1 ) {
+		if( null != copyCountComponent ) {
+			int copyCount = copyCountComponent.count();
+			if ( copyCount == 0 ) {
+				tooltip.add(
+						Text.translatable(
+								"item.villagerunknown-villagercoin.ledger.tooltip.original"
+						).formatted(Formatting.GRAY)
+				);
+			} else if ( copyCount == 1 ) {
+				tooltip.add(
+						Text.translatable(
+								"item.villagerunknown-villagercoin.ledger.tooltip.copy",
+								CoinFeature.humanReadableNumber(copyCount, false)
+						).formatted(Formatting.GRAY)
+				);
+			} else if( copyCount > 1 ) {
+				tooltip.add(
+						Text.translatable(
+								"item.villagerunknown-villagercoin.ledger.tooltip.copyOfCopy",
+								CoinFeature.humanReadableNumber(copyCount, false)
+						).formatted(Formatting.GRAY)
+				);
+			} // if, else if
+		} else {
 			tooltip.add(
 					Text.translatable(
-							"item.villagerunknown-villagercoin.ledger.tooltip.copy",
-							CoinFeature.humanReadableNumber( copyCountComponent.count(), false )
+							"item.villagerunknown-villagercoin.ledger.tooltip.original"
 					).formatted(Formatting.GRAY)
 			);
-		} // if
+		} // if, else
 		
 		super.appendTooltip(stack, context, tooltip, options);
 	}
