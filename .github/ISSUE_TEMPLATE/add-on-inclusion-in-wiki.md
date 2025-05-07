@@ -2,13 +2,16 @@
 name: Add-on Inclusion in Wiki
 about: Request an Add-on to be included on the Wiki
 title: "[WIKI] Please include this add-on in the Wiki"
-labels: documentation
+labels: documentation, enhancement
 assignees: ''
 
 ---
 
 **Ownership**
 Who owns this add-on? (Answering, "me," is sufficient.)
+
+**Add-on Downloads**
+Where can the add-on be download from? Please provide the URL's to the project pages.
 
 **Add-on Name**
 What's the name of the add-on?
