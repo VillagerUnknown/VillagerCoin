@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.list.BlocksList;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
@@ -7,11 +8,8 @@ import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -25,16 +23,9 @@ public class CoinBankBlocksFeature {
 	
 	public static final Identifier COINS_INSERTED_STAT_ID = RegistryUtil.registerStat( "inserted_coins_in_banks", Villagercoin.MOD_ID, StatFormatter.DEFAULT );
 	
-	public static void execute(){}
+	public static BlocksList blocks = new BlocksList();
 	
-	public static BlockEntityType<? extends AbstractCurrencyValueBlockEntity> registerCoinBankBlockEntities(BlockEntityType.Builder<? extends AbstractCurrencyValueBlockEntity> builder) {
-		// # Register the Block Entity Types
-		return Registry.register(
-				Registries.BLOCK_ENTITY_TYPE,
-				Identifier.of(Villagercoin.MOD_ID, COIN_BANK_STRING),
-				builder.build()
-		);
-	}
+	public static void execute(){}
 	
 	public static Block registerCoinBankBlock(String id, Block block) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
@@ -42,7 +33,9 @@ public class CoinBankBlocksFeature {
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), Villagercoin.MOD_ID);
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
-
+		
+		blocks.addBlock( registeredBlock );
+		
 		return block;
 	}
 	
@@ -52,6 +45,8 @@ public class CoinBankBlocksFeature {
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), Villagercoin.MOD_ID);
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
+		blocks.addBlock( registeredBlock );
 		
 		return block;
 	}

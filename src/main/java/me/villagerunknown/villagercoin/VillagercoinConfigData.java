@@ -162,6 +162,13 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public String defaultReceiptThankYouMessage  = "Thank you for shopping with us!";
 	
 	/**
+	 * Coin Banks
+	 */
+	
+	@ConfigEntry.Category("CoinBanks")
+	public int maximumCoinBankCurrencyValue = Integer.MAX_VALUE;
+	
+	/**
 	 * Coin Stacks
 	 */
 	

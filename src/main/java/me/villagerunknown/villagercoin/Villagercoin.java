@@ -7,6 +7,7 @@ import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.feature.*;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentType;
@@ -63,17 +64,35 @@ public class Villagercoin implements ModInitializer {
 		// # Load Components
 		new Components();
 		
-		// # Activate Features
+		// # Activate Primary Features
+		featureManager.addFeature( "coin", CoinFeature::execute );
+		
+		featureManager.addFeature( "collectableCoin", CollectableCoinFeature::execute );
+		featureManager.addFeature( "edibleCoin", EdibleCoinFeature::execute );
+		featureManager.addFeature( "inventoryEffectCoin", InventoryEffectCoinFeature::execute );
+		
+		featureManager.addFeature( "receipt", ReceiptFeature::execute );
+		featureManager.addFeature( "ledger", LedgerFeature::execute );
+		
+		featureManager.addFeature( "coinBank", CoinBankBlocksFeature::execute );
+		featureManager.addFeature( "coinStack", CoinStackBlocksFeature::execute );
+		
 		featureManager.addFeature( "coinCrafting", CoinCraftingFeature::execute );
 		featureManager.addFeature( "coinStackCrafting", CoinStackCraftingFeature::execute );
 		featureManager.addFeature( "receiptCrafting", ReceiptCraftingFeature::execute );
 		featureManager.addFeature( "ledgerCrafting", LedgerCraftingFeature::execute );
 		
-		featureManager.addFeature( "coin", CoinFeature::execute );
-		
+		// # Activate Supporting Features
 		featureManager.addFeature( "structuresIncludeCoins", StructuresIncludeCoinsFeature::execute );
 		featureManager.addFeature( "mobsDropCoins", MobsDropCoinsFeature::execute );
 		featureManager.addFeature( "merchantCoinTrading", MerchantCoinTradingFeature::execute );
+		
+		// # Activate Block Entity Loaders
+		featureManager.addFeatureLast( "coinBankBlockEntities", CoinBankBlockEntityFeature::execute );
+		featureManager.addFeatureLast( "coinStackBlockEntities", CoinStackBlockEntityFeature::execute );
+		
+		// # Load Features
+		featureManager.loadFeatures();
 	}
 	
 	public static TagKey<Item> getItemTagKey(String id ) {

@@ -1,17 +1,13 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.list.BlocksList;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
-import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.type.CoinType;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
@@ -31,16 +27,9 @@ public class CoinStackBlocksFeature {
 	public static final long EMERALD_VALUE = CoinFeature.EMERALD_VALUE;
 	public static final long NETHERITE_VALUE = CoinFeature.NETHERITE_VALUE;
 	
-	public static void execute(){}
+	public static BlocksList blocks = new BlocksList();
 	
-	public static BlockEntityType<? extends AbstractCurrencyValueBlockEntity> registerCoinStackBlockEntities(BlockEntityType.Builder<? extends AbstractCurrencyValueBlockEntity> builder) {
-		// # Register the Block Entity Types
-		return Registry.register(
-				Registries.BLOCK_ENTITY_TYPE,
-				Identifier.of(Villagercoin.MOD_ID, COIN_STACK_STRING),
-				builder.build()
-		);
-	}
+	public static void execute(){}
 	
 	public static Block registerCoinStackBlock( String id, Block block, long value ) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
@@ -48,6 +37,8 @@ public class CoinStackBlocksFeature {
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
+		blocks.addBlock( registeredBlock );
 		
 		return block;
 	}
@@ -58,6 +49,8 @@ public class CoinStackBlocksFeature {
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
 		
 		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		
+		blocks.addBlock( registeredBlock );
 		
 		return block;
 	}
