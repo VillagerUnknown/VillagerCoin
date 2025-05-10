@@ -21,14 +21,22 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class MobsDropCoinsFeature {
+	
+	public static final Set<String> highValueCoinKeywords = Set.of(
+			"gold",
+			"diamond",
+			"emerald",
+			"netherite",
+			"wither",
+			"dragon",
+			"boss",
+			"giant"
+	);
 	
 	public static final int COPPER_DROP_MINIMUM = Villagercoin.CONFIG.copperDropMinimum;
 	public static final int IRON_DROP_MINIMUM = Villagercoin.CONFIG.ironDropMinimum;
@@ -175,27 +183,58 @@ public class MobsDropCoinsFeature {
 						
 						EntityType<?> entityType = entity.getType();
 						
+						String path = entityType.getLootTableId().getValue().getPath();
+						
+						Set<Item> items = new HashSet<>();
+						
 						if( MOB_DROPS.containsKey( entityType ) ) {
-							Set<Item> items = MOB_DROPS.get( entityType );
+							// Included Vanilla Entity
+							items = MOB_DROPS.get( entityType );
+						} else if( Villagercoin.CONFIG.addCoinsToModdedMobDrops && !path.contains("minecraft") ) {
+							// Modded Entity
+							Optional<EntityType<?>> commonEntity = IRON_MOB_DROPS.stream().findAny();
 							
-							for (Item item : items) {
-								DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
-								
-								int dropMultiplier = getDropMultiplier( entityType );
-								
-								if( null != dropComponent ) {
-									dropMultiplier = dropComponent.dropChanceMultiplier();
-								} // if
-								
-								coinsToDrop.put( item, dropMultiplier );
-							} // for
+							if( commonEntity.isPresent() ) {
+								items = MOB_DROPS.get(commonEntity.get());
+							} // if
+							
+							Optional<EntityType<?>> rareEntity = GOLD_MOB_DROPS.stream().findAny();
+							
+							if( rareEntity.isPresent() ) {
+								for (String highValueCoinKeyword : highValueCoinKeywords) {
+									if( path.contains( highValueCoinKeyword ) ) {
+										items = MOB_DROPS.get(rareEntity.get());
+										break;
+									} // if
+								} // for
+							} // if
 						} // if
+						
+						coinsToDrop = buildCoinsList( items, entityType );
 						
 						dropCoins( entity, damageSource, coinsToDrop );
 					} // if
 				} // if
 			} // if
 		});
+	}
+	
+	public static HashMap<Item, Integer> buildCoinsList(Set<Item> items, EntityType<?> entityType ) {
+		HashMap<Item, Integer> coinsToDrop = new HashMap<>();
+		
+		for (Item item : items) {
+			DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
+			
+			int dropMultiplier = getDropMultiplier( entityType );
+			
+			if( null != dropComponent ) {
+				dropMultiplier = dropComponent.dropChanceMultiplier();
+			} // if
+			
+			coinsToDrop.put( item, dropMultiplier );
+		} // for
+		
+		return coinsToDrop;
 	}
 	
 	public static void dropCoins(LivingEntity entity, DamageSource damageSource, HashMap<Item, Integer> coins ) {

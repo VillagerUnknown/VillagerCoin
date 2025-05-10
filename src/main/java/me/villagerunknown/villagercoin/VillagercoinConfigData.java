@@ -30,6 +30,9 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public boolean addCoinsToStructureLootTables = true;
 	
 	@ConfigEntry.Category("LootTables")
+	public boolean addCoinsToModdedStructureLootTables = true;
+	
+	@ConfigEntry.Category("LootTables")
 	public int copperLootTableRolls = 10;
 	
 	@ConfigEntry.Category("LootTables")
@@ -65,6 +68,9 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	
 	@ConfigEntry.Category("MobDrops")
 	public boolean addCoinsToMobDrops = true;
+	
+	@ConfigEntry.Category("MobDrops")
+	public boolean addCoinsToModdedMobDrops = true;
 	
 	@ConfigEntry.Category("MobDrops")
 	public boolean enableBreedableMobDrops = false;
