@@ -43,14 +43,14 @@ public class EdibleCoinItem extends AbstractEdibleCoinItem {
 		);
 	}
 	
-	public EdibleCoinItem(Settings settings, int value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects) {
+	public EdibleCoinItem(Settings settings, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects) {
 		super(
 				settings
-						.maxCount( maximumAllowedInServer )
+						.food(foodComponent)
+						.maxCount( Villagercoin.MAX_STACK_COUNT )
 						.component( COIN_COMPONENT, new CoinComponent( rarity, CoinFeature.COPPER_FLIP_CHANCE ) )
 						.component( DROP_COMPONENT, new DropComponent( dropMinimum, dropMaximum, dropChance, dropChanceMultiplier ) )
 						.component( LOOT_TABLE_COMPONENT, new LootTableComponent( lootTableWeight, lootTableRolls ) )
-						.component( CURRENCY_COMPONENT, new CurrencyComponent( value ) )
 						.component( DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffectsComponent( statusEffects ) )
 		);
 	}

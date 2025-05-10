@@ -11,6 +11,7 @@
   "text.autoconfig.villagerunknown-villagercoin.category.LootTables": "Loot Tables",
   "text.autoconfig.villagerunknown-villagercoin.category.MobDrops": "Mob Drops",
   "text.autoconfig.villagerunknown-villagercoin.category.Trades": "Trades",
+  "text.autoconfig.villagerunknown-villagercoin.category.CoinBanks": "Coin Banks",
   "text.autoconfig.villagerunknown-villagercoin.category.CoinStacks": "Coin Stacks",
 
   "text.autoconfig.villagerunknown-villagercoin.option.receiptThankYouMessage": "Receipt Thank You Message",
@@ -84,6 +85,7 @@
   "text.autoconfig.villagerunknown-villagercoin.option.goldForDiamond": "Gold Coins for Diamond Trades",
   "text.autoconfig.villagerunknown-villagercoin.option.goldForEmerald": "Gold Coins for Emerald Trades",
   "text.autoconfig.villagerunknown-villagercoin.option.chanceDiamondBecomesEmeraldTrade": "Chance Diamond Trade Becomes Emerald Trade",
+  "text.autoconfig.villagerunknown-villagercoin.option.maximumCoinBankCurrencyValue": "Maximum Coin Bank Currency Value",
   "text.autoconfig.villagerunknown-villagercoin.option.enableCoinStacksBreakOnCollision": "Enable Coin Stacks Break On Collision",
 
   "sound.villagerunknown-villagercoin.coin": "Coins jingle",
