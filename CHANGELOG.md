@@ -11,7 +11,8 @@ _Add-on developers can register their blocks with Villager Coin and the Feature 
 
 - Added `maximumCoinBankCurrencyValue` option to allow controlling the maximum currency value of Coin Banks. 
 _This option is set to the maximum Integer value by default._
-- Added `addCoinsToModdedStructureLootTables` option to allow forcing coins into loot tables for non-vanilla structures.
+- Added `addCoinsToModdedStructureLootTables` option to allow forcing coins into loot tables for non-vanilla structures. 
+_If a structure's loot table is modified by a data pack this mod will not make any modifications._
 - Added `addCoinsToModdedMobDrops` option to allow forcing coins into loot tables for non-vanilla mobs.
 
 ### Changed
