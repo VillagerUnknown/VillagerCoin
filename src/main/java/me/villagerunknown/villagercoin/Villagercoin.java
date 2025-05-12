@@ -54,11 +54,7 @@ public class Villagercoin implements ModInitializer {
 			MAX_STACK_COUNT = MAX_STACK_COUNT_CAP;
 		} // if
 		
-		// # Initialize Mod
-		init();
-	}
-	
-	private static void init() {
+		// # Initialize mod with Platform
 		Platform.init_mod( MOD );
 		
 		// # Load Components
