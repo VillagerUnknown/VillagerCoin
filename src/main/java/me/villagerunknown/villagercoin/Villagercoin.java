@@ -36,6 +36,8 @@ public class Villagercoin implements ModInitializer {
 	public static final int MAX_STACK_COUNT_CAP = 1073741822;
 	public static int MAX_STACK_COUNT = 5000;
 	
+	private static boolean loaded = false;
+	
 	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
 	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
@@ -54,6 +56,15 @@ public class Villagercoin implements ModInitializer {
 			MAX_STACK_COUNT = MAX_STACK_COUNT_CAP;
 		} // if
 		
+		// Initialize features
+		init();
+	}
+	
+	private static void init() {
+		if( loaded ) {
+			return;
+		} // if
+		
 		// # Initialize mod with Platform
 		Platform.init_mod( MOD );
 		
@@ -63,32 +74,43 @@ public class Villagercoin implements ModInitializer {
 		// # Activate Primary Features
 		featureManager.addFeature( "coin", CoinFeature::execute );
 		
-		featureManager.addFeature( "collectableCoin", CollectableCoinFeature::execute );
-		featureManager.addFeature( "edibleCoin", EdibleCoinFeature::execute );
-		featureManager.addFeature( "inventoryEffectCoin", InventoryEffectCoinFeature::execute );
+		featureManager.addFeature( "collectable-coin", CollectableCoinFeature::execute );
+		featureManager.addFeature( "edible-coin", EdibleCoinFeature::execute );
+		featureManager.addFeature( "inventory-effect-coin", InventoryEffectCoinFeature::execute );
 		
 		featureManager.addFeature( "receipt", ReceiptFeature::execute );
 		featureManager.addFeature( "ledger", LedgerFeature::execute );
 		
-		featureManager.addFeature( "coinBank", CoinBankBlocksFeature::execute );
-		featureManager.addFeature( "coinStack", CoinStackBlocksFeature::execute );
+		featureManager.addFeature( "coin-bank", CoinBankBlocksFeature::execute );
+		featureManager.addFeature( "coin-stack", CoinStackBlocksFeature::execute );
 		
-		featureManager.addFeature( "coinCrafting", CoinCraftingFeature::execute );
-		featureManager.addFeature( "coinStackCrafting", CoinStackCraftingFeature::execute );
-		featureManager.addFeature( "receiptCrafting", ReceiptCraftingFeature::execute );
-		featureManager.addFeature( "ledgerCrafting", LedgerCraftingFeature::execute );
+		featureManager.addFeature( "coin-crafting", CoinCraftingFeature::execute );
+		featureManager.addFeature( "coin-bank-crafting", CoinBankCraftingFeature::execute );
+		featureManager.addFeature( "coin-stack-crafting", CoinStackCraftingFeature::execute );
+		featureManager.addFeature( "receipt-crafting", ReceiptCraftingFeature::execute );
+		featureManager.addFeature( "ledger-crafting", LedgerCraftingFeature::execute );
 		
 		// # Activate Supporting Features
-		featureManager.addFeature( "structuresIncludeCoins", StructuresIncludeCoinsFeature::execute );
-		featureManager.addFeature( "mobsDropCoins", MobsDropCoinsFeature::execute );
-		featureManager.addFeature( "merchantCoinTrading", MerchantCoinTradingFeature::execute );
+		featureManager.addFeature( "structures-include-coins", StructuresIncludeCoinsFeature::execute );
+		featureManager.addFeature( "mobs-drop-coins", MobsDropCoinsFeature::execute );
+		featureManager.addFeature( "merchant-coin-trading", MerchantCoinTradingFeature::execute );
 		
 		// # Activate Block Entity Loaders
-		featureManager.addFeatureLast( "coinBankBlockEntities", CoinBankBlockEntityFeature::execute );
-		featureManager.addFeatureLast( "coinStackBlockEntities", CoinStackBlockEntityFeature::execute );
+		featureManager.addFeatureLast( "coin-bank-block-entities", CoinBankBlockEntityFeature::execute );
+		featureManager.addFeatureLast( "coin-stack-block-entities", CoinStackBlockEntityFeature::execute );
 		
 		// # Load Features
 		featureManager.loadFeatures();
+		
+		loaded = true;
+	}
+	
+	public static void load() {
+		if( loaded ) {
+			return;
+		} // if
+		
+		init();
 	}
 	
 	public static TagKey<Item> getItemTagKey(String id ) {

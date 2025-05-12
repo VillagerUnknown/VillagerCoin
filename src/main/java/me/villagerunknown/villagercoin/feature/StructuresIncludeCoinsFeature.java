@@ -27,7 +27,8 @@ public class StructuresIncludeCoinsFeature {
 			"reward",
 			"buried",
 			"cache",
-			"stash"
+			"stash",
+			"bonus"
 	);
 	
 	public static final int COPPER_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.copperLootTableRolls;
