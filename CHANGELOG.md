@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [1.0.8]
 
 This update resolves issues with add-ons registering the same Block Entity by implementing a queue system in Platform's Feature Manager. 
-_Add-on developers can register their blocks with Villager Coin and the Feature Manager will register them with their Block Entity at the end of feature initialization._
+_Add-on developers can register their blocks with Villager Coin and the Feature Manager from Platform will register them with their Block Entity at the end of feature initialization._
 
 ### Added
 
@@ -17,11 +17,13 @@ _If a structure's loot table is modified by a data pack this mod will not make a
 
 ### Changed
 
+- Moved coin registrations for mob drops to Entity Type tags.
 - Changed supported Platform version to 1.2.4. _This adds queues to the Feature Manager._
 
 ### Fixed
 
 - Add-ons now properly load shared block entities as intended.
+- ItemStacks in Merchant Trades now properly maintain their components.
 
 ## [1.0.7]
 
