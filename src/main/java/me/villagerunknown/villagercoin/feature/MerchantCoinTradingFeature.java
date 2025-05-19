@@ -4,9 +4,13 @@ import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.VillagerUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.item.CoinItems;
+import net.minecraft.component.Component;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Pair;
 import net.minecraft.village.TradedItem;
 
@@ -186,18 +190,22 @@ public class MerchantCoinTradingFeature {
 	}
 	
 	public static TradedItem replaceEmeraldsInTradedItem( TradedItem tradedItem, Item coin ) {
-		ItemStack replacedStack = replaceEmeraldsInItemStack( tradedItem.itemStack(), coin );
-		return new TradedItem( replacedStack.getItem(), replacedStack.getCount() );
+		if( tradedItem.itemStack().getItem().equals( Items.EMERALD ) ) {
+			ItemStack replacedStack = replaceEmeraldsInItemStack(tradedItem.itemStack(), coin);
+			return new TradedItem(replacedStack.getItem(), replacedStack.getCount());
+		} // if
+		
+		return tradedItem;
 	}
 	
 	public static ItemStack replaceEmeraldsInItemStack( ItemStack itemStack, Item coin ) {
-		int amount = itemStack.getCount();
-		
-		if( coin.equals( CoinItems.GOLD_COIN ) ) {
-			amount = MerchantCoinTradingFeature.getModifiedAmount( amount, Villagercoin.CONFIG.goldCoinSellItemDivisor, Villagercoin.CONFIG.goldCoinSellItemMaximum );
-		} // if
-		
 		if( itemStack.getItem().equals( Items.EMERALD ) ) {
+			int amount = itemStack.getCount();
+			
+			if( coin.equals( CoinItems.GOLD_COIN ) ) {
+				amount = MerchantCoinTradingFeature.getModifiedAmount( amount, Villagercoin.CONFIG.goldCoinSellItemDivisor, Villagercoin.CONFIG.goldCoinSellItemMaximum );
+			} // if
+		
 			itemStack = new ItemStack( coin, amount );
 		} // if
 		
@@ -220,15 +228,15 @@ public class MerchantCoinTradingFeature {
 	}
 	
 	public static ModifiedTrade modifyTrade( TradedItem firstBuyItem, Optional<TradedItem> secondBuyItem, ItemStack sellItem, Item coin ) {
-		firstBuyItem = MerchantCoinTradingFeature.replaceEmeraldsInTradedItem( firstBuyItem, coin );
+		firstBuyItem = replaceEmeraldsInTradedItem( firstBuyItem, coin );
 		
 		if( secondBuyItem.isPresent() ) {
-			secondBuyItem = Optional.of( MerchantCoinTradingFeature.replaceEmeraldsInTradedItem( secondBuyItem.get(), coin ) );
+			secondBuyItem = Optional.of( replaceEmeraldsInTradedItem( secondBuyItem.get(), coin ) );
 		} // if
 		
-		sellItem = MerchantCoinTradingFeature.replaceEmeraldsInItemStack( sellItem, coin );
+		sellItem = replaceEmeraldsInItemStack( sellItem, coin );
 		
-		Pair<TradedItem, ItemStack> modifiedDiamondTrade = MerchantCoinTradingFeature.modifyDiamondTrade( firstBuyItem, sellItem );
+		Pair<TradedItem, ItemStack> modifiedDiamondTrade = modifyDiamondTrade( firstBuyItem, sellItem );
 		
 		firstBuyItem = modifiedDiamondTrade.getLeft();
 		sellItem = modifiedDiamondTrade.getRight();

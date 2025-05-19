@@ -122,11 +122,10 @@ public class CoinFeature {
 		return item;
 	}
 	
-	public static Item registerCoinItem(String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+	public static Item registerCoinItem(String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables, Item.Settings settings ) {
 		Item item = registerCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
-		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
 		return item;
 	}
@@ -135,8 +134,8 @@ public class CoinFeature {
 		return registerCraftableCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, new Item.Settings() );
 	}
 	
-	public static Item registerCraftableCoinItem( String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
-		return registerCraftableCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, lootTables, entityDrops, new Item.Settings() );
+	public static Item registerCraftableCoinItem( String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables ) {
+		return registerCraftableCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, lootTables, new Item.Settings() );
 	}
 	
 	public static Item registerCraftableCoinItem( String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Item.Settings settings ) {
@@ -147,11 +146,10 @@ public class CoinFeature {
 		return item;
 	}
 	
-	public static Item registerCraftableCoinItem( String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+	public static Item registerCraftableCoinItem( String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables, Item.Settings settings ) {
 		Item item = registerCraftableCoinItem( id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
-		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
 		return item;
 	}

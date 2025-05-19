@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:wandering_trader",
+    "minecraft:warden",
+    "minecraft:wither_skeleton",
+    "minecraft:vindicator",
+    "minecraft:evoker",
+    "minecraft:elder_guardian",
+    "minecraft:illusioner",
+    "minecraft:piglin",
+    "minecraft:piglin_brute",
+    "minecraft:shulker",
+    "minecraft:ender_dragon",
+    "minecraft:wither"
+  ]
+}

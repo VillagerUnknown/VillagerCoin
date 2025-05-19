@@ -43,12 +43,12 @@ public class EdibleCoinFeature {
 		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, new Item.Settings() );
 	}
 	
-	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
-		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, lootTables, entityDrops, new Item.Settings() );
+	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables ) {
+		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, lootTables, new Item.Settings() );
 	}
 	
-	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> stewEffects ) {
-		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, lootTables, entityDrops, stewEffects, new Item.Settings() );
+	public static Item registerEdibleCoinItem( String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, List<SuspiciousStewEffectsComponent.StewEffect> stewEffects ) {
+		return registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, lootTables, stewEffects, new Item.Settings() );
 	}
 	
 	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Item.Settings settings ) {
@@ -67,20 +67,18 @@ public class EdibleCoinFeature {
 		return item;
 	}
 	
-	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> stewEffects, Item.Settings settings ) {
+	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, List<SuspiciousStewEffectsComponent.StewEffect> stewEffects, Item.Settings settings ) {
 		Item item = registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, stewEffects, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
-		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
 		return item;
 	}
 	
-	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+	public static Item registerEdibleCoinItem(String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Set<RegistryKey<LootTable>> lootTables, Item.Settings settings ) {
 		Item item = registerEdibleCoinItem( id, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
-		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
 		return item;
 	}
