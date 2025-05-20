@@ -31,40 +31,44 @@ public class CoinStackBlocksFeature {
 	
 	public static void execute(){}
 	
-	public static Block registerCoinStackBlock( String id, Block block, long value ) {
-		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
+	public static void addBlock( Block block ) {
+		blocks.addBlock( block );
+	}
+	
+	public static Block registerCoinStackBlock( String namespace, String id, Block block, long value ) {
+		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), namespace);
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		Villagercoin.addItemToGroup( item );
 		
-		blocks.addBlock( registeredBlock );
+		addBlock( registeredBlock );
 		
 		return block;
 	}
 	
-	public static Block registerFireproofCoinStackBlock( String id, Block block, long value ) {
-		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
+	public static Block registerFireproofCoinStackBlock( String namespace, String id, Block block, long value ) {
+		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), Villagercoin.MOD_ID);
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), namespace);
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		Villagercoin.addItemToGroup( item );
 		
-		blocks.addBlock( registeredBlock );
+		addBlock( registeredBlock );
 		
 		return block;
 	}
 	
-	public static Block registerCraftableCoinStackBlock( CoinType type, String id, Block block, long value ) {
-		Block registeredBlock = registerCoinStackBlock( id, block, value );
+	public static Block registerCraftableCoinStackBlock( CoinType type, String namespace, String id, Block block, long value ) {
+		Block registeredBlock = registerCoinStackBlock( namespace, id, block, value );
 		
 		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, registeredBlock, value );
 		
 		return block;
 	}
 	
-	public static Block registerCraftableFireproofCoinStackBlock( CoinType type, String id, Block block, long value ) {
-		Block registeredBlock = registerFireproofCoinStackBlock( id, block, value );
+	public static Block registerCraftableFireproofCoinStackBlock( CoinType type, String namespace, String id, Block block, long value ) {
+		Block registeredBlock = registerFireproofCoinStackBlock( namespace, id, block, value );
 		
 		CoinStackCraftingFeature.registerCraftingResultCoinStack( type, registeredBlock, value );
 		

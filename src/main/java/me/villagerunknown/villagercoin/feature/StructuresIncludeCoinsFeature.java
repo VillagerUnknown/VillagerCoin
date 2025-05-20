@@ -31,6 +31,13 @@ public class StructuresIncludeCoinsFeature {
 			"bonus"
 	);
 	
+	public static final Set<String> moddedLootTableKeywords = Set.of(
+			"chest",
+			"archeology",
+			"gameplay",
+			"pot"
+	);
+	
 	public static final int COPPER_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.copperLootTableRolls;
 	public static final int IRON_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.ironLootTableRolls;
 	public static final int GOLD_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.goldLootTableRolls;
@@ -186,37 +193,49 @@ public class StructuresIncludeCoinsFeature {
 					// Modded Loot Table
 					LootPool.Builder poolBuilder = LootPool.builder();
 					
-					Set<Item> items = new HashSet<>();
+					String path = registryKey.getValue().getPath();
 					
-					Optional<RegistryKey<LootTable>> commonLootTable = IRON_LOOT_TABLES.stream().findAny();
-					
-					if( commonLootTable.isPresent() ) {
-						items = LOOT_TABLES.get( commonLootTable.get() );
-					} // if
-					
-					Optional<RegistryKey<LootTable>> rareLootTable = GOLD_LOOT_TABLES.stream().findAny();
-					
-					if( rareLootTable.isPresent() ) {
-						String path = registryKey.getValue().getPath();
+					if( moddedLootTableContainsKeyword( path ) ) {
+						Set<Item> items = new HashSet<>();
 						
-						for (String goldCoinKeyword : highValueCoinKeywords) {
-							if (path.contains(goldCoinKeyword)) {
-								items = LOOT_TABLES.get( rareLootTable.get() );
-								break;
-							} // if
-						} // for
-					} // if
-					
-					if( !items.isEmpty() ) {
-						for (Item item : items) {
-							buildLootPool(poolBuilder, item);
-						} // for
+						Optional<RegistryKey<LootTable>> commonLootTable = IRON_LOOT_TABLES.stream().findAny();
 						
-						lootBuilder.pool(poolBuilder);
+						if (commonLootTable.isPresent()) {
+							items = LOOT_TABLES.get(commonLootTable.get());
+						} // if
+						
+						Optional<RegistryKey<LootTable>> rareLootTable = GOLD_LOOT_TABLES.stream().findAny();
+						
+						if (rareLootTable.isPresent()) {
+							for (String goldCoinKeyword : highValueCoinKeywords) {
+								if (path.contains(goldCoinKeyword)) {
+									items = LOOT_TABLES.get(rareLootTable.get());
+									break;
+								} // if
+							} // for
+						} // if
+						
+						if (!items.isEmpty()) {
+							for (Item item : items) {
+								buildLootPool(poolBuilder, item);
+							} // for
+							
+							lootBuilder.pool(poolBuilder);
+						} // if
 					} // if
 				} // if
 			} // if
 		});
+	}
+	
+	private static boolean moddedLootTableContainsKeyword(String path ) {
+		for(String moddedLootTableKeyword : moddedLootTableKeywords) {
+			if( path.contains( moddedLootTableKeyword ) ) {
+				return true;
+			} // if
+		} // for
+		
+		return false;
 	}
 	
 	private static void buildLootPool( LootPool.Builder poolBuilder, Item item ) {

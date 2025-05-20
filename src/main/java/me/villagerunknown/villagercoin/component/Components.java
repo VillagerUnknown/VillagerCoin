@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 import java.util.function.UnaryOperator;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD;
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
 public class Components {
 	
@@ -34,7 +35,7 @@ public class Components {
 	public static final ComponentType<CopyCountComponent> COPY_COUNT_COMPONENT;
 	
 	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-		return (ComponentType) Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MOD.getModId(), id), ((ComponentType.Builder)builderOperator.apply(ComponentType.builder())).build());
+		return (ComponentType) Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MOD_ID, id), ((ComponentType.Builder)builderOperator.apply(ComponentType.builder())).build());
 	}
 	
 	static{

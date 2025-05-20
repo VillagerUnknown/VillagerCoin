@@ -66,8 +66,46 @@ public class MobsDropCoinsFeature {
 	public static final int EMERALD_DROP_MULTIPLIER = Villagercoin.CONFIG.emeraldDropMultiplier;
 	public static final int NETHERITE_DROP_MULTIPLIER = Villagercoin.CONFIG.netheriteDropMultiplier;
 	
+	public static HashMap<EntityType<?>, Set<Item>> MOB_DROPS = new HashMap<>();
+	
+	public static Set<Item> COPPER_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> IRON_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> GOLD_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> EMERALD_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> NETHERITE_COIN_DROPS = new HashSet<>();
+	
 	public static void execute(){
+		addDefaultCoinDrops();
 		registerMobDropsEvent();
+	}
+	
+	private static void addDefaultCoinDrops() {
+		addCoinToDropList( CoinItems.COPPER_COIN, COPPER_COIN_DROPS );
+		addCoinToDropList( CoinItems.IRON_COIN, IRON_COIN_DROPS );
+		addCoinToDropList( CoinItems.GOLD_COIN, GOLD_COIN_DROPS );
+		addCoinToDropList( CoinItems.EMERALD_COIN, EMERALD_COIN_DROPS );
+		addCoinToDropList( CoinItems.NETHERITE_COIN, NETHERITE_COIN_DROPS );
+	}
+	
+	public static void addCoinToMobDrops( Item coin, Set<EntityType<?>> entityTypes ) {
+		for (EntityType<?> entityType : entityTypes) {
+			if( !MOB_DROPS.containsKey( entityType ) ) {
+				MOB_DROPS.put( entityType, new HashSet<>() );
+			} // if
+			
+			Set<Item> coins = MOB_DROPS.get( entityType );
+			coins.add( coin );
+			
+			MOB_DROPS.replace( entityType, coins );
+		} // for
+	}
+	
+	public static void addCoinToDropList( Item coin, Set<Item> list ) {
+		list.add( coin );
 	}
 	
 	private static void registerMobDropsEvent() {
@@ -77,11 +115,14 @@ public class MobsDropCoinsFeature {
 					if( damageSource.getAttacker().isPlayer() ) {
 						EntityType<?> entityType = entity.getType();
 						
+						String namespace = entityType.getLootTableId().getValue().getNamespace();
 						String path = entityType.getLootTableId().getValue().getPath();
 						
 						Set<Item> items = new HashSet<>();
 						
-						if( path.contains("minecraft") ) {
+						boolean isVanilla = namespace.contains("minecraft");
+						
+						if( isVanilla ) {
 							// # Included Vanilla Entity
 							
 							// Copper & Optionals
@@ -93,29 +134,34 @@ public class MobsDropCoinsFeature {
 										&& entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "optional" ) ) )
 									)
 							) {
-								items.add( CoinItems.COPPER_COIN );
+								items.addAll( COPPER_COIN_DROPS );
 							} // if
 							
 							// Iron
 							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "iron" ) ) ) ) {
-								items.add( CoinItems.IRON_COIN );
+								items.addAll( IRON_COIN_DROPS );
 							} // if
 							
 							// Gold
 							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "gold" ) ) ) ) {
-								items.add( CoinItems.GOLD_COIN );
+								items.addAll( GOLD_COIN_DROPS );
 							} // if
 							
 							// Emerald
 							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "emerald" ) ) ) ) {
-								items.add( CoinItems.EMERALD_COIN );
+								items.addAll( EMERALD_COIN_DROPS );
 							} // if
 							
 							// Netherite
 							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "netherite" ) ) ) ) {
-								items.add( CoinItems.NETHERITE_COIN );
+								items.addAll( NETHERITE_COIN_DROPS );
 							} // if
-						} else if( Villagercoin.CONFIG.addCoinsToModdedMobDrops ) {
+							
+							// Specifics
+							if( MOB_DROPS.containsKey( entityType ) ) {
+								items.addAll( MOB_DROPS.get( entityType ) );
+							} // if
+						} else if( !isVanilla && Villagercoin.CONFIG.addCoinsToModdedMobDrops ) {
 							// # Modded Entity
 							items.add( CoinItems.COPPER_COIN );
 							items.add( CoinItems.IRON_COIN );

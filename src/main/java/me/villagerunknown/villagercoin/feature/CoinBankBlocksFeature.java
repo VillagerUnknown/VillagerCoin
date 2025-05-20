@@ -27,26 +27,30 @@ public class CoinBankBlocksFeature {
 	
 	public static void execute(){}
 	
-	public static Block registerCoinBankBlock(String id, Block block) {
-		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
+	public static void addBlock( Block block ) {
+		blocks.addBlock( block );
+	}
+	
+	public static Block registerCoinBankBlock( String namespace, String id, Block block) {
+		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), Villagercoin.MOD_ID);
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), namespace);
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		Villagercoin.addItemToGroup( item );
 		
-		blocks.addBlock( registeredBlock );
+		addBlock( registeredBlock );
 		
 		return block;
 	}
 	
-	public static Block registerFireproofCoinBankBlock(String id, Block block) {
-		Block registeredBlock = RegistryUtil.registerBlock( id, block, Villagercoin.MOD_ID );
+	public static Block registerFireproofCoinBankBlock( String namespace, String id, Block block) {
+		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), Villagercoin.MOD_ID);
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), namespace);
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, item );
+		Villagercoin.addItemToGroup( item );
 		
-		blocks.addBlock( registeredBlock );
+		addBlock( registeredBlock );
 		
 		return block;
 	}

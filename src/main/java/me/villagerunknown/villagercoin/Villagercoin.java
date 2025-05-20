@@ -3,14 +3,13 @@ package me.villagerunknown.villagercoin;
 import me.villagerunknown.platform.Platform;
 import me.villagerunknown.platform.PlatformMod;
 import me.villagerunknown.platform.manager.featureManager;
+import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.feature.*;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.block.Block;
-import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -24,14 +23,13 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 
 import java.util.Comparator;
-import java.util.function.UnaryOperator;
 
 public class Villagercoin implements ModInitializer {
 	
-	public static PlatformMod<VillagercoinConfigData> MOD = Platform.register( "villagercoin", Villagercoin.class, VillagercoinConfigData.class );
-	public static String MOD_ID = MOD.getModId();
-	public static Logger LOGGER = MOD.getLogger();
-	public static VillagercoinConfigData CONFIG = MOD.getConfig();
+	public static final PlatformMod<VillagercoinConfigData> MOD = Platform.register( "villagercoin", Villagercoin.class, VillagercoinConfigData.class );
+	public static final String MOD_ID = MOD.getModId();
+	public static final Logger LOGGER = MOD.getLogger();
+	public static final VillagercoinConfigData CONFIG = MOD.getConfig();
 	
 	public static final int MAX_STACK_COUNT_CAP = 1073741822;
 	public static int MAX_STACK_COUNT = 5000;
@@ -72,7 +70,10 @@ public class Villagercoin implements ModInitializer {
 		new Components();
 		
 		// # Activate Primary Features
+		featureManager.addFeature( "villagercoin-item-group", CustomItemGroupFeature::execute );
+		
 		featureManager.addFeature( "coin", CoinFeature::execute );
+		featureManager.addFeature( "coin-crafting", CoinCraftingFeature::execute );
 		
 		featureManager.addFeature( "collectable-coin", CollectableCoinFeature::execute );
 		featureManager.addFeature( "edible-coin", EdibleCoinFeature::execute );
@@ -80,15 +81,13 @@ public class Villagercoin implements ModInitializer {
 		
 		featureManager.addFeature( "receipt", ReceiptFeature::execute );
 		featureManager.addFeature( "ledger", LedgerFeature::execute );
+		featureManager.addFeature( "receipt-crafting", ReceiptCraftingFeature::execute );
+		featureManager.addFeature( "ledger-crafting", LedgerCraftingFeature::execute );
 		
 		featureManager.addFeature( "coin-bank", CoinBankBlocksFeature::execute );
 		featureManager.addFeature( "coin-stack", CoinStackBlocksFeature::execute );
-		
-		featureManager.addFeature( "coin-crafting", CoinCraftingFeature::execute );
 		featureManager.addFeature( "coin-bank-crafting", CoinBankCraftingFeature::execute );
 		featureManager.addFeature( "coin-stack-crafting", CoinStackCraftingFeature::execute );
-		featureManager.addFeature( "receipt-crafting", ReceiptCraftingFeature::execute );
-		featureManager.addFeature( "ledger-crafting", LedgerCraftingFeature::execute );
 		
 		// # Activate Supporting Features
 		featureManager.addFeature( "structures-include-coins", StructuresIncludeCoinsFeature::execute );
@@ -119,6 +118,10 @@ public class Villagercoin implements ModInitializer {
 	
 	public static TagKey<Block> getBlockTagKey(String id ) {
 		return TagKey.of( RegistryKeys.BLOCK, Identifier.of(MOD_ID, id) );
+	}
+	
+	public static void addItemToGroup( Item item ) {
+		RegistryUtil.addItemToGroup( ITEM_GROUP_KEY, item );
 	}
 	
 	public static Comparator<Integer> reverseSort = new Comparator<Integer>() {

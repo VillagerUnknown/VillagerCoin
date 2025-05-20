@@ -14,7 +14,7 @@
   "text.autoconfig.villagerunknown-villagercoin.category.CoinBanks": "Coin Banks",
   "text.autoconfig.villagerunknown-villagercoin.category.CoinStacks": "Coin Stacks",
 
-  "text.autoconfig.villagerunknown-villagercoin.option.receiptThankYouMessage": "Receipt Thank You Message",
+  "text.autoconfig.villagerunknown-villagercoin.option.defaultReceiptThankYouMessage": "Default Receipt Thank You Message",
   "text.autoconfig.villagerunknown-villagercoin.option.currencyConversionMultiplier": "Currency Conversion Multiplier",
   "text.autoconfig.villagerunknown-villagercoin.option.copperDropMinimum": "Minimum Copper Drop Amount",
   "text.autoconfig.villagerunknown-villagercoin.option.ironDropMinimum": "Minimum Iron Drop Amount",
