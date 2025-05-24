@@ -14,16 +14,19 @@ _This option is set to the maximum Integer value by default._
 - Added `addCoinsToModdedStructureLootTables` option to allow forcing coins into loot tables for non-vanilla structures. 
 _If a structure's loot table is modified by a data pack this mod will not make any modifications._
 - Added `addCoinsToModdedMobDrops` option to allow forcing coins into loot tables for non-vanilla mobs.
+- Added additional keyword configuration files for inclusion of coins in modded loot tables and mob drops.
 
 ### Changed
 
-- Moved coin registrations for mob drops to Entity Type tags.
+- Moved coin registrations for mob drops to Entity Type tags. _This allows datapacks to add coins to entities._
 - Changed supported Platform version to 1.2.4. _This adds queues to the Feature Manager._
 
 ### Fixed
 
-- Add-ons now properly load shared block entities as intended.
+- Add-ons now properly load shared block entities as intended. 
+_Coin Banks and Coin Stacks are now added to lists at registration and included in the Block Entity registration at the end of Platform's Feature Manager's loading queue._
 - ItemStacks in Merchant Trades now properly maintain their components.
+- Coins now drop appropriate amounts depending on the type of mob.
 
 ## [1.0.7]
 
