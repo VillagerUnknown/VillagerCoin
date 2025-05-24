@@ -32,7 +32,7 @@ public class Villagercoin implements ModInitializer {
 	public static final VillagercoinConfigData CONFIG = MOD.getConfig();
 	
 	public static final int MAX_STACK_COUNT_CAP = 1073741822;
-	public static int MAX_STACK_COUNT = 5000;
+	public static int MAX_STACK_COUNT = CONFIG.maximumCoinStackSize;
 	
 	private static boolean loaded = false;
 	
@@ -45,8 +45,6 @@ public class Villagercoin implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
-		MAX_STACK_COUNT = CONFIG.maximumCoinStackSize;
-		
 		if( CONFIG.maximumCoinStackSize > MAX_STACK_COUNT_CAP ) {
 			Villagercoin.LOGGER.warn( "Maximum Coin Stack Size exceeds limit of " + MAX_STACK_COUNT_CAP );
 			Villagercoin.LOGGER.info( "Maximum Coin Stack Size has been set to: " + MAX_STACK_COUNT_CAP );
