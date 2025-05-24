@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.builder.StringsListBuilder;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CollectableComponent;
@@ -16,12 +17,13 @@ import net.minecraft.registry.RegistryKey;
 
 import java.util.*;
 
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.*;
 import static net.minecraft.loot.LootTables.*;
 
 public class StructuresIncludeCoinsFeature {
 	
-	public static final Set<String> highValueCoinKeywords = Set.of(
+	public static final List<String> HIGH_VALUE_COIN_KEYWORDS = List.of(
 			"gold",
 			"treasure",
 			"reward",
@@ -31,12 +33,14 @@ public class StructuresIncludeCoinsFeature {
 			"bonus"
 	);
 	
-	public static final Set<String> moddedLootTableKeywords = Set.of(
+	public static final List<String> MODDED_LOOT_TABLE_KEYWORDS = List.of(
 			"chest",
-			"archeology",
 			"gameplay",
 			"pot"
 	);
+	
+	public static StringsListBuilder highValueCoinKeywords = new StringsListBuilder( MOD_ID + "-high-value-keywords-structures.json", HIGH_VALUE_COIN_KEYWORDS );
+	public static StringsListBuilder moddedLootTableKeywords = new StringsListBuilder( MOD_ID + "-loot-table-keywords-modded.json", MODDED_LOOT_TABLE_KEYWORDS );
 	
 	public static final int COPPER_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.copperLootTableRolls;
 	public static final int IRON_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.ironLootTableRolls;
@@ -178,6 +182,9 @@ public class StructuresIncludeCoinsFeature {
 	private static void registerLootTableEvent() {
 		LootTableEvents.MODIFY.register((registryKey, lootBuilder, lootTableSource, registryWrapper) -> {
 			if( lootTableSource.isBuiltin() ) {
+				String namespace = registryKey.getValue().getNamespace();
+				boolean isVillagerCoin = namespace.equals( MOD_ID );
+				
 				if( Villagercoin.CONFIG.addCoinsToStructureLootTables && LOOT_TABLES.containsKey( registryKey ) ) {
 					// Included Vanilla Loot Table
 					LootPool.Builder poolBuilder = LootPool.builder();
@@ -189,7 +196,7 @@ public class StructuresIncludeCoinsFeature {
 					} // for
 					
 					lootBuilder.pool(poolBuilder);
-				} else if( Villagercoin.CONFIG.addCoinsToModdedStructureLootTables && lootTableSource != LootTableSource.VANILLA ) {
+				} else if( Villagercoin.CONFIG.addCoinsToModdedStructureLootTables && lootTableSource != LootTableSource.VANILLA && !isVillagerCoin ) {
 					// Modded Loot Table
 					LootPool.Builder poolBuilder = LootPool.builder();
 					
@@ -207,7 +214,7 @@ public class StructuresIncludeCoinsFeature {
 						Optional<RegistryKey<LootTable>> rareLootTable = GOLD_LOOT_TABLES.stream().findAny();
 						
 						if (rareLootTable.isPresent()) {
-							for (String goldCoinKeyword : highValueCoinKeywords) {
+							for (String goldCoinKeyword : highValueCoinKeywords.getList()) {
 								if (path.contains(goldCoinKeyword)) {
 									items = LOOT_TABLES.get(rareLootTable.get());
 									break;
@@ -229,7 +236,7 @@ public class StructuresIncludeCoinsFeature {
 	}
 	
 	private static boolean moddedLootTableContainsKeyword(String path ) {
-		for(String moddedLootTableKeyword : moddedLootTableKeywords) {
+		for(String moddedLootTableKeyword : moddedLootTableKeywords.getList()) {
 			if( path.contains( moddedLootTableKeyword ) ) {
 				return true;
 			} // if

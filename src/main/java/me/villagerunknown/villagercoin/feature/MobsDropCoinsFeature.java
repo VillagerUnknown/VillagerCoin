@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.builder.StringsListBuilder;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CollectableComponent;
@@ -27,11 +28,12 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class MobsDropCoinsFeature {
 	
-	public static final Set<String> highValueCoinKeywords = Set.of(
+	public static final List<String> HIGH_VALUE_COIN_KEYWORDS = List.of(
 			"gold",
 			"diamond",
 			"emerald",
@@ -41,6 +43,8 @@ public class MobsDropCoinsFeature {
 			"boss",
 			"giant"
 	);
+	
+	public static StringsListBuilder highValueCoinKeywords = new StringsListBuilder( MOD_ID + "-high-value-keywords-mobs.json", HIGH_VALUE_COIN_KEYWORDS );
 	
 	public static final int COPPER_DROP_MINIMUM = Villagercoin.CONFIG.copperDropMinimum;
 	public static final int IRON_DROP_MINIMUM = Villagercoin.CONFIG.ironDropMinimum;
@@ -166,7 +170,7 @@ public class MobsDropCoinsFeature {
 							items.add( CoinItems.COPPER_COIN );
 							items.add( CoinItems.IRON_COIN );
 							
-							for (String highValueCoinKeyword : highValueCoinKeywords) {
+							for (String highValueCoinKeyword : highValueCoinKeywords.getList()) {
 								if( path.contains( highValueCoinKeyword ) ) {
 									items.add( CoinItems.GOLD_COIN );
 									break;
@@ -186,15 +190,9 @@ public class MobsDropCoinsFeature {
 	public static HashMap<Item, Integer> buildCoinsList(Set<Item> items, EntityType<?> entityType ) {
 		HashMap<Item, Integer> coinsToDrop = new HashMap<>();
 		
+		int dropMultiplier = getDropMultiplier( entityType );
+		
 		for (Item item : items) {
-			DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
-			
-			int dropMultiplier = getDropMultiplier( entityType );
-			
-			if( null != dropComponent ) {
-				dropMultiplier = dropComponent.dropChanceMultiplier();
-			} // if
-			
 			coinsToDrop.put( item, dropMultiplier );
 		} // for
 		
@@ -232,13 +230,13 @@ public class MobsDropCoinsFeature {
 			} // if
 		} // if
 		
-		float lootingModifier = modifier;
+		float lootingModifier = getDropMultiplier( entity.getType() ) + modifier;
 		coins.forEach( ( coin, multiplier ) -> {
 			DropComponent dropComponent = coin.getComponents().get( DROP_COMPONENT );
 			
 			if( null != dropComponent ) {
-				if( dropComponent.dropMaximum() > 0 && MathUtil.hasChance( (dropComponent.dropChance() * multiplier) * lootingModifier ) ) {
-					int amount = (int) MathUtil.getRandomWithinRange(dropComponent.dropMinimum(), dropComponent.dropMaximum());
+				if( dropComponent.dropMaximum() > 0 && MathUtil.hasChance( (dropComponent.dropChance() * dropComponent.dropChanceMultiplier()) * lootingModifier ) ) {
+					int amount = (int) MathUtil.getRandomWithinRange(dropComponent.dropMinimum(), dropComponent.dropMaximum() * multiplier);
 					
 					if( amount > 0 ) {
 						CollectableComponent collectableComponent = coin.getComponents().get( COLLECTABLE_COMPONENT );
