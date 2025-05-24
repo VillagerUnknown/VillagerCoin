@@ -19,12 +19,14 @@ Learn how to customize Villager Coin with addon mods and the developer wiki at t
 * Adds advancements for obtaining coins.
 * Options for fully customizing the coin value, chances, and amounts.
 * Optionally find coins in vanilla structures.
-* Optionally earn coins by killing some vanilla mobs.
+* Optionally find coins in modded structures.
+* Optionally earn coins by killing vanilla mobs.
+* Optionally earn coins by killing modded mobs.
 * Optionally earn coins by killing breedable mobs. (For easier coins.)
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 * Optionally allow players to flip individual coins for a heads or tails result in chat.
-* Additional features can be added with addons like Receipts, Ledgers, Coin Banks, Coin Stacks, custom structures, 
-and loot integrations with mods like the Graveyards & Ghosts and Better Archeology mods.
+* _Additional features can be added with addons like Receipts, Ledgers, Coin Banks, Coin Stacks, custom structures, 
+and loot integrations with mods like the Graveyards & Ghosts and Better Archeology mods._
 
 ## Coin Currency
 
