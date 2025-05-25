@@ -1,0 +1,32 @@
+{
+  "values": [
+    "minecraft:saddle",
+    "minecraft:enchanted_book",
+    "minecraft:gold_ingot",
+    "minecraft:glowstone",
+    "minecraft:globe_banner_pattern",
+    "minecraft:quartz_block",
+    "minecraft:quartz_pillar",
+    "minecraft:ender_pearl",
+    "minecraft:golden_carrot",
+    "minecraft:glistering_melon_slice",
+    "minecraft:glowstone",
+    "minecraft:clock",
+    "minecraft:bell",
+    "minecraft:tipped_arrow",
+    "minecraft:experience_bottle",
+    "minecraft:diamond_hoe",
+    "minecraft:diamond_shovel",
+    "minecraft:diamond_pickaxe",
+    "minecraft:diamond_axe",
+    "minecraft:diamond_sword",
+    "minecraft:diamond_boots",
+    "minecraft:diamond_helmet",
+    "minecraft:diamond_chestplate",
+    "minecraft:diamond_leggings",
+    "minecraft:quartz",
+    "minecraft:nether_wart",
+    "minecraft:blaze_rod",
+    "minecraft:blaze_powder"
+  ]
+}

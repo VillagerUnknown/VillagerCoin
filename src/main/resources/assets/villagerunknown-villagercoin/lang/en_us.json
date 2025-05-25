@@ -118,6 +118,12 @@
   "tag.item.villagerunknown-villagercoin.receipt": "Receipt",
   "tag.item.villagerunknown-villagercoin.ledger": "Ledgers",
 
+  "tag.item.villagerunknown-villagercoin.copper_coin_trade": "Copper Coin Trade",
+  "tag.item.villagerunknown-villagercoin.iron_coin_trade": "Iron Coin Trade",
+  "tag.item.villagerunknown-villagercoin.gold_coin_trade": "Gold Coin Trade",
+  "tag.item.villagerunknown-villagercoin.emerald_coin_trade": "Emerald Coin Trade",
+  "tag.item.villagerunknown-villagercoin.netherite_coin_trade": "Netherite Coin Trade",
+
   "itemGroup.villagerunknown-villagercoin": "Villager Coin",
 
   "item.villagerunknown-villagercoin.receipt.tooltip.merchant": "Receipt from %s",
