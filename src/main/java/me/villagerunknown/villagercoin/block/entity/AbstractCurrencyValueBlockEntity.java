@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.block.entity;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import net.minecraft.block.BlockState;
@@ -37,7 +38,7 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	}
 	
 	public boolean canIncrementCurrencyValue( long increment ) {
-		return (this.totalCurrencyValue + increment) <= Integer.MAX_VALUE;
+		return (this.totalCurrencyValue + increment) <= Villagercoin.CONFIG.maximumCoinBankCurrencyValue;
 	}
 	
 	public void incrementCurrencyValue( long value ) {

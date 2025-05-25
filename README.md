@@ -3,10 +3,10 @@
 Villager Coin is a lightweight currency library that adds customizable coin currencies and optionally adds the currencies to loot tables, mob drops, and merchant trades. 
 Coins can be converted between different types through the crafting table.
 
-Villager Coin, on its own, consists of craftable receipts and 5 types of coins with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
+Villager Coin, on its own, consists of 5 types of coins with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
 More coins can be added, like edible, collectable, cursed, and lucky coins, with addon mods. 
 
-Each type of coin stacks up to 5,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
+Each type of coin stacks up to 1,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
 The stack size can be configured, but it's limited to a maximum of 1,073,741,822.
 
 Learn how to customize Villager Coin with addon mods and the developer wiki at the bottom of this page.
@@ -19,12 +19,14 @@ Learn how to customize Villager Coin with addon mods and the developer wiki at t
 * Adds advancements for obtaining coins.
 * Options for fully customizing the coin value, chances, and amounts.
 * Optionally find coins in vanilla structures.
-* Optionally earn coins by killing some vanilla mobs.
+* Optionally find coins in modded structures.
+* Optionally earn coins by killing vanilla mobs.
+* Optionally earn coins by killing modded mobs.
 * Optionally earn coins by killing breedable mobs. (For easier coins.)
 * Optionally change trades for Villagers, and Wandering Traders, and replace the Emerald trades with Coin trades.
 * Optionally allow players to flip individual coins for a heads or tails result in chat.
-* Additional features can be added with addons like Receipts, Ledgers, Coin Banks, Coin Stacks, custom structures, 
-and loot integrations with mods like the Graveyards & Ghosts and Better Archeology mods.
+* _Additional features can be added with addons like Receipts, Ledgers, Coin Banks, Coin Stacks, custom structures, 
+and loot integrations with mods like the Graveyards & Ghosts and Better Archeology mods._
 
 ## Coin Currency
 
@@ -79,7 +81,7 @@ Copper, Iron, and Gold Villager Coins can be smelted down to their respective re
 _Due to technical limitations, quick-crafting (shift-clicking crafted items to craft the maximum) will only craft once. 
 Use the auto-crafter to convert large amounts of coins._
 
-## Loot Tables
+### Loot Tables
 
 Coins can be optionally included in the loot tables. 
 The value of the coins will vary depending on the loot table rarity. 
@@ -94,7 +96,7 @@ Loot table weights and rolls can be configured through the options.
 _While some mods may include vanilla loot tables, coins will only be included in structures added by mods if they have included coins in the loot tables. 
 You can find data packs that provide compatibility at [https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons](https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons)_
 
-## Mob Drops
+### Mob Drops
 
 Coins can optionally drop when a player kills Humanoid mobs, Bosses, and Shulkers. 
 
@@ -107,7 +109,7 @@ Mob drop chances, minimums, and maximums can be configured through the options.
 
 _Coins will only drop from mobs added by mods if they have included coins in the loot tables. You can find data packs that provide compatibility at [https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility](https://github.com/VillagerUnknown/VillagerCoin/wiki/Villager-Coin-Addons#compatibility)_
 
-## Trade Modifications
+### Trade Modifications
 
 Coins can optionally be used for trading with Villagers and Wandering Traders by replacing Emerald trades with Coin trades. 
 
@@ -127,6 +129,40 @@ but at half of the original emerald amount. These are the most expensive trades.
 These are the most rewarding trades available and they're configurable.
 
 _Trade modifications scale appropriately with the Vanilla trading values for professions. Some mods may use exaggerated values resulting in trades offering high value coins at a lower level. It is important for Villager Coin economies to use modded Villagers with appropriate trade values for the appropriate profession. If you are a fellow mod-maker and would like your custom Villagers to be compatible with Villager Coin please make sure you use the appropriate values for the appropriate levels._
+
+## Receipts
+
+With add-ons, you can add craftable Receipts from multiple add-ons to record transactions.
+
+* The type of Receipt you can craft is randomly selected at the time of crafting from the added Receipts. 
+_It is up to you to make sure that the Receipts you add with add-ons all provide the same functionality._
+* Receipts can be added to Ledgers for bookkeeping purposes.
+* Receipts are crafted with Paper and Coins.
+* A custom footnote can be included on the Receipt by renaming the Paper ingredient before crafting the Receipt.
+
+## Ledgers
+
+With add-ons, you can add craftable Ledgers from multiple add-ons to catalog Receipts for bookkeeping purposes.
+
+* The type of Ledger you can craft is randomly selected at the time of crafting from the added Ledgers.
+_It is up to you to make sure that the Ledgers you add with add-ons all provide the same functionality._
+* Ledgers are crafted with a Book and Quill and Receipts.
+* Receipts can be continuously added to Ledgers, up to 100 Receipts/pages.
+
+## Coin Banks
+
+
+ith add-ons, you can add craftable Coin Banks from multiple add-ons to hold Coins.
+* Coin Banks are crafted with a Coin and themed resources.
+* Coin Banks always drop their crafting ingredients.
+* If broken without Silk Touch, the Coin Banks drop their total amount in the highest valued Coins.
+
+## Coin Stacks
+
+With add-ons, you can add craftable Coin Stacks from multiple add-ons to display coins. 
+
+* If broken without Silk Touch, the Coin Stacks drop their total amount in the highest valued coins.
+* Coin Stacks are crafted with a stack of Coins surrounded by 4 String.
 
 ## Additional Notes
 

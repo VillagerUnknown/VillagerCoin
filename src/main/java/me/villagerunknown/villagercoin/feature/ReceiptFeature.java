@@ -12,16 +12,16 @@ public class ReceiptFeature {
 	
 	public static void execute() {}
 	
-	public static Item registerReceipt(String id, Item item ) {
-		Item registeredItem = RegistryUtil.registerItem( id, item, MOD_ID );
+	public static Item registerReceipt( String namespace, String id, Item item ) {
+		Item registeredItem = RegistryUtil.registerItem( id, item, namespace );
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, registeredItem );
+		Villagercoin.addItemToGroup( registeredItem );
 		
 		return registeredItem;
 	}
 	
-	public static Item registerCraftableReceipt(String id, Item item) {
-		Item registeredItem = registerReceipt( id, item );
+	public static Item registerCraftableReceipt( String namespace, String id, Item item) {
+		Item registeredItem = registerReceipt( namespace, id, item );
 		
 		ReceiptCraftingFeature.registerCraftingResultReceipt( registeredItem );
 		

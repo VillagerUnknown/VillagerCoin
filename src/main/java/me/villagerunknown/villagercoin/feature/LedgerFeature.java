@@ -12,16 +12,16 @@ public class LedgerFeature {
 	
 	public static void execute() {}
 	
-	public static Item registerLedger(String id, Item item ) {
-		Item registeredItem = RegistryUtil.registerItem( id, item, MOD_ID );
+	public static Item registerLedger( String namespace, String id, Item item ) {
+		Item registeredItem = RegistryUtil.registerItem( id, item, namespace );
 		
-		RegistryUtil.addItemToGroup( Villagercoin.ITEM_GROUP_KEY, registeredItem );
+		Villagercoin.addItemToGroup( registeredItem );
 		
 		return registeredItem;
 	}
 	
-	public static Item registerCraftableLedger(String id, Item item) {
-		Item registeredItem = registerLedger( id, item );
+	public static Item registerCraftableLedger( String namespace, String id, Item item) {
+		Item registeredItem = registerLedger( namespace, id, item );
 		
 		LedgerCraftingFeature.registerCraftingResultLedger( registeredItem );
 		

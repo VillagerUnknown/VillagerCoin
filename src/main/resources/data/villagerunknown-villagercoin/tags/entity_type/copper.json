@@ -1,0 +1,28 @@
+{
+  "values": [
+    "minecraft:drowned",
+    "minecraft:skeleton",
+    "minecraft:villager",
+    "minecraft:zombie",
+    "minecraft:zombie_villager",
+    "minecraft:husk",
+    "minecraft:wandering_trader",
+    "minecraft:enderman",
+    "minecraft:pillager",
+    "minecraft:bogged",
+    "minecraft:stray",
+    "minecraft:witch",
+    "minecraft:zombified_piglin",
+    "minecraft:warden",
+    "minecraft:wither_skeleton",
+    "minecraft:vindicator",
+    "minecraft:evoker",
+    "minecraft:elder_guardian",
+    "minecraft:illusioner",
+    "minecraft:piglin",
+    "minecraft:piglin_brute",
+    "minecraft:shulker",
+    "minecraft:ender_dragon",
+    "minecraft:wither"
+  ]
+}
