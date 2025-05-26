@@ -41,6 +41,7 @@ public class StructuresIncludeCoinsFeature {
 	
 	public static StringsListBuilder highValueCoinKeywords = new StringsListBuilder( MOD_ID + "-high-value-keywords-structures.json", HIGH_VALUE_COIN_KEYWORDS );
 	public static StringsListBuilder moddedLootTableKeywords = new StringsListBuilder( MOD_ID + "-loot-table-keywords-modded.json", MODDED_LOOT_TABLE_KEYWORDS );
+	public static StringsListBuilder excludeCoinKeywords = new StringsListBuilder( MOD_ID + "-exclude-keywords-modded-structures.json", List.of() );
 	
 	public static final int COPPER_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.copperLootTableRolls;
 	public static final int IRON_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.ironLootTableRolls;
@@ -199,10 +200,18 @@ public class StructuresIncludeCoinsFeature {
 				} else if( Villagercoin.CONFIG.addCoinsToModdedStructureLootTables && lootTableSource != LootTableSource.VANILLA && !isVillagerCoin ) {
 					// Modded Loot Table
 					LootPool.Builder poolBuilder = LootPool.builder();
-					
 					String path = registryKey.getValue().getPath();
 					
-					if( moddedLootTableContainsKeyword( path ) ) {
+					boolean includeCoins = true;
+					
+					for (String excludeCoinKeyword : excludeCoinKeywords.getList()) {
+						if( namespace.contains( excludeCoinKeyword ) || path.contains( excludeCoinKeyword ) ) {
+							includeCoins = false;
+							break;
+						} // if
+					} // for
+					
+					if( includeCoins && moddedLootTableContainsKeyword( path ) ) {
 						Set<Item> items = new HashSet<>();
 						
 						Optional<RegistryKey<LootTable>> commonLootTable = IRON_LOOT_TABLES.stream().findAny();

@@ -45,6 +45,7 @@ public class MobsDropCoinsFeature {
 	);
 	
 	public static StringsListBuilder highValueCoinKeywords = new StringsListBuilder( MOD_ID + "-high-value-keywords-mobs.json", HIGH_VALUE_COIN_KEYWORDS );
+	public static StringsListBuilder excludeCoinKeywords = new StringsListBuilder( MOD_ID + "-exclude-keywords-modded-mobs.json", List.of() );
 	
 	public static final int COPPER_DROP_MINIMUM = Villagercoin.CONFIG.copperDropMinimum;
 	public static final int IRON_DROP_MINIMUM = Villagercoin.CONFIG.ironDropMinimum;
@@ -167,15 +168,26 @@ public class MobsDropCoinsFeature {
 							} // if
 						} else if( !isVanilla && Villagercoin.CONFIG.addCoinsToModdedMobDrops ) {
 							// # Modded Entity
-							items.add( CoinItems.COPPER_COIN );
-							items.add( CoinItems.IRON_COIN );
+							boolean includeCoins = true;
 							
-							for (String highValueCoinKeyword : highValueCoinKeywords.getList()) {
-								if( path.contains( highValueCoinKeyword ) ) {
-									items.add( CoinItems.GOLD_COIN );
+							for (String excludeCoinKeyword : excludeCoinKeywords.getList()) {
+								if( namespace.contains( excludeCoinKeyword ) || path.contains( excludeCoinKeyword ) ) {
+									includeCoins = false;
 									break;
 								} // if
 							} // for
+							
+							if( includeCoins ) {
+								items.add(CoinItems.COPPER_COIN);
+								items.add(CoinItems.IRON_COIN);
+								
+								for (String highValueCoinKeyword : highValueCoinKeywords.getList()) {
+									if (path.contains(highValueCoinKeyword)) {
+										items.add(CoinItems.GOLD_COIN);
+										break;
+									} // if
+								} // for
+							} // if
 						} // if
 						
 						HashMap<Item, Integer> coinsToDrop = buildCoinsList( items, entityType );

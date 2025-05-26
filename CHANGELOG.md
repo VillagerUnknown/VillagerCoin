@@ -14,7 +14,7 @@ _This option is set to the maximum Integer value by default._
 - Added `addCoinsToModdedStructureLootTables` option to allow forcing coins into loot tables for non-vanilla structures. 
 _If a structure's loot table is modified by a data pack this mod will not make any modifications._
 - Added `addCoinsToModdedMobDrops` option to allow forcing coins into loot tables for non-vanilla mobs.
-- Added additional keyword configuration files for inclusion of coins in modded loot tables and mob drops.
+- Added additional keyword configuration files for inclusion, and exclusion, of coins in modded loot tables and mob drops.
 
 ### Changed
 
