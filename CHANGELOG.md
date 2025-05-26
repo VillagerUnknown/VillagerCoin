@@ -27,6 +27,7 @@ _If a structure's loot table is modified by a data pack this mod will not make a
 _Coin Banks and Coin Stacks are now added to lists at registration and included in the Block Entity registration at the end of Platform's Feature Manager's loading queue._
 - ItemStacks in Merchant Trades now properly maintain their components.
 - Coins now drop appropriate amounts depending on the type of mob.
+- Fixed an issue with Looting 3 swords causing an excessive amount of items to drop.
 
 ## [1.0.7]
 
