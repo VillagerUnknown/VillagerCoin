@@ -26,17 +26,6 @@ public abstract class ItemStackMixin {
 	@Shadow
 	public static final Codec<ItemStack> CODEC;
 	
-	@Inject(method = "capCount", at = @At("HEAD"), cancellable = true)
-	private void capCount(int maxCount, CallbackInfo ci) {
-		ItemStack stack = (ItemStack) (Object) this;
-		
-		if (!stack.isEmpty() && stack.getCount() > maxCount) {
-			stack.setCount( Villagercoin.MAX_STACK_COUNT );
-		}
-		
-		ci.cancel();
-	}
-	
 	static{
 		CODEC = Codec.lazyInitialized(() -> {
 			return RecordCodecBuilder.create((instance) -> {
