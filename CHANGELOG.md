@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.8]
+
+This update resolves issues with add-ons registering the same Block Entity by implementing a queue system in Platform's Feature Manager. 
+_Add-on developers can register their blocks with Villager Coin and the Feature Manager from Platform will register them with their Block Entity at the end of feature initialization._
+
+### Added
+
+- Added `maximumCoinBankCurrencyValue` option to allow controlling the maximum currency value of Coin Banks. 
+_This option is set to the maximum Integer value by default._
+- Added `addCoinsToModdedStructureLootTables` option to allow forcing coins into loot tables for non-vanilla structures. 
+_If a structure's loot table is modified by a data pack this mod will not make any modifications._
+- Added `addCoinsToModdedMobDrops` option to allow forcing coins into loot tables for non-vanilla mobs.
+- Added additional keyword configuration files for inclusion, and exclusion, of coins in modded loot tables and mob drops.
+
+### Changed
+
+- Moved coin registrations for mob drops to Entity Type tags. _This allows datapacks to add coins to entities._
+- Changed supported Platform version to 1.3.0. _This adds queues to the Feature Manager._
+
+### Fixed
+
+- Add-ons now properly load shared block entities as intended. 
+_Coin Banks and Coin Stacks are now added to lists at registration and included in the Block Entity registration at the end of Platform's Feature Manager's loading queue._
+- ItemStacks in Merchant Trades now properly maintain their components.
+- Coins now drop appropriate amounts depending on the type of mob.
+- Fixed an issue with Looting 3 swords causing an excessive amount of items to drop.
+
 ## [1.0.7]
 
 This update resolves an issue with modded containers causing a fatal crash when saving stacks greater than 99.

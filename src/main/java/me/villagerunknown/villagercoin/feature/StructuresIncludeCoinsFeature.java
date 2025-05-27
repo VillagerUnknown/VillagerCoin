@@ -1,11 +1,13 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.builder.StringsListBuilder;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CollectableComponent;
 import me.villagerunknown.villagercoin.component.DropComponent;
 import me.villagerunknown.villagercoin.component.LootTableComponent;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
@@ -13,15 +15,33 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKey;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.*;
 import static net.minecraft.loot.LootTables.*;
 
 public class StructuresIncludeCoinsFeature {
+	
+	public static final List<String> HIGH_VALUE_COIN_KEYWORDS = List.of(
+			"gold",
+			"treasure",
+			"reward",
+			"buried",
+			"cache",
+			"stash",
+			"bonus"
+	);
+	
+	public static final List<String> MODDED_LOOT_TABLE_KEYWORDS = List.of(
+			"chest",
+			"gameplay",
+			"pot"
+	);
+	
+	public static StringsListBuilder highValueCoinKeywords = new StringsListBuilder( MOD_ID + "-high-value-keywords-structures.json", HIGH_VALUE_COIN_KEYWORDS );
+	public static StringsListBuilder moddedLootTableKeywords = new StringsListBuilder( MOD_ID + "-loot-table-keywords-modded.json", MODDED_LOOT_TABLE_KEYWORDS );
+	public static StringsListBuilder excludeCoinKeywords = new StringsListBuilder( MOD_ID + "-exclude-keywords-modded-structures.json", List.of() );
 	
 	public static final int COPPER_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.copperLootTableRolls;
 	public static final int IRON_LOOT_TABLE_ROLLS = Villagercoin.CONFIG.ironLootTableRolls;
@@ -162,48 +182,108 @@ public class StructuresIncludeCoinsFeature {
 	
 	private static void registerLootTableEvent() {
 		LootTableEvents.MODIFY.register((registryKey, lootBuilder, lootTableSource, registryWrapper) -> {
-			if( lootTableSource.isBuiltin() && Villagercoin.CONFIG.addCoinsToStructureLootTables ) {
-				LootPool.Builder poolBuilder = LootPool.builder();
+			if( lootTableSource.isBuiltin() ) {
+				String namespace = registryKey.getValue().getNamespace();
+				boolean isVillagerCoin = namespace.equals( MOD_ID );
 				
-				if( LOOT_TABLES.containsKey( registryKey ) ) {
+				if( Villagercoin.CONFIG.addCoinsToStructureLootTables && LOOT_TABLES.containsKey( registryKey ) ) {
+					// Included Vanilla Loot Table
+					LootPool.Builder poolBuilder = LootPool.builder();
+					
 					Set<Item> items = LOOT_TABLES.get( registryKey );
 					
 					for (Item item : items) {
-						LootTableComponent lootTableComponent = item.getComponents().get( LOOT_TABLE_COMPONENT );
-						
-						if( null != lootTableComponent ) {
-							CollectableComponent collectableComponent = item.getComponents().get( COLLECTABLE_COMPONENT );
-							DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
-							
-							int lootTableWeight = lootTableComponent.lootTableWeight();
-							int lootTableRolls = lootTableComponent.lootTableRolls();
-							
-							if( lootTableWeight > 0 && lootTableRolls > 0 ) {
-								if( null != collectableComponent && null != dropComponent ) {
-									// Collectable Coins
-									if(
-										MathUtil.hasChance( dropComponent.dropChance() * dropComponent.dropChanceMultiplier() )
-										&& collectableComponent.canAddToCirculation( item )
-									) {
-										// Every collectable coin has a minimum roll of 1 after passing the drop chance check
-										poolBuilder.with(ItemEntry.builder(item).weight( lootTableWeight ));
-										poolBuilder.rolls( UniformLootNumberProvider.create( lootTableRolls, lootTableRolls ) );
-									} // if
-								} else {
-									// Coins
-									// Every coin has a minimum roll equal to lootTableRolls divided by COPPER_LOOT_TABLE_ROLLS
-									// with the larger number dividing into the smaller number.
-									poolBuilder.with( ItemEntry.builder( item ).weight( lootTableWeight ) );
-									poolBuilder.rolls( UniformLootNumberProvider.create( getMinimumLootTableRolls( lootTableRolls ), lootTableRolls ) );
-								} // if, else
-							} // if
+						buildLootPool(poolBuilder, item);
+					} // for
+					
+					lootBuilder.pool(poolBuilder);
+				} else if( Villagercoin.CONFIG.addCoinsToModdedStructureLootTables && lootTableSource != LootTableSource.VANILLA && !isVillagerCoin ) {
+					// Modded Loot Table
+					LootPool.Builder poolBuilder = LootPool.builder();
+					String path = registryKey.getValue().getPath();
+					
+					boolean includeCoins = true;
+					
+					for (String excludeCoinKeyword : excludeCoinKeywords.getList()) {
+						if( namespace.contains( excludeCoinKeyword ) || path.contains( excludeCoinKeyword ) ) {
+							includeCoins = false;
+							break;
 						} // if
 					} // for
+					
+					if( includeCoins && moddedLootTableContainsKeyword( path ) ) {
+						Set<Item> items = new HashSet<>();
+						
+						Optional<RegistryKey<LootTable>> commonLootTable = IRON_LOOT_TABLES.stream().findAny();
+						
+						if (commonLootTable.isPresent()) {
+							items = LOOT_TABLES.get(commonLootTable.get());
+						} // if
+						
+						Optional<RegistryKey<LootTable>> rareLootTable = GOLD_LOOT_TABLES.stream().findAny();
+						
+						if (rareLootTable.isPresent()) {
+							for (String goldCoinKeyword : highValueCoinKeywords.getList()) {
+								if (path.contains(goldCoinKeyword)) {
+									items = LOOT_TABLES.get(rareLootTable.get());
+									break;
+								} // if
+							} // for
+						} // if
+						
+						if (!items.isEmpty()) {
+							for (Item item : items) {
+								buildLootPool(poolBuilder, item);
+							} // for
+							
+							lootBuilder.pool(poolBuilder);
+						} // if
+					} // if
 				} // if
-				
-				lootBuilder.pool(poolBuilder);
 			} // if
 		});
+	}
+	
+	private static boolean moddedLootTableContainsKeyword(String path ) {
+		for(String moddedLootTableKeyword : moddedLootTableKeywords.getList()) {
+			if( path.contains( moddedLootTableKeyword ) ) {
+				return true;
+			} // if
+		} // for
+		
+		return false;
+	}
+	
+	private static void buildLootPool( LootPool.Builder poolBuilder, Item item ) {
+		LootTableComponent lootTableComponent = item.getComponents().get( LOOT_TABLE_COMPONENT );
+		
+		if( null != lootTableComponent ) {
+			CollectableComponent collectableComponent = item.getComponents().get( COLLECTABLE_COMPONENT );
+			DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
+			
+			int lootTableWeight = lootTableComponent.lootTableWeight();
+			int lootTableRolls = lootTableComponent.lootTableRolls();
+			
+			if( lootTableWeight > 0 && lootTableRolls > 0 ) {
+				if( null != collectableComponent && null != dropComponent ) {
+					// Collectable Coins
+					if(
+							MathUtil.hasChance( dropComponent.dropChance() * dropComponent.dropChanceMultiplier() )
+									&& collectableComponent.canAddToCirculation( item )
+					) {
+						// Every collectable coin has a minimum roll of 1 after passing the drop chance check
+						poolBuilder.with(ItemEntry.builder(item).weight( lootTableWeight ));
+						poolBuilder.rolls( UniformLootNumberProvider.create( lootTableRolls, lootTableRolls ) );
+					} // if
+				} else {
+					// Coins
+					// Every coin has a minimum roll equal to lootTableRolls divided by COPPER_LOOT_TABLE_ROLLS
+					// with the larger number dividing into the smaller number.
+					poolBuilder.with( ItemEntry.builder( item ).weight( lootTableWeight ) );
+					poolBuilder.rolls( UniformLootNumberProvider.create( getMinimumLootTableRolls( lootTableRolls ), lootTableRolls ) );
+				} // if, else
+			} // if
+		} // if
 	}
 	
 	public static int getLootTableWeight( RegistryKey<LootTable> registryKey ) {

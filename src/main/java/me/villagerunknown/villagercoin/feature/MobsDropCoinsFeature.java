@@ -1,9 +1,11 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.platform.builder.StringsListBuilder;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CollectableComponent;
 import me.villagerunknown.villagercoin.component.DropComponent;
+import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -16,19 +18,34 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class MobsDropCoinsFeature {
+	
+	public static final List<String> HIGH_VALUE_COIN_KEYWORDS = List.of(
+			"gold",
+			"diamond",
+			"emerald",
+			"netherite",
+			"wither",
+			"dragon",
+			"boss",
+			"giant"
+	);
+	
+	public static StringsListBuilder highValueCoinKeywords = new StringsListBuilder( MOD_ID + "-high-value-keywords-mobs.json", HIGH_VALUE_COIN_KEYWORDS );
+	public static StringsListBuilder excludeCoinKeywords = new StringsListBuilder( MOD_ID + "-exclude-keywords-modded-mobs.json", List.of() );
 	
 	public static final int COPPER_DROP_MINIMUM = Villagercoin.CONFIG.copperDropMinimum;
 	public static final int IRON_DROP_MINIMUM = Villagercoin.CONFIG.ironDropMinimum;
@@ -54,103 +71,29 @@ public class MobsDropCoinsFeature {
 	public static final int EMERALD_DROP_MULTIPLIER = Villagercoin.CONFIG.emeraldDropMultiplier;
 	public static final int NETHERITE_DROP_MULTIPLIER = Villagercoin.CONFIG.netheriteDropMultiplier;
 	
-	public static Set<EntityType<?>> OPTIONAL_MOB_DROPS = new HashSet<>(Arrays.asList(
-			EntityType.PIG,
-			EntityType.HOGLIN,
-			EntityType.ZOGLIN,
-			EntityType.COW,
-			EntityType.SHEEP,
-			EntityType.HORSE,
-			EntityType.LLAMA,
-			EntityType.TRADER_LLAMA,
-			EntityType.RABBIT,
-			EntityType.PANDA,
-			EntityType.CAMEL,
-			EntityType.CAT,
-			EntityType.WOLF,
-			EntityType.FOX,
-			EntityType.CHICKEN,
-			EntityType.MOOSHROOM,
-			EntityType.FROG,
-			EntityType.GOAT,
-			EntityType.DONKEY,
-			EntityType.MULE,
-			EntityType.OCELOT,
-			EntityType.PARROT,
-			EntityType.AXOLOTL,
-			EntityType.POLAR_BEAR,
-			EntityType.SNIFFER,
-			EntityType.TURTLE
-	));
-	
-	public static Set<EntityType<?>> NETHERITE_MOB_DROPS = new HashSet<>(Arrays.asList(
-			EntityType.ENDER_DRAGON,
-			EntityType.WITHER
-	));
-	
-	public static Set<EntityType<?>> EMERALD_MOB_DROPS = combineEntityTypes( NETHERITE_MOB_DROPS, new HashSet<>(Arrays.asList(
-			EntityType.SHULKER
-	)));
-	
-	public static Set<EntityType<?>> GOLD_MOB_DROPS = combineEntityTypes( EMERALD_MOB_DROPS, new HashSet<>(Arrays.asList(
-			EntityType.ELDER_GUARDIAN,
-			EntityType.ILLUSIONER,
-			EntityType.PIGLIN,
-			EntityType.PIGLIN_BRUTE,
-			EntityType.EVOKER,
-			EntityType.VINDICATOR,
-			EntityType.WITHER_SKELETON,
-			EntityType.WARDEN
-	)));
-	
-	public static Set<EntityType<?>> IRON_MOB_DROPS = combineEntityTypes( GOLD_MOB_DROPS, new HashSet<>(Arrays.asList(
-			EntityType.ENDERMAN,
-			EntityType.PILLAGER,
-			EntityType.BOGGED,
-			EntityType.STRAY,
-			EntityType.WITCH,
-			EntityType.ZOMBIFIED_PIGLIN
-	)));
-	
-	public static Set<EntityType<?>> COPPER_MOB_DROPS = buildCopperMobDrops(new HashSet<>(Arrays.asList(
-			EntityType.DROWNED,
-			EntityType.SKELETON,
-			EntityType.VILLAGER,
-			EntityType.WANDERING_TRADER,
-			EntityType.HUSK,
-			EntityType.ZOMBIE,
-			EntityType.ZOMBIE_VILLAGER
-	)));
-	
 	public static HashMap<EntityType<?>, Set<Item>> MOB_DROPS = new HashMap<>();
 	
+	public static Set<Item> COPPER_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> IRON_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> GOLD_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> EMERALD_COIN_DROPS = new HashSet<>();
+	
+	public static Set<Item> NETHERITE_COIN_DROPS = new HashSet<>();
+	
 	public static void execute(){
-		if( Villagercoin.CONFIG.enableBreedableMobDrops ) {
-			COPPER_MOB_DROPS = combineEntityTypes( COPPER_MOB_DROPS, OPTIONAL_MOB_DROPS );
-		} // if
-		
+		addDefaultCoinDrops();
 		registerMobDropsEvent();
 	}
 	
-	@SafeVarargs
-	private static Set<EntityType<?>> combineEntityTypes(Set<EntityType<?>>... entityTypeCollections ) {
-		Set<EntityType<?>> combinedEntityTypes = new HashSet<>();
-		
-		for( Set<EntityType<?>> entityTypes : entityTypeCollections) {
-			combinedEntityTypes.addAll( entityTypes );
-		} // for
-		
-		return combinedEntityTypes;
-	}
-	
-	private static Set<EntityType<?>> buildCopperMobDrops( Set<EntityType<?>> entityTypes ) {
-		Set<EntityType<?>> copperMobDrops = combineEntityTypes( IRON_MOB_DROPS, entityTypes );
-		
-		if( Villagercoin.CONFIG.enableBreedableMobDrops ) {
-			copperMobDrops = combineEntityTypes( copperMobDrops, OPTIONAL_MOB_DROPS );
-		} // if
-		
-		return copperMobDrops;
+	private static void addDefaultCoinDrops() {
+		addCoinToDropList( CoinItems.COPPER_COIN, COPPER_COIN_DROPS );
+		addCoinToDropList( CoinItems.IRON_COIN, IRON_COIN_DROPS );
+		addCoinToDropList( CoinItems.GOLD_COIN, GOLD_COIN_DROPS );
+		addCoinToDropList( CoinItems.EMERALD_COIN, EMERALD_COIN_DROPS );
+		addCoinToDropList( CoinItems.NETHERITE_COIN, NETHERITE_COIN_DROPS );
 	}
 	
 	public static void addCoinToMobDrops( Item coin, Set<EntityType<?>> entityTypes ) {
@@ -166,36 +109,106 @@ public class MobsDropCoinsFeature {
 		} // for
 	}
 	
+	public static void addCoinToDropList( Item coin, Set<Item> list ) {
+		list.add( coin );
+	}
+	
 	private static void registerMobDropsEvent() {
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
 			if( Villagercoin.CONFIG.addCoinsToMobDrops ) {
 				if( null != damageSource && null != damageSource.getAttacker() ) {
 					if( damageSource.getAttacker().isPlayer() ) {
-						HashMap<Item, Integer> coinsToDrop = new HashMap<>();
-						
 						EntityType<?> entityType = entity.getType();
 						
-						if( MOB_DROPS.containsKey( entityType ) ) {
-							Set<Item> items = MOB_DROPS.get( entityType );
+						String namespace = entityType.getLootTableId().getValue().getNamespace();
+						String path = entityType.getLootTableId().getValue().getPath();
+						
+						Set<Item> items = new HashSet<>();
+						
+						boolean isVanilla = namespace.contains("minecraft");
+						
+						if( isVanilla ) {
+							// # Included Vanilla Entity
 							
-							for (Item item : items) {
-								DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
-								
-								int dropMultiplier = getDropMultiplier( entityType );
-								
-								if( null != dropComponent ) {
-									dropMultiplier = dropComponent.dropChanceMultiplier();
+							// Copper & Optionals
+							if(
+									entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "copper" ) ) )
+									||
+									(
+										Villagercoin.CONFIG.enableBreedableMobDrops
+										&& entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "optional" ) ) )
+									)
+							) {
+								items.addAll( COPPER_COIN_DROPS );
+							} // if
+							
+							// Iron
+							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "iron" ) ) ) ) {
+								items.addAll( IRON_COIN_DROPS );
+							} // if
+							
+							// Gold
+							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "gold" ) ) ) ) {
+								items.addAll( GOLD_COIN_DROPS );
+							} // if
+							
+							// Emerald
+							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "emerald" ) ) ) ) {
+								items.addAll( EMERALD_COIN_DROPS );
+							} // if
+							
+							// Netherite
+							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "netherite" ) ) ) ) {
+								items.addAll( NETHERITE_COIN_DROPS );
+							} // if
+							
+							// Specifics
+							if( MOB_DROPS.containsKey( entityType ) ) {
+								items.addAll( MOB_DROPS.get( entityType ) );
+							} // if
+						} else if( !isVanilla && Villagercoin.CONFIG.addCoinsToModdedMobDrops ) {
+							// # Modded Entity
+							boolean includeCoins = true;
+							
+							for (String excludeCoinKeyword : excludeCoinKeywords.getList()) {
+								if( namespace.contains( excludeCoinKeyword ) || path.contains( excludeCoinKeyword ) ) {
+									includeCoins = false;
+									break;
 								} // if
-								
-								coinsToDrop.put( item, dropMultiplier );
 							} // for
+							
+							if( includeCoins ) {
+								items.add(CoinItems.COPPER_COIN);
+								items.add(CoinItems.IRON_COIN);
+								
+								for (String highValueCoinKeyword : highValueCoinKeywords.getList()) {
+									if (path.contains(highValueCoinKeyword)) {
+										items.add(CoinItems.GOLD_COIN);
+										break;
+									} // if
+								} // for
+							} // if
 						} // if
+						
+						HashMap<Item, Integer> coinsToDrop = buildCoinsList( items, entityType );
 						
 						dropCoins( entity, damageSource, coinsToDrop );
 					} // if
 				} // if
 			} // if
 		});
+	}
+	
+	public static HashMap<Item, Integer> buildCoinsList(Set<Item> items, EntityType<?> entityType ) {
+		HashMap<Item, Integer> coinsToDrop = new HashMap<>();
+		
+		int dropMultiplier = getDropMultiplier( entityType );
+		
+		for (Item item : items) {
+			coinsToDrop.put( item, dropMultiplier );
+		} // for
+		
+		return coinsToDrop;
 	}
 	
 	public static void dropCoins(LivingEntity entity, DamageSource damageSource, HashMap<Item, Integer> coins ) {
@@ -229,13 +242,13 @@ public class MobsDropCoinsFeature {
 			} // if
 		} // if
 		
-		float lootingModifier = modifier;
+		float lootingModifier = getDropMultiplier( entity.getType() ) + modifier;
 		coins.forEach( ( coin, multiplier ) -> {
 			DropComponent dropComponent = coin.getComponents().get( DROP_COMPONENT );
 			
 			if( null != dropComponent ) {
-				if( dropComponent.dropMaximum() > 0 && MathUtil.hasChance( (dropComponent.dropChance() * multiplier) * lootingModifier ) ) {
-					int amount = (int) MathUtil.getRandomWithinRange(dropComponent.dropMinimum(), dropComponent.dropMaximum());
+				if( dropComponent.dropMaximum() > 0 && MathUtil.hasChance( (dropComponent.dropChance() * dropComponent.dropChanceMultiplier()) * lootingModifier ) ) {
+					int amount = (int) MathUtil.getRandomWithinRange(dropComponent.dropMinimum(), dropComponent.dropMaximum() * multiplier);
 					
 					if( amount > 0 ) {
 						CollectableComponent collectableComponent = coin.getComponents().get( COLLECTABLE_COMPONENT );
@@ -258,13 +271,13 @@ public class MobsDropCoinsFeature {
 	public static int getDropMultiplier( EntityType<?> entityType ) {
 		int dropMultiplier = COPPER_DROP_MULTIPLIER;
 		
-		if( NETHERITE_MOB_DROPS.contains( entityType ) ) {
+		if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "netherite" ) ) ) ) {
 			dropMultiplier = NETHERITE_DROP_MULTIPLIER;
-		} else if( EMERALD_MOB_DROPS.contains( entityType ) ) {
+		} else if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "emerald" ) ) ) ) {
 			dropMultiplier = EMERALD_DROP_MULTIPLIER;
-		} else if( GOLD_MOB_DROPS.contains( entityType ) ) {
+		} else if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "gold" ) ) ) ) {
 			dropMultiplier = GOLD_DROP_MULTIPLIER;
-		} else if( IRON_MOB_DROPS.contains( entityType ) ) {
+		} else if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "iron" ) ) ) ) {
 			dropMultiplier = IRON_DROP_MULTIPLIER;
 		} // if, else if ...
 		

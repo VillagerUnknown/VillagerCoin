@@ -4,134 +4,19 @@ import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.VillagerUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.item.CoinItems;
+import net.minecraft.component.Component;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.predicate.ComponentPredicate;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Pair;
 import net.minecraft.village.TradedItem;
 
 import java.util.*;
 
 public class MerchantCoinTradingFeature {
-	
-	public static Set<Item> COPPER_TRADE_ITEMS = new HashSet<>(Arrays.asList(
-			Items.LEATHER_BOOTS,
-			Items.LEATHER_HELMET,
-			Items.LEATHER_CHESTPLATE,
-			Items.LEATHER_LEGGINGS
-	));
-	
-	public static Set<Item> IRON_TRADE_ITEMS = new HashSet<>(Arrays.asList(
-			Items.BLACK_WOOL,
-			Items.WHITE_WOOL,
-			Items.BROWN_WOOL,
-			Items.GRAY_WOOL,
-			Items.SLIME_BALL,
-			Items.PUFFERFISH_BUCKET,
-			Items.TROPICAL_FISH_BUCKET,
-			Items.SHEARS,
-			Items.NAUTILUS_SHELL,
-			Items.ICE,
-			Items.PACKED_ICE,
-			Items.BLUE_ICE,
-			Items.SUGAR_CANE,
-			Items.KELP,
-			Items.CACTUS,
-			Items.SEA_PICKLE,
-			Items.SMALL_DRIPLEAF,
-			Items.GUNPOWDER,
-			Items.MOSS_BLOCK,
-			Items.PODZOL,
-			Items.ROOTED_DIRT,
-			Items.SAND,
-			Items.RED_SAND,
-			Items.ACACIA_SAPLING,
-			Items.SPRUCE_SAPLING,
-			Items.BIRCH_SAPLING,
-			Items.OAK_SAPLING,
-			Items.CHERRY_SAPLING,
-			Items.DARK_OAK_SAPLING,
-			Items.JUNGLE_SAPLING,
-			Items.MANGROVE_PROPAGULE,
-			Items.IRON_HOE,
-			Items.IRON_SHOVEL,
-			Items.IRON_PICKAXE,
-			Items.IRON_AXE,
-			Items.IRON_SWORD,
-			Items.IRON_BOOTS,
-			Items.IRON_HELMET,
-			Items.IRON_CHESTPLATE,
-			Items.IRON_LEGGINGS,
-			Items.CHAINMAIL_BOOTS,
-			Items.CHAINMAIL_HELMET,
-			Items.CHAINMAIL_CHESTPLATE,
-			Items.CHAINMAIL_LEGGINGS,
-			Items.GRAVEL
-	));
-	
-	public static Set<Item> GOLD_TRADE_ITEMS = new HashSet<>(Arrays.asList(
-			Items.SADDLE,
-			Items.ENCHANTED_BOOK,
-			Items.GOLD_INGOT,
-			Items.GLOWSTONE,
-			Items.GLOBE_BANNER_PATTERN,
-			Items.QUARTZ_BLOCK,
-			Items.QUARTZ_PILLAR,
-			Items.ENDER_PEARL,
-			Items.GOLDEN_CARROT,
-			Items.GLISTERING_MELON_SLICE,
-			Items.GLOWSTONE,
-			Items.CLOCK,
-			Items.BELL,
-			Items.TIPPED_ARROW,
-			Items.EXPERIENCE_BOTTLE,
-			Items.DIAMOND_HOE,
-			Items.DIAMOND_SHOVEL,
-			Items.DIAMOND_PICKAXE,
-			Items.DIAMOND_AXE,
-			Items.DIAMOND_SWORD,
-			Items.DIAMOND_BOOTS,
-			Items.DIAMOND_HELMET,
-			Items.DIAMOND_CHESTPLATE,
-			Items.DIAMOND_LEGGINGS,
-			Items.QUARTZ,
-			Items.NETHER_WART,
-			Items.BLAZE_ROD,
-			Items.BLAZE_POWDER
-	));
-	
-	public static Set<Item> EMERALD_TRADE_ITEMS = new HashSet<>(Arrays.asList(
-			Items.ENDER_EYE,
-			Items.CHORUS_FLOWER,
-			Items.CHORUS_FRUIT,
-			Items.SHULKER_BOX,
-			Items.ENDER_CHEST,
-			Items.ELYTRA,
-			Items.WITHER_SKELETON_SKULL,
-			Items.BEACON,
-			Items.ANCIENT_DEBRIS,
-			Items.NETHERITE_SCRAP
-	));
-	
-	public static Set<Item> NETHERITE_TRADE_ITEMS = new HashSet<>(Arrays.asList(
-			Items.NETHERITE_SWORD,
-			Items.NETHERITE_SHOVEL,
-			Items.NETHERITE_PICKAXE,
-			Items.NETHERITE_AXE,
-			Items.NETHERITE_HOE,
-			Items.NETHERITE_HELMET,
-			Items.NETHERITE_CHESTPLATE,
-			Items.NETHERITE_LEGGINGS,
-			Items.NETHERITE_BOOTS,
-			Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
-			Items.NETHERITE_BLOCK,
-			Items.NETHERITE_INGOT,
-			Items.NETHERITE_SWORD,
-			Items.NETHERITE_SHOVEL,
-			Items.NETHERITE_PICKAXE,
-			Items.NETHERITE_AXE,
-			Items.NETHERITE_HOE
-	));
 	
 	public static void execute() {}
 	
@@ -145,9 +30,9 @@ public class MerchantCoinTradingFeature {
 		Item coin = CoinItems.COPPER_COIN;
 		
 		// Netherite and Emerald trade checks implemented for modded trades
-		if( NETHERITE_TRADE_ITEMS.contains( firstBuyItem.itemStack().getItem() ) || NETHERITE_TRADE_ITEMS.contains( sellItem.getItem() ) ) {
+		if( firstBuyItem.itemStack().isIn( Villagercoin.getItemTagKey( "netherite_coin_trade" ) ) || sellItem.isIn( Villagercoin.getItemTagKey( "netherite_coin_trade" ) ) ) {
 			coin = CoinItems.NETHERITE_COIN;
-		} else if( EMERALD_TRADE_ITEMS.contains( firstBuyItem.itemStack().getItem() ) || EMERALD_TRADE_ITEMS.contains( sellItem.getItem() ) ) {
+		} else if( firstBuyItem.itemStack().isIn( Villagercoin.getItemTagKey( "emerald_coin_trade" ) ) || sellItem.isIn( Villagercoin.getItemTagKey( "emerald_coin_trade" ) ) ) {
 			coin = CoinItems.EMERALD_COIN;
 		} else if(
 			(
@@ -160,21 +45,21 @@ public class MerchantCoinTradingFeature {
 				)
 			)
 			|| (sellItem.hasEnchantments() && merchantExperience >= VillagerUtil.JOURNEYMAN_SELL_XP)
-			|| GOLD_TRADE_ITEMS.contains( firstBuyItem.itemStack().getItem() )
-			|| GOLD_TRADE_ITEMS.contains( sellItem.getItem() )
+			|| firstBuyItem.itemStack().isIn( Villagercoin.getItemTagKey( "gold_coin_trade" ) )
+			|| sellItem.isIn( Villagercoin.getItemTagKey( "gold_coin_trade" ) )
 		) {
 			coin = CoinItems.GOLD_COIN;
 		} else if(
 			merchantExperience > VillagerUtil.NOVICE_BUY_XP
 			|| sellItem.hasEnchantments()
-			|| IRON_TRADE_ITEMS.contains( firstBuyItem.itemStack().getItem() )
-			|| IRON_TRADE_ITEMS.contains( sellItem.getItem() )
+			|| firstBuyItem.itemStack().isIn( Villagercoin.getItemTagKey( "iron_coin_trade" ) )
+					|| sellItem.isIn( Villagercoin.getItemTagKey( "iron_coin_trade" ) )
 		) {
 			coin = CoinItems.IRON_COIN;
 		} // if
 		
 		// Force to Copper Coins
-		if( COPPER_TRADE_ITEMS.contains( firstBuyItem.itemStack().getItem() ) || COPPER_TRADE_ITEMS.contains( sellItem.getItem() ) ) {
+		if( firstBuyItem.itemStack().isIn( Villagercoin.getItemTagKey( "copper_coin_trade" ) ) || sellItem.isIn( Villagercoin.getItemTagKey( "copper_coin_trade" ) ) ) {
 			coin = CoinItems.COPPER_COIN;
 		} // if
 		
@@ -186,18 +71,22 @@ public class MerchantCoinTradingFeature {
 	}
 	
 	public static TradedItem replaceEmeraldsInTradedItem( TradedItem tradedItem, Item coin ) {
-		ItemStack replacedStack = replaceEmeraldsInItemStack( tradedItem.itemStack(), coin );
-		return new TradedItem( replacedStack.getItem(), replacedStack.getCount() );
+		if( tradedItem.itemStack().getItem().equals( Items.EMERALD ) ) {
+			ItemStack replacedStack = replaceEmeraldsInItemStack(tradedItem.itemStack(), coin);
+			return new TradedItem(replacedStack.getItem(), replacedStack.getCount());
+		} // if
+		
+		return tradedItem;
 	}
 	
 	public static ItemStack replaceEmeraldsInItemStack( ItemStack itemStack, Item coin ) {
-		int amount = itemStack.getCount();
-		
-		if( coin.equals( CoinItems.GOLD_COIN ) ) {
-			amount = MerchantCoinTradingFeature.getModifiedAmount( amount, Villagercoin.CONFIG.goldCoinSellItemDivisor, Villagercoin.CONFIG.goldCoinSellItemMaximum );
-		} // if
-		
 		if( itemStack.getItem().equals( Items.EMERALD ) ) {
+			int amount = itemStack.getCount();
+			
+			if( coin.equals( CoinItems.GOLD_COIN ) ) {
+				amount = MerchantCoinTradingFeature.getModifiedAmount( amount, Villagercoin.CONFIG.goldCoinSellItemDivisor, Villagercoin.CONFIG.goldCoinSellItemMaximum );
+			} // if
+		
 			itemStack = new ItemStack( coin, amount );
 		} // if
 		
@@ -220,15 +109,15 @@ public class MerchantCoinTradingFeature {
 	}
 	
 	public static ModifiedTrade modifyTrade( TradedItem firstBuyItem, Optional<TradedItem> secondBuyItem, ItemStack sellItem, Item coin ) {
-		firstBuyItem = MerchantCoinTradingFeature.replaceEmeraldsInTradedItem( firstBuyItem, coin );
+		firstBuyItem = replaceEmeraldsInTradedItem( firstBuyItem, coin );
 		
 		if( secondBuyItem.isPresent() ) {
-			secondBuyItem = Optional.of( MerchantCoinTradingFeature.replaceEmeraldsInTradedItem( secondBuyItem.get(), coin ) );
+			secondBuyItem = Optional.of( replaceEmeraldsInTradedItem( secondBuyItem.get(), coin ) );
 		} // if
 		
-		sellItem = MerchantCoinTradingFeature.replaceEmeraldsInItemStack( sellItem, coin );
+		sellItem = replaceEmeraldsInItemStack( sellItem, coin );
 		
-		Pair<TradedItem, ItemStack> modifiedDiamondTrade = MerchantCoinTradingFeature.modifyDiamondTrade( firstBuyItem, sellItem );
+		Pair<TradedItem, ItemStack> modifiedDiamondTrade = modifyDiamondTrade( firstBuyItem, sellItem );
 		
 		firstBuyItem = modifiedDiamondTrade.getLeft();
 		sellItem = modifiedDiamondTrade.getRight();
