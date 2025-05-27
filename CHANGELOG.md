@@ -19,7 +19,7 @@ _If a structure's loot table is modified by a data pack this mod will not make a
 ### Changed
 
 - Moved coin registrations for mob drops to Entity Type tags. _This allows datapacks to add coins to entities._
-- Changed supported Platform version to 1.2.4. _This adds queues to the Feature Manager._
+- Changed supported Platform version to 1.3.0. _This adds queues to the Feature Manager._
 
 ### Fixed
 
