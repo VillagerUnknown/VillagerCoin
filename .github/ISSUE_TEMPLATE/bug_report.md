@@ -22,8 +22,11 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Version**
+**Villager Coin Version**
 What version of Villager Coin do you have installed?
+
+**Minecraft Version**
+What version of Minecraft do you have installed?
 
 **Add-ons**
  - If applicable, what add-ons and versions do you have installed?

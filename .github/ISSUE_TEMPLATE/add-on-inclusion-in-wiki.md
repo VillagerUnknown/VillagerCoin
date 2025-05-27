@@ -2,7 +2,7 @@
 name: Add-on Inclusion in Wiki
 about: Request an Add-on to be included on the Wiki
 title: "[WIKI] Please include this add-on in the Wiki"
-labels: documentation, enhancement
+labels: bug, documentation, enhancement
 assignees: ''
 
 ---
