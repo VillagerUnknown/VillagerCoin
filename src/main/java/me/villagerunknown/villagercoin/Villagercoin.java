@@ -26,7 +26,8 @@ import java.util.Comparator;
 
 public class Villagercoin implements ModInitializer {
 	
-	public static final PlatformMod<VillagercoinConfigData> MOD = Platform.register( "villagercoin", Villagercoin.class, VillagercoinConfigData.class );
+	public static final String ID = "villagercoin";
+	public static final PlatformMod<VillagercoinConfigData> MOD = Platform.register( ID, Villagercoin.class, VillagercoinConfigData.class );
 	public static final String MOD_ID = MOD.getModId();
 	public static final Logger LOGGER = MOD.getLogger();
 	public static final VillagercoinConfigData CONFIG = MOD.getConfig();
@@ -108,6 +109,14 @@ public class Villagercoin implements ModInitializer {
 		} // if
 		
 		init();
+	}
+	
+	public static String formOfficialAddonID( String id ) {
+		return ID + "-" + id;
+	}
+	
+	public static String formAddonID( String id ) {
+		return id + "-" + ID;
 	}
 	
 	public static TagKey<Item> getItemTagKey(String id ) {

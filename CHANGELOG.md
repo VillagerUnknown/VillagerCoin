@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.9]
+
+### Added
+
+- Added `formOfficialAddonID` method to provide a formed string, such as "villagercoin-{id}".
+- Added `formAddonID` method to provide a formed string, such as "{id}-villagercoin".
+
 ## [1.0.8]
 
 This update resolves issues with add-ons registering the same Block Entity by implementing a queue system in Platform's Feature Manager. 
