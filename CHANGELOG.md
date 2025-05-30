@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Added `formOfficialAddonID` method to provide a formed string, such as "villagercoin-{id}".
 - Added `formAddonID` method to provide a formed string, such as "{id}-villagercoin".
+- Added `ReceiptItem` and `LedgerItem` objects from Bookkeeping to simplify the process for add-ons.
 
 ## [1.0.8]
 
