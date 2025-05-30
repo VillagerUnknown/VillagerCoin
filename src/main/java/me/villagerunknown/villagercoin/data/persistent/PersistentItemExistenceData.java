@@ -3,7 +3,7 @@ package me.villagerunknown.villagercoin.data.persistent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import me.villagerunknown.villagercoin.adapter.ItemCountMapTypeAdapter;
+import me.villagerunknown.platform.adapter.ItemCountMapTypeAdapter;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
