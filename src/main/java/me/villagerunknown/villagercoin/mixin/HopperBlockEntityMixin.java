@@ -32,7 +32,7 @@ public abstract class HopperBlockEntityMixin {
 						if( !((HopperBlockEntityAccessor) hopperBlockEntity).invokeIsDisabled() ) {
 							ItemStack itemStack = hopperBlockEntity.getStack(i);
 							
-							if (!itemStack.isEmpty() && itemStack.isIn(Villagercoin.getItemTagKey("villager_coin"))) {
+							if (!itemStack.isEmpty() && itemStack.isIn(Villagercoin.getItemTagKey( "currency_coin" ))) {
 								CurrencyComponent currencyComponent = itemStack.get(CURRENCY_COMPONENT);
 								
 								if (null != currencyComponent) {

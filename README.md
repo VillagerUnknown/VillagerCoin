@@ -1,5 +1,7 @@
 # VillagerUnknown's Villager Coin
 
+Meet the last currency mod you'll ever need!
+
 Villager Coin is a lightweight currency library that adds customizable coin currencies and optionally adds the currencies to loot tables, mob drops, and merchant trades. 
 Coins can be converted between different types through the crafting table.
 
@@ -203,7 +205,7 @@ In most cases, Villager Coin should "just work" with other mods. Additional conf
 
 _If a loot table is modified by a data pack, Villager Coin will not inject coins into those loot tables. This does not apply to mob drops._
 
-### Developer Wiki (WIP)
+### Wiki & Developer Discussions
 
 Villager Coin allows players, and communities, to design their own coin economy.
 
