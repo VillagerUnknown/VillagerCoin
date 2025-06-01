@@ -194,6 +194,22 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 * Request features and report bugs at https://github.com/VillagerUnknown/VillagerCoin/issues
 * View the changelog at https://github.com/VillagerUnknown/VillagerCoin/blob/main/CHANGELOG.md
 
+### Supported Languages
+
+* English
+* Pirate English
+* Svenska (Swedish)
+* Français (French)
+* Italiano (Italian)
+* Deutsch (German)
+* Português do Brasil (Brazil Portuguese)
+* Русский (Russian)
+* 한국어 (Korean)
+* 简体中文 (Simplified Chinese)
+* 日本語 (Japanese)
+* हिन्दी (Hindi)
+* (Hebrew) עברית
+
 ### Configurable Options
 
 The list of configurable options, and their default values, can be found on the Wiki at https://github.com/VillagerUnknown/VillagerCoin/wiki/Configurable-Options

@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Added `currency_coin` item tag.
+- Added translations for German, Pirate English, Brazil Portuguese, Spanish, Hindi, Italian, Swedish, French, Korean, Japanese, Russian, Simplified Chinese, and Hebrew.
 
 ## [1.0.9]
 
