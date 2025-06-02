@@ -196,7 +196,7 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 
 ### Supported Languages
 
-* English
+* English _by VillagerUnknown_
 * Pirate English
 * Svenska (Swedish)
 * Français (French)
@@ -209,6 +209,8 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 * 日本語 (Japanese)
 * हिन्दी (Hindi)
 * (Hebrew) עברית
+
+_Disclaimer: Unless noted otherwise, translations have been provided by automated services._
 
 ### Configurable Options
 
