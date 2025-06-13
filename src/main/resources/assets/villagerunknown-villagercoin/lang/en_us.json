@@ -95,8 +95,8 @@
 
   "stat.villagerunknown-villagercoin.inserted_coins_in_banks": "Inserted Coins in Banks",
 
-  "item.villagerunknown-villagercoin.villager_coin.flip.heads": "%s flipped a coin and it landed heads up.",
-  "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed tails up.",
+  "item.villagerunknown-villagercoin.villager_coin.flip.heads": "%s flipped a coin and it landed on heads.",
+  "item.villagerunknown-villagercoin.villager_coin.flip.tails": "%s flipped a coin and it landed on tails.",
 
   "tag.item.villagerunknown-villagercoin.villager_coin": "Villager Coin",
 
