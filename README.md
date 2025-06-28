@@ -1,15 +1,17 @@
 # VillagerUnknown's Villager Coin
 
-Villager Coin is a lightweight currency library that adds customizable coin currencies and optionally adds the currencies to loot tables, mob drops, and merchant trades. 
-Coins can be converted between different types through the crafting table.
+Meet the last currency mod you'll ever need!
 
-Villager Coin, on its own, consists of 5 types of coins with their own value: Copper, Iron, Gold, Emerald, and Netherite. 
-More coins can be added, like edible, collectable, cursed, and lucky coins, with add-on mods. 
+Villager Coin is a lightweight currency library that adds customizable coin currencies and optionally adds the currencies to loot tables, mob drops, and merchant trades.
+Additional features can be enabled with add-on mods, like different types of coins, coin banks, and coin stacks.
+
+On its own, Villager Coin consists of 5 types of coins with their own value: Copper, Iron, Gold, Emerald, and Netherite.
+Coins can be converted between different types through the crafting table.
 
 Each type of coin stacks up to 1,000 coins by default to reduce inventory clutter and can be converted between the different coins through the crafting table.
 The stack size can be configured, but it's limited to a maximum of 1,073,741,822.
 
-Learn how to customize Villager Coin with add-on mods, like Coin Banks and Coin Stacks, and the developer wiki at the bottom of this page.
+Learn how to customize Villager Coin with add-on mods and the developer wiki at the bottom of this page.
 
 ## Features
 
@@ -192,6 +194,24 @@ Iron and Gold farms will be more rewarding than a crop farm or melon and pumpkin
 * Request features and report bugs at https://github.com/VillagerUnknown/VillagerCoin/issues
 * View the changelog at https://github.com/VillagerUnknown/VillagerCoin/blob/main/CHANGELOG.md
 
+### Supported Languages
+
+* English _by VillagerUnknown_
+* Pirate English
+* Svenska (Swedish)
+* Français (French)
+* Italiano (Italian)
+* Deutsch (German)
+* Português do Brasil (Brazil Portuguese)
+* Русский (Russian)
+* 한국어 (Korean)
+* 简体中文 (Simplified Chinese)
+* 日本語 (Japanese)
+* हिन्दी (Hindi)
+* (Hebrew) עברית
+
+_Disclaimer: Unless noted otherwise, translations have been provided by automated services._
+
 ### Configurable Options
 
 The list of configurable options, and their default values, can be found on the Wiki at https://github.com/VillagerUnknown/VillagerCoin/wiki/Configurable-Options
@@ -203,7 +223,7 @@ In most cases, Villager Coin should "just work" with other mods. Additional conf
 
 _If a loot table is modified by a data pack, Villager Coin will not inject coins into those loot tables. This does not apply to mob drops._
 
-### Developer Wiki (WIP)
+### Wiki & Developer Discussions
 
 Villager Coin allows players, and communities, to design their own coin economy.
 

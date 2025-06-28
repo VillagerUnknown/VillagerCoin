@@ -23,7 +23,7 @@ public abstract class ItemEntityMixin extends Entity {
 	
 	@Inject(method = "applyWaterBuoyancy", at = @At("HEAD"), cancellable = true)
 	private void applyWaterBuoyancy(CallbackInfo ci) {
-		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getStack().isIn( Villagercoin.getItemTagKey( "villager_coin" ) ) ) {
+		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getStack().isIn( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
 			this.applyGravity();
 			ci.cancel();
 		} // if
@@ -31,7 +31,7 @@ public abstract class ItemEntityMixin extends Entity {
 	
 	@Inject(method = "applyLavaBuoyancy", at = @At("HEAD"), cancellable = true)
 	private void applyLavaBuoyancy(CallbackInfo ci) {
-		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getStack().isIn( Villagercoin.getItemTagKey( "villager_coin" ) ) ) {
+		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getStack().isIn( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
 			this.applyGravity();
 			ci.cancel();
 		} // if
