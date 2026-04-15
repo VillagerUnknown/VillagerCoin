@@ -33,7 +33,7 @@ Learn how to customize Villager Coin with add-on mods and the developer wiki at 
 ## Coin Currency
 
 The value of coins can be configured through a Currency Multiplier option, with a default multiplier of 100. 
-Copper coins are used as the base value of 1 with each coin above it multiplying by the Currency Multipler.
+Copper coins are used as the base value of 1 with each coin above it multiplying by the Currency Multiplier.
 
 By default, Villager Coin includes Copper, Iron, and Gold coins in the loot tables and mob drops with lower value coins being more common. 
 
