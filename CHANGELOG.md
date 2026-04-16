@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.11]
+
+_This update helps balance coin drops._
+
+### Changed
+
+- Wandering Traders no longer have a chance to drop gold coins.
+- Piglin Brutes no longer have a chance to drop emerald coins (if enabled).
+
 ## [1.0.10]
 
 ### Added
