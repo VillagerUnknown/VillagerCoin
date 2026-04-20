@@ -38,6 +38,7 @@ public class CoinBankBlocksFeature {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
 		Item.Settings settings = new Item.Settings()
+				.useBlockPrefixedTranslationKey()
 				.component(CURRENCY_COMPONENT, new CurrencyComponent(0))
 				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
 		
@@ -54,6 +55,7 @@ public class CoinBankBlocksFeature {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
 		Item.Settings settings = new Item.Settings()
+				.useBlockPrefixedTranslationKey()
 				.component(CURRENCY_COMPONENT, new CurrencyComponent(0))
 				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)))
 				.fireproof();
