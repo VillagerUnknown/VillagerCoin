@@ -10,6 +10,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootTable;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 import java.util.List;
@@ -52,6 +54,8 @@ public class EdibleCoinFeature {
 	}
 	
 	public static Item registerEdibleCoinItem( String namespace, String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, Item.Settings settings ) {
+		settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+		
 		Item item = RegistryUtil.registerItem( id, new EdibleCoinItem( settings, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls ), namespace );
 		
 		Villagercoin.addItemToGroup( item );
@@ -60,6 +64,8 @@ public class EdibleCoinFeature {
 	}
 	
 	public static Item registerEdibleCoinItem( String namespace, String id, FoodComponent foodComponent, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, List<SuspiciousStewEffectsComponent.StewEffect> stewEffects, Item.Settings settings ) {
+		settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+		
 		Item item = RegistryUtil.registerItem( id, new EdibleCoinItem( settings, foodComponent, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, stewEffects ), namespace );
 		
 		Villagercoin.addItemToGroup( item );

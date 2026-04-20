@@ -9,11 +9,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.loot.LootTable;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 import java.util.HashMap;
 import java.util.Set;
+
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
 public class CollectableCoinFeature {
 	
@@ -56,6 +60,8 @@ public class CollectableCoinFeature {
 	}
 	
 	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
+		settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+		
 		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer ), namespace );
 		
 		Villagercoin.addItemToGroup( item );

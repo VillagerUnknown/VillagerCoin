@@ -10,11 +10,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public class CoinBankBlocksFeature {
@@ -34,7 +37,11 @@ public class CoinBankBlocksFeature {
 	public static Block registerCoinBankBlock( String namespace, String id, Block block) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), namespace);
+		Item.Settings settings = new Item.Settings()
+				.component(CURRENCY_COMPONENT, new CurrencyComponent(0))
+				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+		
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, settings), namespace);
 		
 		Villagercoin.addItemToGroup( item );
 		
@@ -46,7 +53,12 @@ public class CoinBankBlocksFeature {
 	public static Block registerFireproofCoinBankBlock( String namespace, String id, Block block) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent(0))), namespace);
+		Item.Settings settings = new Item.Settings()
+				.component(CURRENCY_COMPONENT, new CurrencyComponent(0))
+				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)))
+				.fireproof();
+		
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, settings), namespace);
 		
 		Villagercoin.addItemToGroup( item );
 		

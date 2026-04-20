@@ -3,12 +3,17 @@ package me.villagerunknown.villagercoin.feature;
 import me.villagerunknown.platform.list.BlocksList;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.Components;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.type.CoinType;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 
+import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public class CoinStackBlocksFeature {
@@ -38,7 +43,11 @@ public class CoinStackBlocksFeature {
 	public static Block registerCoinStackBlock( String namespace, String id, Block block, long value ) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), namespace);
+		Item.Settings settings = new Item.Settings()
+				.component(CURRENCY_COMPONENT, new CurrencyComponent(value))
+				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+		
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, settings), namespace);
 		
 		Villagercoin.addItemToGroup( item );
 		
@@ -50,7 +59,12 @@ public class CoinStackBlocksFeature {
 	public static Block registerFireproofCoinStackBlock( String namespace, String id, Block block, long value ) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, new Item.Settings().fireproof().component( CURRENCY_COMPONENT, new CurrencyComponent( value ))), namespace);
+		Item.Settings settings = new Item.Settings()
+				.component(CURRENCY_COMPONENT, new CurrencyComponent(value))
+				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)))
+				.fireproof();
+		
+		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, settings), namespace);
 		
 		Villagercoin.addItemToGroup( item );
 		

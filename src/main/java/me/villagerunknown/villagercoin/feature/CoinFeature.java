@@ -13,6 +13,7 @@ import net.minecraft.registry.*;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 import java.text.DecimalFormat;
@@ -110,6 +111,8 @@ public class CoinFeature {
 	}
 	
 	public static Item registerCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Item.Settings settings ) {
+		settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+		
 		Item item = RegistryUtil.registerItem( id, new CoinItem( settings, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance ), namespace );
 		
 		Villagercoin.addItemToGroup( item );
