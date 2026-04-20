@@ -8,7 +8,7 @@ import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -27,7 +27,7 @@ public class CoinCraftingFeature {
 	
 	private static TreeMap<Long, Item> CRAFTING_RESULT_COINS = new TreeMap<>();
 	
-	public static RecipeSerializer<VillagerCoinRecipe> RECIPE_SERIALIZER;
+	public static RecipeSerializer RECIPE_SERIALIZER;
 	
 	public static void execute() {}
 	
@@ -326,7 +326,7 @@ public class CoinCraftingFeature {
 	}
 	
 	static {
-		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_villager_coin" ), new SpecialRecipeSerializer(VillagerCoinRecipe::new));
+		RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_villager_coin" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(VillagerCoinRecipe::new));
 	}
 	
 	public static class CoinIngredient {

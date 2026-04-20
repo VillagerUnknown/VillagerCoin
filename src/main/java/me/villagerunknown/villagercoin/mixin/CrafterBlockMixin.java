@@ -59,7 +59,7 @@ public class CrafterBlockMixin {
 						world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
 						itemStack.onCraftByCrafter(world);
 						this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
-						Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRemainder(craftingRecipeInput).iterator();
+						Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRecipeRemainders(craftingRecipeInput).iterator();
 						
 						while(var9.hasNext()) {
 							ItemStack itemStack2 = (ItemStack)var9.next();
@@ -103,7 +103,7 @@ public class CrafterBlockMixin {
 						world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
 						itemStack.onCraftByCrafter(world);
 						this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
-						Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRemainder(craftingRecipeInput).iterator();
+						Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRecipeRemainders(craftingRecipeInput).iterator();
 						
 						while(var9.hasNext()) {
 							ItemStack itemStack2 = (ItemStack)var9.next();
@@ -143,7 +143,7 @@ public class CrafterBlockMixin {
 							world.setBlockState(pos, (BlockState)state.with(CRAFTING, true), 2);
 							itemStack.onCraftByCrafter(world);
 							this.transferOrSpawnStack(world, pos, crafterBlockEntity, itemStack, state, recipeEntry);
-							Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRemainder(craftingRecipeInput).iterator();
+							Iterator var9 = ((CraftingRecipe)recipeEntry.value()).getRecipeRemainders(craftingRecipeInput).iterator();
 							
 							while(var9.hasNext()) {
 								ItemStack itemStack2 = (ItemStack)var9.next();

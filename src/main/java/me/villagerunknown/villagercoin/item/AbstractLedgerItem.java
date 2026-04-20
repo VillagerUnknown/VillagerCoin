@@ -31,7 +31,7 @@ public class AbstractLedgerItem extends WritableBookItem {
 		Text customNameComponent = stack.get(DataComponentTypes.CUSTOM_NAME);
 		
 		if(
-			(null == nameComponent || Objects.equals( nameComponent, Text.translatable(stack.getTranslationKey()) ))
+			(null == nameComponent || Objects.equals( nameComponent, Text.translatable(stack.getItem().getTranslationKey()) ))
 			&& null == customNameComponent
 		) {
 			stack.set(DataComponentTypes.ITEM_NAME, Text.translatable(

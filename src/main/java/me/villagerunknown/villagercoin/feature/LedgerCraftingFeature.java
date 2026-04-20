@@ -12,7 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -340,8 +340,8 @@ public class LedgerCraftingFeature {
 	}
 	
 	static {
-		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_ledger" ), new SpecialRecipeSerializer(LedgerRecipe::new));
-		CLONING_RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_ledgercloning" ), new SpecialRecipeSerializer(LedgerCloningRecipe::new));
+		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_ledger" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(LedgerRecipe::new));
+		CLONING_RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_ledgercloning" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(LedgerCloningRecipe::new));
 	}
 	
 	public static class Ledger {

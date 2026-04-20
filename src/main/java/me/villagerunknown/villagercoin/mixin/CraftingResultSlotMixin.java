@@ -8,14 +8,18 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.screen.slot.CraftingResultSlot;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -61,7 +65,13 @@ public class CraftingResultSlotMixin {
 		} else {
 			CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
 			CraftingRecipeInput craftingRecipeInput = positioned.input();
-			DefaultedList<ItemStack> defaultedList = player.getWorld().getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, craftingRecipeInput, player.getWorld());
+			DefaultedList<ItemStack> defaultedList;
+			
+			if( player.getWorld() instanceof ServerWorld serverWorld ) {
+				defaultedList = serverWorld.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingRecipeInput, serverWorld).map((recipe) -> ((CraftingRecipe)recipe.value()).getRecipeRemainders(craftingRecipeInput)).orElseGet(() -> copyInput(craftingRecipeInput));
+			} else {
+				defaultedList = CraftingRecipe.collectRecipeRemainders(craftingRecipeInput);
+			} // if, else
 			
 			if( LedgerCraftingFeature.isCraftingResultLedger( stack.getItem() ) ) {
 				// # Ledgers - Remove the written book and receipts and add each receipt as a page in the ledger
@@ -167,5 +177,16 @@ public class CraftingResultSlotMixin {
 	
 	@Shadow
 	protected void onCrafted(ItemStack stack) {}
+	
+	@Unique
+	private static DefaultedList<ItemStack> copyInput(CraftingRecipeInput input) {
+		DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(input.size(), ItemStack.EMPTY);
+		
+		for(int i = 0; i < defaultedList.size(); ++i) {
+			defaultedList.set(i, input.getStackInSlot(i));
+		}
+		
+		return defaultedList;
+	}
 	
 }

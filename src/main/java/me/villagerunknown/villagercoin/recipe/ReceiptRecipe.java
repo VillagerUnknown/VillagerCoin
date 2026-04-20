@@ -2,7 +2,6 @@ package me.villagerunknown.villagercoin.recipe;
 
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
-import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,7 +54,7 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 		
 		ItemStack carrierStack = null;
 		
-		for(int i = 0; i < craftingRecipeInput.getSize(); ++i) {
+		for(int i = 0; i < craftingRecipeInput.size(); ++i) {
 			ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 			
 			if( !itemStack.isEmpty() ) {
@@ -88,13 +87,12 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 		return returnStack;
 	}
 	
-	@Override
 	public boolean fits(int width, int height) {
 		return width * height >= 2;
 	}
 	
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
 		return ReceiptCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

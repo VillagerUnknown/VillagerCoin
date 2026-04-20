@@ -1,8 +1,6 @@
 package me.villagerunknown.villagercoin.recipe;
 
-import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
-import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
 import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import me.villagerunknown.villagercoin.type.CoinType;
@@ -85,13 +83,12 @@ public class CoinStackRecipe extends SpecialCraftingRecipe {
 		return returnStack;
 	}
 	
-	@Override
 	public boolean fits(int width, int height) {
 		return width * height >= 9;
 	}
 	
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
 		return CoinStackCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

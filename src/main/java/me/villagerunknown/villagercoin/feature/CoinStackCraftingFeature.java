@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -37,7 +37,7 @@ public class CoinStackCraftingFeature {
 	
 	private static HashSet<Item> FLAT_CRAFTING_RESULT_COIN_STACKS = new HashSet<>();
 	
-	public static RecipeSerializer<CoinStackRecipe> RECIPE_SERIALIZER;
+	public static RecipeSerializer RECIPE_SERIALIZER;
 	
 	public static void execute() {}
 	
@@ -150,7 +150,7 @@ public class CoinStackCraftingFeature {
 	}
 	
 	static {
-		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_coin_stack" ), new SpecialRecipeSerializer(CoinStackRecipe::new));
+		RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_coin_stack" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(CoinStackRecipe::new));
 	}
 	
 }

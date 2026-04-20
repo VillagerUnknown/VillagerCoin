@@ -14,8 +14,8 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
@@ -33,7 +33,7 @@ public abstract class AbstractFlippableCoinItem extends AbstractCoinItem {
 	}
 	
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	public ActionResult use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand( hand );
 		
 		if( !world.isClient() && !user.isSpectator() && Villagercoin.CONFIG.enableCoinFlipping ) {
@@ -68,7 +68,7 @@ public abstract class AbstractFlippableCoinItem extends AbstractCoinItem {
 				
 				MessageUtil.sendChatMessage( user, result.getString());
 				
-				user.getItemCooldownManager().set( this, COOLDOWN_TIME );
+				user.getItemCooldownManager().set( itemStack, COOLDOWN_TIME );
 				user.incrementStat(Stats.USED.getOrCreateStat(this));
 				
 				List<Entity> nearbyEntities = world.getOtherEntities(user, user.getBoundingBox().expand(16));
@@ -81,11 +81,11 @@ public abstract class AbstractFlippableCoinItem extends AbstractCoinItem {
 					} // for
 				} // if
 				
-				return TypedActionResult.success(itemStack);
+				return ActionResult.SUCCESS;
 			} // if
 		} // if
 		
-		return TypedActionResult.pass(itemStack);
+		return ActionResult.PASS;
 	}
 	
 }

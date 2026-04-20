@@ -60,12 +60,12 @@ public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock
 			
 			if( null != serverWorld && !player.isInCreativeMode() ) {
 				DynamicRegistryManager drm =serverWorld.getRegistryManager();
-				Registry<Enchantment> reg = drm.get(RegistryKeys.ENCHANTMENT);
+				Registry<Enchantment> reg = drm.getOrThrow(RegistryKeys.ENCHANTMENT);
 				
-				Optional<RegistryEntry.Reference<Enchantment>> optional = reg.getEntry( Enchantments.SILK_TOUCH );
-				RegistryEntry<Enchantment> silkTouchEnchantmentEntry = optional.orElseThrow();
+				Enchantment silkTouchEnchantmentEntry = reg.get( Enchantments.SILK_TOUCH );
+				RegistryEntry<Enchantment> regEntry = reg.getEntry( silkTouchEnchantmentEntry );
 				
-				if( !player.getStackInHand( player.getActiveHand() ).getEnchantments().getEnchantments().contains( silkTouchEnchantmentEntry ) ) {
+				if( !player.getStackInHand( player.getActiveHand() ).getEnchantments().getEnchantments().contains( regEntry ) ) {
 					BlockEntity blockEntity = world.getBlockEntity( pos );
 					
 					if( blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity ) {

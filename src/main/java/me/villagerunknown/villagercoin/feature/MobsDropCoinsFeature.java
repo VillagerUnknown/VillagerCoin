@@ -17,12 +17,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.loot.LootTable;
+import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -120,79 +119,87 @@ public class MobsDropCoinsFeature {
 					if( damageSource.getAttacker().isPlayer() ) {
 						EntityType<?> entityType = entity.getType();
 						
-						String namespace = entityType.getLootTableId().getValue().getNamespace();
-						String path = entityType.getLootTableId().getValue().getPath();
+						Optional<RegistryKey<LootTable>> lootTableKey = entityType.getLootTableKey();
 						
-						Set<Item> items = new HashSet<>();
-						
-						boolean isVanilla = namespace.contains("minecraft");
-						
-						if( isVanilla ) {
-							// # Included Vanilla Entity
+						if( lootTableKey.isPresent() ) {
+							RegistryKey<LootTable> lootTableRegKey = lootTableKey.get();
 							
-							// Copper & Optionals
-							if(
-									entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "copper" ) ) )
-									||
-									(
-										Villagercoin.CONFIG.enableBreedableMobDrops
-										&& entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "optional" ) ) )
-									)
-							) {
-								items.addAll( COPPER_COIN_DROPS );
-							} // if
+							String namespace = lootTableRegKey.getValue().getNamespace();
+							String path = lootTableRegKey.getValue().getPath();
 							
-							// Iron
-							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "iron" ) ) ) ) {
-								items.addAll( IRON_COIN_DROPS );
-							} // if
+							Set<Item> items = new HashSet<>();
 							
-							// Gold
-							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "gold" ) ) ) ) {
-								items.addAll( GOLD_COIN_DROPS );
-							} // if
+							boolean isVanilla = namespace.contains("minecraft");
 							
-							// Emerald
-							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "emerald" ) ) ) ) {
-								items.addAll( EMERALD_COIN_DROPS );
-							} // if
-							
-							// Netherite
-							if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "netherite" ) ) ) ) {
-								items.addAll( NETHERITE_COIN_DROPS );
-							} // if
-							
-							// Specifics
-							if( MOB_DROPS.containsKey( entityType ) ) {
-								items.addAll( MOB_DROPS.get( entityType ) );
-							} // if
-						} else if( !isVanilla && Villagercoin.CONFIG.addCoinsToModdedMobDrops ) {
-							// # Modded Entity
-							boolean includeCoins = true;
-							
-							for (String excludeCoinKeyword : excludeCoinKeywords.getList()) {
-								if( namespace.contains( excludeCoinKeyword ) || path.contains( excludeCoinKeyword ) ) {
-									includeCoins = false;
-									break;
-								} // if
-							} // for
-							
-							if( includeCoins ) {
-								items.add(CoinItems.COPPER_COIN);
-								items.add(CoinItems.IRON_COIN);
+							if( isVanilla ) {
+								// # Included Vanilla Entity
 								
-								for (String highValueCoinKeyword : highValueCoinKeywords.getList()) {
-									if (path.contains(highValueCoinKeyword)) {
-										items.add(CoinItems.GOLD_COIN);
+								// Copper & Optionals
+								if(
+										entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "copper" ) ) )
+												||
+												(
+														Villagercoin.CONFIG.enableBreedableMobDrops
+																&& entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "optional" ) ) )
+												)
+								) {
+									items.addAll( COPPER_COIN_DROPS );
+								} // if
+								
+								// Iron
+								if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "iron" ) ) ) ) {
+									items.addAll( IRON_COIN_DROPS );
+								} // if
+								
+								// Gold
+								if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "gold" ) ) ) ) {
+									items.addAll( GOLD_COIN_DROPS );
+								} // if
+								
+								// Emerald
+								if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "emerald" ) ) ) ) {
+									items.addAll( EMERALD_COIN_DROPS );
+								} // if
+								
+								// Netherite
+								if( entityType.isIn( TagKey.of( RegistryKeys.ENTITY_TYPE, Identifier.of( Villagercoin.MOD_ID, "netherite" ) ) ) ) {
+									items.addAll( NETHERITE_COIN_DROPS );
+								} // if
+								
+								// Specifics
+								if( MOB_DROPS.containsKey( entityType ) ) {
+									items.addAll( MOB_DROPS.get( entityType ) );
+								} // if
+							} else if( !isVanilla && Villagercoin.CONFIG.addCoinsToModdedMobDrops ) {
+								// # Modded Entity
+								boolean includeCoins = true;
+								
+								for (String excludeCoinKeyword : excludeCoinKeywords.getList()) {
+									if( namespace.contains( excludeCoinKeyword ) || path.contains( excludeCoinKeyword ) ) {
+										includeCoins = false;
 										break;
 									} // if
 								} // for
+								
+								if( includeCoins ) {
+									items.add(CoinItems.COPPER_COIN);
+									items.add(CoinItems.IRON_COIN);
+									
+									for (String highValueCoinKeyword : highValueCoinKeywords.getList()) {
+										if (path.contains(highValueCoinKeyword)) {
+											items.add(CoinItems.GOLD_COIN);
+											break;
+										} // if
+									} // for
+								} // if
 							} // if
+							
+							HashMap<Item, Integer> coinsToDrop = buildCoinsList( items, entityType );
+							
+							dropCoins( entity, damageSource, coinsToDrop );
+							
 						} // if
 						
-						HashMap<Item, Integer> coinsToDrop = buildCoinsList( items, entityType );
-						
-						dropCoins( entity, damageSource, coinsToDrop );
 					} // if
 				} // if
 			} // if
@@ -229,9 +236,9 @@ public class MobsDropCoinsFeature {
 				DynamicRegistryManager drm = world.getRegistryManager();
 				
 				if (null != drm) {
-					Registry<Enchantment> registry = drm.get(RegistryKeys.ENCHANTMENT);
-					Enchantment lootingEnchantment = registry.get(Enchantments.LOOTING);
-					RegistryEntry<Enchantment> lootingEntry = registry.getEntry(lootingEnchantment);
+					Registry<Enchantment> reg = drm.getOrThrow(RegistryKeys.ENCHANTMENT);
+					Enchantment lootingEnchantment = reg.get(Enchantments.LOOTING);
+					RegistryEntry<Enchantment> lootingEntry = reg.getEntry(lootingEnchantment);
 					
 					int enchantmentLevel = enchantments.getLevel(lootingEntry);
 					
@@ -253,15 +260,22 @@ public class MobsDropCoinsFeature {
 					if( amount > 0 ) {
 						CollectableComponent collectableComponent = coin.getComponents().get( COLLECTABLE_COMPONENT );
 						
-						if( null != collectableComponent ) {
-							if( collectableComponent.canAddToCirculation( coin ) ) {
-								collectableComponent.addToCirculation( coin, amount );
-								
-								entity.dropStack(new ItemStack(coin, amount));
-							} // if
-						} else {
-							entity.dropStack(new ItemStack(coin, amount));
-						} // if, else
+						MinecraftServer server = world.getServer();
+						
+						if( null != server ) {
+							
+							if( null != collectableComponent ) {
+								if( collectableComponent.canAddToCirculation( coin ) ) {
+									collectableComponent.addToCirculation( coin, amount );
+									
+									entity.dropStack( server.getWorld( world.getRegistryKey() ), new ItemStack(coin, amount) );
+								} // if
+							} else {
+								entity.dropStack( server.getWorld( world.getRegistryKey() ), new ItemStack(coin, amount) );
+							} // if, else
+							
+						} // if
+						
 					} // if
 				} // if
 			} // if

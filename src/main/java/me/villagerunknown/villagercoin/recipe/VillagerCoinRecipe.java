@@ -46,7 +46,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 		if( craftingRecipeInput.getStackCount() > 1 ) {
 			// # Combine Multiple Coins to the Highest Coin Value
 			
-			for(int i = 0; i < craftingRecipeInput.getSize(); ++i) {
+			for(int i = 0; i < craftingRecipeInput.size(); ++i) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 				
 				if( !itemStack.isEmpty() ) {
@@ -67,7 +67,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 		} else {
 			// # Convert a Single Coin to a Higher or Lower Valued Coin
 			
-			for(int i = 0; i < craftingRecipeInput.getSize(); ++i) {
+			for(int i = 0; i < craftingRecipeInput.size(); ++i) {
 				ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 				
 				if( !itemStack.isEmpty() ) {
@@ -105,13 +105,12 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 		return returnStack;
 	}
 	
-	@Override
 	public boolean fits(int width, int height) {
 		return width * height >= 2;
 	}
 	
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
 		return CoinCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

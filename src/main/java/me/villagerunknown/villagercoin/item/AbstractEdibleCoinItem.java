@@ -5,16 +5,16 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.List;
 
 public abstract class AbstractEdibleCoinItem extends AbstractCoinItem {
 	
-	public static SoundEvent SOUND = SoundEvents.ENTITY_GENERIC_EAT;
+	public static SoundEvent SOUND = SoundEvents.ENTITY_GENERIC_EAT.value();
 	
 	public AbstractEdibleCoinItem(Settings settings) {
 		super(settings);
@@ -42,7 +42,6 @@ public abstract class AbstractEdibleCoinItem extends AbstractCoinItem {
 		return UseAction.EAT;
 	}
 	
-	@Override
 	public SoundEvent getEatSound() {
 		return SOUND;
 	}

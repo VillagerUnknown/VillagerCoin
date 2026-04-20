@@ -35,9 +35,9 @@ public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock 
 	}
 	
 	@Override
-	protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if( world.isClient() ) {
-			return ItemActionResult.SUCCESS;
+			return ActionResult.SUCCESS;
 		} // if
 		
 		world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
@@ -53,11 +53,11 @@ public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock 
 				
 				player.incrementStat( CoinBankBlocksFeature.COINS_INSERTED_STAT_ID );
 				
-				return ItemActionResult.CONSUME;
+				return ActionResult.CONSUME;
 			} // if
 		} // if
 		
-		return ItemActionResult.FAIL;
+		return ActionResult.FAIL;
 	}
 	
 	@Override
@@ -69,12 +69,12 @@ public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock 
 
 			if( null != serverWorld ) {
 				DynamicRegistryManager drm =serverWorld.getRegistryManager();
-				Registry<Enchantment> reg = drm.get(RegistryKeys.ENCHANTMENT);
+				Registry<Enchantment> reg = drm.getOrThrow(RegistryKeys.ENCHANTMENT);
+				
+				Enchantment silkTouchEnchantmentEntry = reg.get( Enchantments.SILK_TOUCH );
+				RegistryEntry<Enchantment> regEntry = reg.getEntry( silkTouchEnchantmentEntry );
 
-				Optional<RegistryEntry.Reference<Enchantment>> optional = reg.getEntry( Enchantments.SILK_TOUCH );
-				RegistryEntry<Enchantment> silkTouchEnchantmentEntry = optional.orElseThrow();
-
-				if( !player.getStackInHand( player.getActiveHand() ).getEnchantments().getEnchantments().contains( silkTouchEnchantmentEntry ) ) {
+				if( !player.getStackInHand( player.getActiveHand() ).getEnchantments().getEnchantments().contains( regEntry ) ) {
 					BlockEntity blockEntity = world.getBlockEntity( pos );
 
 					if( blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity ) {

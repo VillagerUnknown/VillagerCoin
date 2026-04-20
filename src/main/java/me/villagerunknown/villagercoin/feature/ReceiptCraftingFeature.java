@@ -12,7 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -32,7 +32,7 @@ public class ReceiptCraftingFeature {
 	
 	private static HashSet<Item> CRAFTING_RESULT_RECEIPTS = new HashSet<>();
 	
-	public static RecipeSerializer<ReceiptRecipe> RECIPE_SERIALIZER;
+	public static RecipeSerializer RECIPE_SERIALIZER;
 	
 	public static void execute(){}
 	
@@ -109,7 +109,7 @@ public class ReceiptCraftingFeature {
 	}
 	
 	static {
-		RECIPE_SERIALIZER = (RecipeSerializer) Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_receipt" ), new SpecialRecipeSerializer(ReceiptRecipe::new));
+		RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_receipt" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(ReceiptRecipe::new));
 	}
 	
 }

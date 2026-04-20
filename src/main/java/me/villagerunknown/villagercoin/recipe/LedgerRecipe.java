@@ -5,12 +5,9 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.AccumulatingValueComponent;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
-import me.villagerunknown.villagercoin.feature.CoinStackCraftingFeature;
 import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
-import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -86,7 +83,7 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 		
 		ItemStack carrierStack = null;
 		
-		for(int i = 0; i < craftingRecipeInput.getSize(); ++i) {
+		for(int i = 0; i < craftingRecipeInput.size(); ++i) {
 			ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
 			
 			if( !itemStack.isEmpty() ) {
@@ -122,13 +119,12 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 		return returnStack;
 	}
 	
-	@Override
 	public boolean fits(int width, int height) {
 		return width * height >= 2;
 	}
 	
 	@Override
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
 		return LedgerCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

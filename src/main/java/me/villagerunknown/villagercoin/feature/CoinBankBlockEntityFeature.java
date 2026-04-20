@@ -1,6 +1,7 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.block.entity.CoinBankBlockEntity;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 
@@ -16,7 +17,7 @@ public class CoinBankBlockEntityFeature extends AbstractBlockEntityFeature {
 		Block[] blocks = CoinBankBlocksFeature.blocks.getBlocksArray();
 		
 		if( blocks.length > 0 ) {
-			BlockEntityType.Builder<CoinBankBlockEntity> builder = BlockEntityType.Builder.create(
+			FabricBlockEntityTypeBuilder<CoinBankBlockEntity> builder = FabricBlockEntityTypeBuilder.create(
 					CoinBankBlockEntity::new,
 					blocks
 			);

@@ -8,12 +8,7 @@ import me.villagerunknown.villagercoin.component.LootTableComponent;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
 import me.villagerunknown.villagercoin.feature.MobsDropCoinsFeature;
 import me.villagerunknown.villagercoin.feature.StructuresIncludeCoinsFeature;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
 
 import static me.villagerunknown.villagercoin.component.Components.*;
 

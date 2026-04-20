@@ -3,10 +3,8 @@ package me.villagerunknown.villagercoin.recipe;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CopyCountComponent;
 import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
-import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.component.type.WrittenBookContentComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.WrittenBookItem;
@@ -30,7 +28,7 @@ public class LedgerCloningRecipe extends SpecialCraftingRecipe {
 		int i = 0;
 		ItemStack itemStack = ItemStack.EMPTY;
 		
-		for(int j = 0; j < craftingRecipeInput.getSize(); ++j) {
+		for(int j = 0; j < craftingRecipeInput.size(); ++j) {
 			ItemStack itemStack2 = craftingRecipeInput.getStackInSlot(j);
 			if (!itemStack2.isEmpty()) {
 				if (itemStack2.isIn(Villagercoin.getItemTagKey( "ledger" ))) {
@@ -56,7 +54,7 @@ public class LedgerCloningRecipe extends SpecialCraftingRecipe {
 		int i = 0;
 		ItemStack itemStack = ItemStack.EMPTY;
 		
-		for(int j = 0; j < craftingRecipeInput.getSize(); ++j) {
+		for(int j = 0; j < craftingRecipeInput.size(); ++j) {
 			ItemStack itemStack2 = craftingRecipeInput.getStackInSlot(j);
 			if (!itemStack2.isEmpty()) {
 				if (itemStack2.isIn(Villagercoin.getItemTagKey( "ledger" ))) {
@@ -94,12 +92,12 @@ public class LedgerCloningRecipe extends SpecialCraftingRecipe {
 	}
 	
 	public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput craftingRecipeInput) {
-		DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.getSize(), ItemStack.EMPTY);
+		DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(craftingRecipeInput.size(), ItemStack.EMPTY);
 		
 		for(int i = 0; i < defaultedList.size(); ++i) {
 			ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
-			if (itemStack.getItem().hasRecipeRemainder()) {
-				defaultedList.set(i, new ItemStack(itemStack.getItem().getRecipeRemainder()));
+			if (!itemStack.getItem().getRecipeRemainder().isEmpty()) {
+				defaultedList.set(i, itemStack.getItem().getRecipeRemainder());
 			} else if (itemStack.getItem() instanceof WrittenBookItem) {
 				defaultedList.set(i, itemStack.copyWithCount(1));
 				break;
@@ -109,7 +107,7 @@ public class LedgerCloningRecipe extends SpecialCraftingRecipe {
 		return defaultedList;
 	}
 	
-	public RecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
 		return LedgerCraftingFeature.CLONING_RECIPE_SERIALIZER;
 	}
 	
