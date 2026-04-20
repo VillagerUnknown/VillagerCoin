@@ -106,6 +106,8 @@
   "tag.item.villagerunknown-villagercoin.emerald_coin": "Smaragdmynt",
   "tag.item.villagerunknown-villagercoin.netherite_coin": "Netheritmynt",
 
+  "tag.item.villagerunknown-villagercoin.currency_coin": "Valutamynt",
+
   "tag.item.villagerunknown-villagercoin.edible_coin": "Ätbart mynt",
   "tag.item.villagerunknown-villagercoin.collectable_coin": "Samlarobjektmynt",
   "tag.item.villagerunknown-villagercoin.instant_effect_coin": "Omedelbar effektmynt",

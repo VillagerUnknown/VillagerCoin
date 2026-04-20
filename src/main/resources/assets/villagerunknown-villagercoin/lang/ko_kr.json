@@ -106,6 +106,8 @@
   "tag.item.villagerunknown-villagercoin.emerald_coin": "에메랄드 동전",
   "tag.item.villagerunknown-villagercoin.netherite_coin": "네더라이트 동전",
 
+  "tag.item.villagerunknown-villagercoin.currency_coin": "화폐 동전",
+
   "tag.item.villagerunknown-villagercoin.edible_coin": "먹을 수 있는 동전",
   "tag.item.villagerunknown-villagercoin.collectable_coin": "수집용 동전",
   "tag.item.villagerunknown-villagercoin.instant_effect_coin": "즉시 효과 동전",

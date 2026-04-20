@@ -106,6 +106,8 @@
   "tag.item.villagerunknown-villagercoin.emerald_coin": "绿宝石币",
   "tag.item.villagerunknown-villagercoin.netherite_coin": "下界合金币",
 
+  "tag.item.villagerunknown-villagercoin.currency_coin": "货币硬币",
+
   "tag.item.villagerunknown-villagercoin.edible_coin": "可食用硬币",
   "tag.item.villagerunknown-villagercoin.collectable_coin": "可收集硬币",
   "tag.item.villagerunknown-villagercoin.instant_effect_coin": "即时效果硬币",
