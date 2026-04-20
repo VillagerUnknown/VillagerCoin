@@ -22,16 +22,22 @@ public abstract class AbstractEdibleCoinItem extends AbstractCoinItem {
 	
 	@Override
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-		if( !world.isClient() ) {
-			SuspiciousStewEffectsComponent stewEffectsComponent = stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
+		SuspiciousStewEffectsComponent stewEffectsComponent = stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
+		
+		if (null != stewEffectsComponent) {
+			List<SuspiciousStewEffectsComponent.StewEffect> stewEffects = stewEffectsComponent.effects();
 			
-			if (null != stewEffectsComponent) {
-				List<SuspiciousStewEffectsComponent.StewEffect> stewEffects = stewEffectsComponent.effects();
+			if (!stewEffects.isEmpty() && stewEffects.size() > 1) {
+				SuspiciousStewEffectsComponent.StewEffect stewEffect = stewEffects.get((int) MathUtil.getRandomWithinRange(0, stewEffects.size() - 1));
 				
-				SuspiciousStewEffectsComponent.StewEffect stewEffect = stewEffects.get((int) MathUtil.getRandomWithinRange(0, stewEffects.size()));
-				
-				user.addStatusEffect(stewEffect.createStatusEffectInstance());
+				stack.remove(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
+				stack.set(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffectsComponent(List.of(stewEffect)));
 			} // if
+			
+		} // if
+		
+		if( world.isClient() ) {
+			stack.remove(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
 		} // if
 		
 		return super.finishUsing(stack, world, user);
