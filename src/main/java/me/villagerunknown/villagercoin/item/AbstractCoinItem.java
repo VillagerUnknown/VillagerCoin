@@ -49,7 +49,7 @@ public abstract class AbstractCoinItem extends Item {
 	}
 	
 	@Override
-	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
+	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType options) {
 		CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
 		
 		if( null != currencyComponent ) {

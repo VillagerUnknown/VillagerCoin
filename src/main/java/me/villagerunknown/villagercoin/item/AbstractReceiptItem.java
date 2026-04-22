@@ -27,7 +27,7 @@ public class AbstractReceiptItem extends Item {
 	}
 	
 	@Override
-	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
+	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType options) {
 		DateComponent dateComponent = stack.get( DATE_COMPONENT );
 		
 		if( null != dateComponent ) {

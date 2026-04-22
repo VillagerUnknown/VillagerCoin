@@ -44,7 +44,7 @@ public class AbstractLedgerItem extends WritableBookItem {
 	}
 	
 	@Override
-	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
+	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType options) {
 		NumberFormat numberFormat = NumberFormat.getNumberInstance();
 		
 		DateComponent dateComponent = stack.get( DATE_COMPONENT );
