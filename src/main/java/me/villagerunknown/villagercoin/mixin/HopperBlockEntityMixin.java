@@ -2,6 +2,7 @@ package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
+import me.villagerunknown.villagercoin.block.entity.CoinBankBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.HopperBlockEntity;
@@ -23,15 +24,13 @@ public abstract class HopperBlockEntityMixin {
 	private static void insert(World world, BlockPos pos, HopperBlockEntity hopperBlockEntity, CallbackInfoReturnable<Boolean> cir) {
 		Direction direction = Direction.getFacing( pos.getX(), pos.getY(), pos.getZ() );
 		
-		if( Direction.DOWN == direction ) {
+		if( Direction.DOWN == direction || Direction.UP == direction ) {
 			BlockEntity be = world.getBlockEntity( pos.down() );
-			
-			if( be instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {
+			if( be instanceof CoinBankBlockEntity coinBankBlockEntity ) {
 				if( coinBankBlockEntity.canIncrementCurrencyValue( 1 ) ) {
 					for (int i = 0; i < hopperBlockEntity.size(); i++) {
 						if( !((HopperBlockEntityAccessor) hopperBlockEntity).invokeIsDisabled() ) {
 							ItemStack itemStack = hopperBlockEntity.getStack(i);
-							
 							if (!itemStack.isEmpty() && itemStack.isIn(Villagercoin.getItemTagKey( "currency_coin" ))) {
 								CurrencyComponent currencyComponent = itemStack.get(CURRENCY_COMPONENT);
 								
