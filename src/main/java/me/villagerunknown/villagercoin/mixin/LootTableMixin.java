@@ -6,6 +6,7 @@ import me.villagerunknown.villagercoin.component.CollectableComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,10 +21,10 @@ import static me.villagerunknown.villagercoin.component.Components.COLLECTABLE_C
 @Mixin(LootTable.class)
 public class LootTableMixin {
 	
-	@Inject(method = "shuffle", at = @At("HEAD"), cancellable = true)
-	public void shuffle(ObjectArrayList<ItemStack> drops, int freeSlots, Random random, CallbackInfo ci) {
+	@Inject(method = "spreadStacks", at = @At("HEAD"), cancellable = true)
+	public void spreadStacks(ObjectArrayList<ItemStack> stacks, int freeSlots, Random random, CallbackInfo ci) {
 		List<ItemStack> list = Lists.newArrayList();
-		Iterator<ItemStack> iterator = drops.iterator();
+		Iterator<ItemStack> iterator = stacks.iterator();
 		
 		while(iterator.hasNext()) {
 			ItemStack itemStack = (ItemStack)iterator.next();
@@ -44,7 +45,8 @@ public class LootTableMixin {
 			} // if
 		}
 		
-		drops.addAll(list);
+		stacks.addAll(list);
+		Util.shuffle(stacks, random);
 	}
 	
 }
