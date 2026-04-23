@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - Updated supported Minecraft version to 1.21.4.
 
+### Fixed
+
+- Fixed the ability for hoppers to transfer coins into banks.
+
 ## [1.0.11+1.21.3]
 
 ### Changed
