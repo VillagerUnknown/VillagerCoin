@@ -4,6 +4,7 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.block.entity.CoinBankBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
+import net.minecraft.block.HopperBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ public abstract class HopperBlockEntityMixin {
 	
 	@Inject(method = "insert", at = @At("HEAD"), cancellable = true)
 	private static void insert(World world, BlockPos pos, HopperBlockEntity hopperBlockEntity, CallbackInfoReturnable<Boolean> cir) {
-		Direction direction = Direction.getFacing( pos.getX(), pos.getY(), pos.getZ() );
+		Direction direction = world.getBlockState( pos ).get(HopperBlock.FACING);
 		
 		if( Direction.DOWN == direction || Direction.UP == direction ) {
 			BlockEntity be = world.getBlockEntity( pos.down() );
