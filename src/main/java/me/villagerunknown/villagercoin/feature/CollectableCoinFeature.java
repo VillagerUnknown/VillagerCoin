@@ -99,7 +99,7 @@ public class CollectableCoinFeature {
 		return item;
 	}
 	
-	public static HashMap<Item, Integer> getItemsInExistence() {
+	public static HashMap<String, Integer> getItemsInExistence() {
 		if( null != CollectableCoinFeature.server ) {
 			PersistentItemExistenceData state = PersistentItemExistenceData.getServerState(CollectableCoinFeature.server);
 			return state.ITEMS_IN_EXISTENCE;
@@ -108,7 +108,7 @@ public class CollectableCoinFeature {
 		return new HashMap<>();
 	}
 	
-	public static void setItemsInExistence( HashMap<Item, Integer> itemsInExistence ) {
+	public static void setItemsInExistence( HashMap<String, Integer> itemsInExistence ) {
 		if( null != CollectableCoinFeature.server ) {
 			PersistentItemExistenceData state = PersistentItemExistenceData.getServerState(CollectableCoinFeature.server);
 			
@@ -121,14 +121,14 @@ public class CollectableCoinFeature {
 	}
 	
 	public static boolean isInCirculation( Item item ) {
-		return getItemsInExistence().containsKey( item );
+		return getItemsInExistence().containsKey( item.getTranslationKey() );
 	}
 	
 	public static boolean canAddToCirculation( Item item, int maximumAllowedInServer ) {
-		HashMap<Item, Integer> itemsInExistence = getItemsInExistence();
+		HashMap<String, Integer> itemsInExistence = getItemsInExistence();
 		
-		if( itemsInExistence.containsKey( item ) ) {
-			return itemsInExistence.get(item) < maximumAllowedInServer;
+		if( itemsInExistence.containsKey( item.getTranslationKey() ) ) {
+			return itemsInExistence.get(item.getTranslationKey()) < maximumAllowedInServer;
 		} // if
 		
 		return maximumAllowedInServer >= 1;
@@ -139,13 +139,13 @@ public class CollectableCoinFeature {
 	}
 	
 	public static void addToCirculation( Item item, int amount ) {
-		HashMap<Item, Integer> itemsInExistence = getItemsInExistence();
+		HashMap<String, Integer> itemsInExistence = getItemsInExistence();
 		
-		if( itemsInExistence.containsKey( item ) ) {
-			amount = itemsInExistence.get( item ) + amount;
+		if( itemsInExistence.containsKey( item.getTranslationKey() ) ) {
+			amount = itemsInExistence.get( item.getTranslationKey() ) + amount;
 		} // if
 		
-		itemsInExistence.put( item, amount );
+		itemsInExistence.put( item.getTranslationKey(), amount );
 		
 		setItemsInExistence( itemsInExistence );
 	}
@@ -163,18 +163,18 @@ public class CollectableCoinFeature {
 	}
 	
 	public static void removeFromCirculation( Item item, int amount ) {
-		HashMap<Item, Integer> itemsInExistence = getItemsInExistence();
+		HashMap<String, Integer> itemsInExistence = getItemsInExistence();
 		
-		if( !itemsInExistence.containsKey( item ) ) {
+		if( !itemsInExistence.containsKey( item.getTranslationKey() ) ) {
 			return;
 		} // if
 		
-		int newAmount = itemsInExistence.get( item ) - amount;
+		int newAmount = itemsInExistence.get( item.getTranslationKey() ) - amount;
 		
 		if( newAmount <= 0 ) {
-			itemsInExistence.remove( item );
+			itemsInExistence.remove( item.getTranslationKey() );
 		} else {
-			itemsInExistence.put( item, newAmount );
+			itemsInExistence.put( item.getTranslationKey(), newAmount );
 		} // if, else
 		
 		setItemsInExistence( itemsInExistence );

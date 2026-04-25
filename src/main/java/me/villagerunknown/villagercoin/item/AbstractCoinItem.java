@@ -36,35 +36,18 @@ public abstract class AbstractCoinItem extends Item {
 	}
 	
 	@Override
-	public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
+	public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
+		World world = player.getWorld();
+		
 		if( !world.isClient() ) {
 			playCoinSound(player);
 		} // if
 		
-		super.onCraftByPlayer(stack, world, player);
+		super.onCraftByPlayer(stack, player);
 	}
 	
 	public static void playCoinSound( PlayerEntity player ) {
 		CoinFeature.playCoinSound( player );
-	}
-	
-	@Override
-	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType options) {
-		CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
-		
-		if( null != currencyComponent ) {
-			NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-			
-			tooltip.add(
-					Text.translatable(
-							"block.villagerunknown-villagercoin.coin_bank.tooltip",
-							numberFormat.format((long) currencyComponent.value() * stack.getCount() ),
-							CoinItems.COPPER_COIN.getName().getString()
-					).formatted(Formatting.ITALIC, Formatting.GRAY)
-			);
-		} // if
-		
-		super.appendTooltip(stack, context, tooltip, options);
 	}
 	
 }

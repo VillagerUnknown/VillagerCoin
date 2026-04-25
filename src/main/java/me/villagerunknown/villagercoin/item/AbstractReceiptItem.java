@@ -26,44 +26,4 @@ public class AbstractReceiptItem extends Item {
 		super(settings);
 	}
 	
-	@Override
-	public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType options) {
-		DateComponent dateComponent = stack.get( DATE_COMPONENT );
-		
-		if( null != dateComponent ) {
-			tooltip.add(
-					Text.translatable(
-							"item.villagerunknown-villagercoin.receipt.tooltip.date",
-							dateComponent.date()
-					).formatted(Formatting.GRAY)
-			);
-		} // if
-		
-		ReceiptValueComponent receiptValueComponent = stack.get( RECEIPT_VALUE_COMPONENT );
-		
-		if( null != receiptValueComponent ) {
-			NumberFormat numberFormat = NumberFormat.getIntegerInstance();
-			
-			tooltip.add(
-					Text.translatable(
-							"item.villagerunknown-villagercoin.receipt.tooltip.value",
-							numberFormat.format(receiptValueComponent.value() * stack.getCount() ),
-							CoinItems.COPPER_COIN.getName().getString()
-					).formatted(Formatting.GRAY)
-			);
-		} // if
-		
-		ReceiptMessageComponent receiptMessageComponent = stack.get( RECEIPT_MESSAGE_COMPONENT );
-		
-		if( null != receiptMessageComponent ) {
-			tooltip.add(
-					Text.literal(
-							receiptMessageComponent.message()
-					).formatted(Formatting.ITALIC, Formatting.GRAY)
-			);
-		} // if
-		
-		super.appendTooltip(stack, context, tooltip, options);
-	}
-	
 }

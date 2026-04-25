@@ -6,9 +6,12 @@ import me.villagerunknown.villagercoin.feature.InventoryEffectCoinFeature;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class AbstractInventoryEffectCoinItem extends AbstractCollectableCoinItem
 	}
 	
 	@Override
-	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+	public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
 		if( MathUtil.hasChance( Villagercoin.CONFIG.inventoryEffectChancePerTick) ) {
 			SuspiciousStewEffectsComponent effectsComponent = stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
 			if (null != effectsComponent) {
@@ -34,7 +37,7 @@ public class AbstractInventoryEffectCoinItem extends AbstractCollectableCoinItem
 			} // if
 		} // if
 		
-		super.inventoryTick(stack, world, entity, slot, selected);
+		super.inventoryTick(stack, world, entity, slot);
 	}
 	
 }

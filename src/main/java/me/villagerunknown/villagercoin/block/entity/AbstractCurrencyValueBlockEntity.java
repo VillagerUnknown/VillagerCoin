@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import javax.swing.text.NumberFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
@@ -64,7 +65,9 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
 		super.readNbt(nbt, registryLookup);
 		
-		this.totalCurrencyValue = nbt.getLong("totalCurrencyValue");
+		Optional<Long> totalCurrencyValue = nbt.getLong("totalCurrencyValue");
+		
+		totalCurrencyValue.ifPresent(value -> this.totalCurrencyValue = value);
 	}
 	
 	@Override

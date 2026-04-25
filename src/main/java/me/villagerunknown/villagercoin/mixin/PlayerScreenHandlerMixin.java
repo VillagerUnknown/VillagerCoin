@@ -64,7 +64,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 					ReceiptCraftingFeature.subtractCarrierFromIngredients( this.craftingInventory, 1 );
 					ReceiptCraftingFeature.setCustomName( player, craftedItemStack );
 					
-					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
+					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player);
 					
 					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
 						player.dropItem(craftedItemStack, true);
@@ -106,7 +106,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 					LedgerCraftingFeature.subtractCarrierFromIngredients( this.craftingInventory, 1 );
 					LedgerCraftingFeature.removeReceiptsFromIngredients( this.craftingInventory.getHeldStacks() );
 					
-					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
+					craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player);
 					
 					if (!this.insertItem(craftedItemStack, 10, 46, true)) {
 						player.dropItem(craftedItemStack, true);
@@ -134,7 +134,7 @@ public abstract class PlayerScreenHandlerMixin extends ScreenHandler {
 							totalCost.set( CoinCraftingFeature.subtractCoinValueFromTotalCost( ingredient, totalCost, this.craftingInventory, ingredientSlot ) );
 						} );
 						
-						craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player.getWorld(), player);
+						craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player);
 						
 						if (!this.insertItem(craftedItemStack, 9, 46, true)) {
 							player.dropItem(craftedItemStack, true);

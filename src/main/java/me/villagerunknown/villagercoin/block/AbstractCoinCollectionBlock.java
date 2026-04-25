@@ -113,25 +113,6 @@ public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implem
 	}
 	
 	@Override
-	public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType options) {
-		CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
-		
-		if( null != currencyComponent ) {
-			NumberFormat numberFormat = NumberFormat.getNumberInstance();
-			
-			tooltip.add(
-					Text.translatable(
-							"block.villagerunknown-villagercoin.coin_bank.tooltip",
-							numberFormat.format( currencyComponent.value() ),
-							CoinItems.COPPER_COIN.getName().getString()
-					).formatted(Formatting.ITALIC, Formatting.GRAY)
-			);
-		} // if
-		
-		super.appendTooltip(stack, context, tooltip, options);
-	}
-	
-	@Override
 	protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
 		return CoinBankBlocksFeature.getComparatorOutput(state, world, pos);
 	}
