@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -62,18 +64,18 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	}
 	
 	@Override
-	protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		super.readNbt(nbt, registryLookup);
+	protected void readData(ReadView view) {
+		super.readData(view);
 		
-		Optional<Long> totalCurrencyValue = nbt.getLong("totalCurrencyValue");
+		Optional<Long> totalCurrencyValue = Optional.of(view.getLong("totalCurrencyValue", 0L));
 		
 		totalCurrencyValue.ifPresent(value -> this.totalCurrencyValue = value);
 	}
 	
 	@Override
-	protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-		nbt.putLong("totalCurrencyValue", this.totalCurrencyValue);
-		super.writeNbt(nbt, registryLookup);
+	protected void writeData(WriteView view) {
+		view.putLong("totalCurrencyValue", this.totalCurrencyValue);
+		super.writeData(view);
 	}
 	
 	@Override

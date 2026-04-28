@@ -1,10 +1,12 @@
 package me.villagerunknown.villagercoin.client.mixin;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3x2fStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,25 +19,23 @@ public abstract class DrawContextMixin {
 	
 	@Shadow
 	@Final
-	private MatrixStack matrices;
+	private Matrix3x2fStack matrices;
 	
 	@Inject(method = "drawStackCount", at = @At("HEAD"), cancellable = true)
-	private void drawStackCount(TextRenderer textRenderer, ItemStack stack, int x, int y, String stackCountText, CallbackInfo ci) {
+	private void drawStackCount(TextRenderer textRenderer, ItemStack stack, int x, int y, @Nullable String stackCountText, CallbackInfo ci) {
 		if( !stack.isEmpty() && stack.getMaxCount() > 99 && stack.getCount() > 99 ) {
-			String text = CoinFeature.humanReadableNumber( stack.getCount(), false );
-			float scale = CoinFeature.humanReadableNumberScale( text.length() );
+			stackCountText = CoinFeature.humanReadableNumber( stack.getCount(), false );
+			float scale = CoinFeature.humanReadableNumberScale( stackCountText.length() );
 			
-			this.matrices.push();
+			this.matrices.popMatrix();
+			this.matrices.pushMatrix();
 			
-			this.matrices.translate(x * (1 - scale) + (1 - scale) * 16, y * (1 - scale) + (1 - scale) * 16, 0);
-			this.matrices.scale(scale, scale, 1.0F);
-			
-			this.matrices.translate(0.0F, 0.0F, 200.0F);
+			this.matrices.translate(x * (1 - scale) + (1 - scale) * 16, y * (1 - scale) + (1 - scale) * 16);
+			this.matrices.scale(scale, scale);
+
 			DrawContext drawContext = (DrawContext) (Object) this;
-			drawContext.drawText(textRenderer, text, x + 19 - 2 - textRenderer.getWidth( text ), y + 6 + 3, 16777215, true);
-			
-			this.matrices.pop();
-			
+			drawContext.drawText(textRenderer, stackCountText, x + 19 - 2 - textRenderer.getWidth( stackCountText ), y + 6 + 3, -1, true);
+
 			ci.cancel();
 		} // if
 	}
