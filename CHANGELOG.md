@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.11+1.21.5.1]
+
+### Fixed
+
+- Fixed currency values for coin tooltips.
+
 ## [1.0.11+1.21.5]
 
 ### Changed
