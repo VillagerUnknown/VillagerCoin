@@ -1,5 +1,6 @@
 package me.villagerunknown.villagercoin.client;
 
+import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
 import me.villagerunknown.villagercoin.item.AbstractLedgerItem;
@@ -31,17 +32,23 @@ public class VillagercoinClient implements ClientModInitializer {
 		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, list) -> {
 			if (!stack.getComponents().contains( CURRENCY_COMPONENT )) {
 				return;
-			}
+			} // if
 			
 			CurrencyComponent currencyComponent = stack.get( CURRENCY_COMPONENT );
 			
 			if( null != currencyComponent ) {
+				Long value = currencyComponent.value();
+				
+				if( stack.isIn( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
+					value = currencyComponent.value() * stack.getCount();
+				} // if
+				
 				NumberFormat numberFormat = NumberFormat.getNumberInstance();
 				
 				list.add(
 						Text.translatable(
 								"block.villagerunknown-villagercoin.coin_bank.tooltip",
-								numberFormat.format( currencyComponent.value() ),
+								numberFormat.format( value ),
 								CoinItems.COPPER_COIN.getName().getString()
 						).formatted(Formatting.ITALIC, Formatting.GRAY)
 				);
