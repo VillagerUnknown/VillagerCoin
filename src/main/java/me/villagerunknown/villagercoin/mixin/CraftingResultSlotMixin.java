@@ -48,7 +48,7 @@ public class CraftingResultSlotMixin {
 	
 	@Inject(method = "onTakeItem", at = @At("HEAD"), cancellable = true)
 	private void onTakeItem(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
-		if( player.getWorld().isClient() ) {
+		if( player.getEntityWorld().isClient() ) {
 			return;
 		} // if
 		
@@ -67,7 +67,7 @@ public class CraftingResultSlotMixin {
 			CraftingRecipeInput craftingRecipeInput = positioned.input();
 			DefaultedList<ItemStack> defaultedList;
 			
-			if( player.getWorld() instanceof ServerWorld serverWorld ) {
+			if( player.getEntityWorld() instanceof ServerWorld serverWorld ) {
 				defaultedList = serverWorld.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingRecipeInput, serverWorld).map((recipe) -> ((CraftingRecipe)recipe.value()).getRecipeRemainders(craftingRecipeInput)).orElseGet(() -> copyInput(craftingRecipeInput));
 			} else {
 				defaultedList = CraftingRecipe.collectRecipeRemainders(craftingRecipeInput);

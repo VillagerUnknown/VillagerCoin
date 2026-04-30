@@ -35,7 +35,7 @@ public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock
 	
 	@Override
 	public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-		if( !world.isClient && Villagercoin.CONFIG.enableCoinStacksBreakOnCollision && entity instanceof PlayerEntity playerEntity && !playerEntity.isInCreativeMode() && !playerEntity.isSneaking() ) {
+		if( !world.isClient() && Villagercoin.CONFIG.enableCoinStacksBreakOnCollision && entity instanceof PlayerEntity playerEntity && !playerEntity.isInCreativeMode() && !playerEntity.isSneaking() ) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			
 			if (blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity) {

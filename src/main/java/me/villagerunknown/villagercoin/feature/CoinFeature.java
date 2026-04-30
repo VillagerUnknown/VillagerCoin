@@ -153,7 +153,7 @@ public class CoinFeature {
 	}
 	
 	public static void playSound( PlayerEntity player, SoundEvent sound ) {
-		if( player.getWorld().isClient() ) {
+		if( player.getEntityWorld().isClient() ) {
 			return;
 		} // if
 		

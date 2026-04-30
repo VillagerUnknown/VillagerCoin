@@ -94,7 +94,7 @@ public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implem
 		if( null != server ) {
 			ServerWorld serverWorld = server.getWorld(world.getRegistryKey());
 			if( null != serverWorld ) {
-				if (!world.isClient && projectile.canModifyAt(serverWorld, blockPos) && projectile.canBreakBlocks(serverWorld)) {
+				if (!world.isClient() && projectile.canModifyAt(serverWorld, blockPos) && projectile.canBreakBlocks(serverWorld)) {
 					world.breakBlock(blockPos, true, projectile);
 				}
 			}
@@ -112,7 +112,6 @@ public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implem
 		super.onStacksDropped(state, world, pos, tool, dropExperience);
 	}
 	
-	@Override
 	protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
 		return CoinBankBlocksFeature.getComparatorOutput(state, world, pos);
 	}

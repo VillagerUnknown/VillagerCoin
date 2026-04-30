@@ -223,7 +223,7 @@ public class MobsDropCoinsFeature {
 			return;
 		} // if
 		
-		World world = entity.getWorld();
+		World world = entity.getEntityWorld();
 		Entity source = damageSource.getSource();
 		
 		float modifier = 1;

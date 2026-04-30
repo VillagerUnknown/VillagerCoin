@@ -28,7 +28,7 @@ public abstract class AbstractCoinItem extends Item {
 	
 	@Override
 	public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
-		if( !player.getWorld().isClient() ) {
+		if( !player.getEntityWorld().isClient() ) {
 			playCoinSound(player);
 		} // if
 		
@@ -37,7 +37,7 @@ public abstract class AbstractCoinItem extends Item {
 	
 	@Override
 	public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
-		World world = player.getWorld();
+		World world = player.getEntityWorld();
 		
 		if( !world.isClient() ) {
 			playCoinSound(player);
