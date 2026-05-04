@@ -153,10 +153,6 @@ public class CoinFeature {
 	}
 	
 	public static void playSound( PlayerEntity player, SoundEvent sound ) {
-		if( player.getEntityWorld().isClient() ) {
-			return;
-		} // if
-		
 		EntityUtil.playSound(player, sound, SoundCategory.PLAYERS, 0.5F, 1F, false);
 	}
 	

@@ -37,8 +37,8 @@ public class PersistentItemExistenceData extends AbstractPersistentData {
 	
 	private static PersistentStateType<PersistentItemExistenceData> type = new PersistentStateType<>(
 			MOD_ID,
-			(context) -> new PersistentItemExistenceData(),
-			ctx -> CODEC,
+			PersistentItemExistenceData::new,
+			CODEC,
 			null
 	);
 	
