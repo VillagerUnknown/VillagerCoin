@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import me.villagerunknown.platform.util.MathUtil;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.util.Rarity;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Rarity;
 
 public record CoinComponent( Rarity rarity, float flipChance ) {
 	
@@ -16,7 +16,7 @@ public record CoinComponent( Rarity rarity, float flipChance ) {
 				Codec.FLOAT.fieldOf( "flipChance" ).forGetter(CoinComponent::flipChance)
 		).apply(instance, CoinComponent::new);
 	});
-	public static final PacketCodec<ByteBuf, CoinComponent> PACKET_CODEC;
+	public static final StreamCodec<ByteBuf, CoinComponent> PACKET_CODEC;
 	
 	public CoinComponent( Rarity rarity, float flipChance ) {
 		this.rarity = rarity;
@@ -36,9 +36,9 @@ public record CoinComponent( Rarity rarity, float flipChance ) {
 	}
 	
 	static {
-		PACKET_CODEC = PacketCodec.tuple(
-				Rarity.PACKET_CODEC, CoinComponent::rarity,
-				PacketCodecs.FLOAT, CoinComponent::flipChance,
+		PACKET_CODEC = StreamCodec.composite(
+				Rarity.STREAM_CODEC, CoinComponent::rarity,
+				ByteBufCodecs.FLOAT, CoinComponent::flipChance,
 				CoinComponent::new
 		);
 	}

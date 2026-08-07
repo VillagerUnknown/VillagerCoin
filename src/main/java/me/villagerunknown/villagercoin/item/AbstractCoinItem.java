@@ -2,18 +2,12 @@ package me.villagerunknown.villagercoin.item;
 
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.stat.StatFormatter;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
-
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import java.text.NumberFormat;
 import java.util.List;
 
@@ -22,31 +16,31 @@ import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMP
 
 public abstract class AbstractCoinItem extends Item {
 	
-	public AbstractCoinItem(Settings settings) {
+	public AbstractCoinItem(Properties settings) {
 		super(settings);
 	}
 	
 	@Override
-	public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
-		if( !player.getEntityWorld().isClient() ) {
+	public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction clickType, Player player) {
+		if( !player.level().isClientSide() ) {
 			playCoinSound(player);
 		} // if
 		
-		return super.onStackClicked(stack, slot, clickType, player);
+		return super.overrideStackedOnOther(stack, slot, clickType, player);
 	}
 	
 	@Override
-	public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
-		World world = player.getEntityWorld();
+	public void onCraftedBy(ItemStack stack, Player player) {
+		Level world = player.level();
 		
-		if( !world.isClient() ) {
+		if( !world.isClientSide() ) {
 			playCoinSound(player);
 		} // if
 		
-		super.onCraftByPlayer(stack, player);
+		super.onCraftedBy(stack, player);
 	}
 	
-	public static void playCoinSound( PlayerEntity player ) {
+	public static void playCoinSound( Player player ) {
 		CoinFeature.playCoinSound( player );
 	}
 	

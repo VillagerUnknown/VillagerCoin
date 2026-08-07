@@ -3,20 +3,20 @@ package me.villagerunknown.villagercoin.feature;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import me.villagerunknown.villagercoin.recipe.CoinStackRecipe;
+import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
 import me.villagerunknown.villagercoin.type.CoinType;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.block.Block;
 import java.util.*;
 
 import static java.util.Map.entry;
@@ -89,7 +89,7 @@ public class CoinStackCraftingFeature {
 				if( coinStackValue >= value ) {
 					Item item = typeMap.get( value );
 					
-					if( !item.getComponents().contains( COLLECTABLE_COMPONENT ) ) {
+					if( !item.components().has( COLLECTABLE_COMPONENT ) ) {
 						coinStack = item;
 					} // if
 				} // if
@@ -119,38 +119,42 @@ public class CoinStackCraftingFeature {
 		return ItemStack.EMPTY;
 	}
 	
-	public static void subtractCarrierFromIngredients( RecipeInputInventory craftingInput, long amount ) {
-		CraftingRecipeInput.Positioned positioned = craftingInput.createPositionedRecipeInput();
-		CraftingRecipeInput craftingRecipeInput = positioned.input();
+	public static void subtractCarrierFromIngredients( CraftingContainer craftingInput, long amount ) {
+		CraftingInput.Positioned positioned = craftingInput.asPositionedCraftInput();
+		CraftingInput craftingRecipeInput = positioned.input();
 		int left = positioned.left();
 		int top = positioned.top();
 		
-		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
-			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
+		for(int y = 0; y < craftingRecipeInput.height(); ++y) {
+			for (int x = 0; x < craftingRecipeInput.width(); ++x) {
 				int m = x + left + (y + top) * craftingInput.getWidth();
-				ItemStack ingredientStack = craftingInput.getStack(m);
+				ItemStack ingredientStack = craftingInput.getItem(m);
 				
-				if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) ) {
+				if( ingredientStack.is( RECIPE_CARRIER_ITEM ) ) {
 					if( amount > Integer.MAX_VALUE ) {
 						amount = Integer.MAX_VALUE;
 					} // if
 					
-					craftingInput.removeStack( m, CoinCraftingFeature.toIntSafely(amount) );
+					craftingInput.removeItem( m, CoinCraftingFeature.toIntSafely(amount) );
 				} // if
 			} // for
 		} // for
 	}
 	
-	public static void subtractCarrierFromIngredients( DefaultedList<ItemStack> ingredients, int amount ) {
+	public static void subtractCarrierFromIngredients( NonNullList<ItemStack> ingredients, int amount ) {
 		for (ItemStack ingredientStack : ingredients) {
-			if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) ) {
-				ingredientStack.decrement( amount );
+			if( ingredientStack.is( RECIPE_CARRIER_ITEM ) ) {
+				ingredientStack.shrink( amount );
 			} // if
 		} // for
 	}
 	
 	static {
-		RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_coin_stack" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(CoinStackRecipe::new));
+		RECIPE_SERIALIZER = Registry.register(
+				BuiltInRegistries.RECIPE_SERIALIZER,
+				Identifier.fromNamespaceAndPath( MOD_ID, "crafting_special_coin_stack" ),
+				new RecipeSerializer<>(CoinStackRecipe.CODEC, CoinStackRecipe.STREAM_CODEC)
+		);
 	}
 	
 }

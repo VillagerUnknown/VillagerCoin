@@ -3,10 +3,10 @@ package me.villagerunknown.villagercoin.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.villagerunknown.villagercoin.feature.CollectableCoinFeature;
-import net.minecraft.item.Item;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
 
 public record CollectableComponent(int maximumAllowedInServer) {
 	
@@ -15,7 +15,7 @@ public record CollectableComponent(int maximumAllowedInServer) {
 				Codec.INT.fieldOf( "maximumAllowedInWorld" ).forGetter(CollectableComponent::maximumAllowedInServer)
 		).apply(instance, CollectableComponent::new);
 	});
-	public static final PacketCodec<RegistryByteBuf, CollectableComponent> PACKET_CODEC;
+	public static final StreamCodec<RegistryFriendlyByteBuf, CollectableComponent> PACKET_CODEC;
 	
 	public CollectableComponent(int maximumAllowedInServer) {
 		this.maximumAllowedInServer = maximumAllowedInServer;
@@ -58,8 +58,8 @@ public record CollectableComponent(int maximumAllowedInServer) {
 	}
 	
 	static {
-		PACKET_CODEC = PacketCodec.tuple(
-				PacketCodecs.INTEGER, CollectableComponent::maximumAllowedInServer,
+		PACKET_CODEC = StreamCodec.composite(
+				ByteBufCodecs.INT, CollectableComponent::maximumAllowedInServer,
 				CollectableComponent::new
 		);
 	}

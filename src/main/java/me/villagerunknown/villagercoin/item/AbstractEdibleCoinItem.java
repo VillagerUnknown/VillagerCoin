@@ -1,51 +1,50 @@
 package me.villagerunknown.villagercoin.item;
 
 import me.villagerunknown.platform.util.MathUtil;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.SuspiciousStewEffectsComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.world.World;
-
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.level.Level;
 import java.util.List;
 
 public abstract class AbstractEdibleCoinItem extends AbstractCoinItem {
 	
-	public static SoundEvent SOUND = SoundEvents.ENTITY_GENERIC_EAT.value();
+	public static SoundEvent SOUND = SoundEvents.GENERIC_EAT.value();
 	
-	public AbstractEdibleCoinItem(Settings settings) {
+	public AbstractEdibleCoinItem(Properties settings) {
 		super(settings);
 	}
 	
 	@Override
-	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-		SuspiciousStewEffectsComponent stewEffectsComponent = stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
+	public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity user) {
+		SuspiciousStewEffects stewEffectsComponent = stack.get(DataComponents.SUSPICIOUS_STEW_EFFECTS);
 		
 		if (null != stewEffectsComponent) {
-			List<SuspiciousStewEffectsComponent.StewEffect> stewEffects = stewEffectsComponent.effects();
+			List<SuspiciousStewEffects.Entry> stewEffects = stewEffectsComponent.effects();
 			
 			if (!stewEffects.isEmpty() && stewEffects.size() > 1) {
-				SuspiciousStewEffectsComponent.StewEffect stewEffect = stewEffects.get((int) MathUtil.getRandomWithinRange(0, stewEffects.size() - 1));
+				SuspiciousStewEffects.Entry stewEffect = stewEffects.get((int) MathUtil.getRandomWithinRange(0, stewEffects.size() - 1));
 				
-				stack.remove(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
-				stack.set(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffectsComponent(List.of(stewEffect)));
+				stack.remove(DataComponents.SUSPICIOUS_STEW_EFFECTS);
+				stack.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffects(List.of(stewEffect)));
 			} // if
 			
 		} // if
 		
-		if( world.isClient() ) {
-			stack.remove(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
+		if( world.isClientSide() ) {
+			stack.remove(DataComponents.SUSPICIOUS_STEW_EFFECTS);
 		} // if
 		
-		return super.finishUsing(stack, world, user);
+		return super.finishUsingItem(stack, world, user);
 	}
 	
 	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.EAT;
+	public ItemUseAnimation getUseAnimation(ItemStack stack) {
+		return ItemUseAnimation.EAT;
 	}
 	
 	public SoundEvent getEatSound() {

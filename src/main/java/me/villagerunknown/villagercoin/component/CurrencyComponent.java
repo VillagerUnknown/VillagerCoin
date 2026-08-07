@@ -3,10 +3,10 @@ package me.villagerunknown.villagercoin.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 
 public record CurrencyComponent(long value) {
 	
@@ -15,7 +15,7 @@ public record CurrencyComponent(long value) {
 				Codec.LONG.fieldOf( "value" ).forGetter(CurrencyComponent::value)
 		).apply(instance, CurrencyComponent::new);
 	});
-	public static final PacketCodec<RegistryByteBuf, CurrencyComponent> PACKET_CODEC;
+	public static final StreamCodec<RegistryFriendlyByteBuf, CurrencyComponent> PACKET_CODEC;
 	
 	public CurrencyComponent(long value) {
 		this.value = value;
@@ -50,8 +50,8 @@ public record CurrencyComponent(long value) {
 	}
 	
 	static {
-		PACKET_CODEC = PacketCodec.tuple(
-				PacketCodecs.VAR_LONG, CurrencyComponent::value,
+		PACKET_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_LONG, CurrencyComponent::value,
 				CurrencyComponent::new
 		);
 	}

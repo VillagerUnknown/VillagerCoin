@@ -3,20 +3,18 @@ package me.villagerunknown.villagercoin.block.entity;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import javax.swing.text.NumberFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +44,12 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	
 	public void incrementCurrencyValue( long value ) {
 		this.totalCurrencyValue += value;
-		markDirty();
+		setChanged();
 	}
 	
 	public void incrementCurrencyValueAndSetComponent( long value ) {
 		incrementCurrencyValue( value );
-		this.setComponents(ComponentMap.builder().add(CURRENCY_COMPONENT, new CurrencyComponent( getTotalCurrencyValue() )).build());
+		this.setComponents(DataComponentMap.builder().set(CURRENCY_COMPONENT, new CurrencyComponent( getTotalCurrencyValue() )).build());
 	}
 	
 	public boolean canDecrementCurrencyValue( long decrement ) {
@@ -60,33 +58,33 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	
 	public void decrementCurrencyValue( long value ) {
 		this.totalCurrencyValue -= value;
-		markDirty();
+		setChanged();
 	}
 	
 	@Override
-	protected void readData(ReadView view) {
-		super.readData(view);
+	protected void loadAdditional(ValueInput view) {
+		super.loadAdditional(view);
 		
-		Optional<Long> totalCurrencyValue = Optional.of(view.getLong("totalCurrencyValue", 0L));
+		Optional<Long> totalCurrencyValue = Optional.of(view.getLongOr("totalCurrencyValue", 0L));
 		
 		totalCurrencyValue.ifPresent(value -> this.totalCurrencyValue = value);
 	}
 	
 	@Override
-	protected void writeData(WriteView view) {
+	protected void saveAdditional(ValueOutput view) {
 		view.putLong("totalCurrencyValue", this.totalCurrencyValue);
-		super.writeData(view);
+		super.saveAdditional(view);
 	}
 	
 	@Override
-	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-		return createNbt(registryLookup);
+	public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+		return saveWithoutMetadata(registryLookup);
 	}
 	
 	public List<ItemStack> getTotalValueAsCoins() {
 		List<ItemStack> coinItemStacks = new ArrayList<>();
 		
-		World world = this.getWorld();
+		Level world = this.getLevel();
 		
 		long totalValue = this.totalCurrencyValue;
 		
@@ -112,11 +110,11 @@ public abstract class AbstractCurrencyValueBlockEntity extends BlockEntity {
 	public void dropTotalValueAsCoins() {
 		List<ItemStack> coinStacks = getTotalValueAsCoins();
 		
-		World world = this.getWorld();
+		Level world = this.getLevel();
 		
 		if( null != world ) {
 			for (ItemStack coinStack : coinStacks) {
-				world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), coinStack));
+				world.addFreshEntity(new ItemEntity(world, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), coinStack));
 			} // for
 		} // if
 	}

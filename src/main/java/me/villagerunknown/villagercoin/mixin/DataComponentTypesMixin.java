@@ -2,33 +2,33 @@ package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.Components;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.component.type.LoreComponent;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(DataComponentTypes.class)
+@Mixin(DataComponents.class)
 public class DataComponentTypesMixin {
 	
 	@Mutable
 	@Final
 	@Shadow
-	public static final ComponentMap DEFAULT_ITEM_COMPONENTS;
+	public static final DataComponentMap COMMON_ITEM_COMPONENTS;
 	
 	@Shadow
-	public static final ComponentType<Integer> MAX_STACK_SIZE = Components.registerComponentType("max_stack_size", (builder) -> builder.codec(Codecs.rangedInt(1, Integer.MAX_VALUE)).packetCodec(PacketCodecs.VAR_INT));
+	public static final DataComponentType<Integer> MAX_STACK_SIZE = Components.registerComponentType("max_stack_size", (builder) -> builder.persistent(ExtraCodecs.intRange(1, Integer.MAX_VALUE)).networkSynchronized(ByteBufCodecs.VAR_INT));
 	
 	static {
-		DEFAULT_ITEM_COMPONENTS = ComponentMap.builder().add(MAX_STACK_SIZE, 64).add(DataComponentTypes.LORE, LoreComponent.DEFAULT).add(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT).add(DataComponentTypes.REPAIR_COST, 0).add(DataComponentTypes.ATTRIBUTE_MODIFIERS, AttributeModifiersComponent.DEFAULT).add(DataComponentTypes.RARITY, Rarity.COMMON).build();
+		COMMON_ITEM_COMPONENTS = DataComponentMap.builder().set(MAX_STACK_SIZE, 64).set(DataComponents.LORE, ItemLore.EMPTY).set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).set(DataComponents.REPAIR_COST, 0).set(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY).set(DataComponents.RARITY, Rarity.COMMON).build();
 	}
 	
 }

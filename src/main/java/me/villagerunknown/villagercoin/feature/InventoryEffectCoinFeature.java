@@ -6,20 +6,19 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CoinComponent;
 import me.villagerunknown.villagercoin.effect.StewEffects;
 import me.villagerunknown.villagercoin.item.InventoryEffectCoinItem;
-import net.minecraft.component.type.SuspiciousStewEffectsComponent;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.Item;
-import net.minecraft.loot.LootTable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.level.storage.loot.LootTable;
 import java.util.*;
 
 import static me.villagerunknown.villagercoin.component.Components.COIN_COMPONENT;
@@ -35,31 +34,31 @@ public class InventoryEffectCoinFeature {
 	
 	public static final int EXTENDED_EFFECT_DURATION = DEFAULT_EFFECT_DURATION * EXTENDED_EFFECT_MODIFIER;
 	
-	public static Set<RegistryEntry<StatusEffect>> CONSTANT_EFFECTS = new HashSet<>(Arrays.asList(
-			StatusEffects.NIGHT_VISION,
-			StatusEffects.MINING_FATIGUE,
-			StatusEffects.BAD_OMEN,
-			StatusEffects.TRIAL_OMEN,
-			StatusEffects.RAID_OMEN,
-			StatusEffects.DOLPHINS_GRACE
+	public static Set<Holder<MobEffect>> CONSTANT_EFFECTS = new HashSet<>(Arrays.asList(
+			MobEffects.NIGHT_VISION,
+			MobEffects.MINING_FATIGUE,
+			MobEffects.BAD_OMEN,
+			MobEffects.TRIAL_OMEN,
+			MobEffects.RAID_OMEN,
+			MobEffects.DOLPHINS_GRACE
 	));
 	
-	public static Set<RegistryEntry<StatusEffect>> IGNORE_EFFECTS = new HashSet<>(Arrays.asList());
+	public static Set<Holder<MobEffect>> IGNORE_EFFECTS = new HashSet<>(Arrays.asList());
 	
 	public static void execute() {
 		new StewEffects();
 	}
 	
-	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, new Item.Settings() );
+	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffects.Entry> statusEffects ) {
+		return registerInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, new Item.Properties() );
 	}
 	
-	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops,  List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Settings() );
+	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops,  List<SuspiciousStewEffects.Entry> statusEffects ) {
+		return registerInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Properties() );
 	}
 	
-	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
-		settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffects.Entry> statusEffects, Item.Properties settings ) {
+		settings.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID,id)));
 		
 		Item item = RegistryUtil.registerItem( id, new InventoryEffectCoinItem( settings, value, rarity, 1, 1, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects ), namespace );
 		
@@ -68,7 +67,7 @@ public class InventoryEffectCoinFeature {
 		return item;
 	}
 	
-	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
+	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffects.Entry> statusEffects, Item.Properties settings ) {
 		Item item = registerInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
@@ -77,19 +76,19 @@ public class InventoryEffectCoinFeature {
 		return item;
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerCraftableInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, new Item.Settings() );
+	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffects.Entry> statusEffects ) {
+		return registerCraftableInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, new Item.Properties() );
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects ) {
-		return registerCraftableInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Settings() );
+	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffects.Entry> statusEffects ) {
+		return registerCraftableInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, statusEffects, new Item.Properties() );
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
+	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, List<SuspiciousStewEffects.Entry> statusEffects, Item.Properties settings ) {
 		return registerInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects );
 	}
 	
-	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffectsComponent.StewEffect> statusEffects, Item.Settings settings ) {
+	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffects.Entry> statusEffects, Item.Properties settings ) {
 		Item item = registerCraftableInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, settings );
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
@@ -98,29 +97,29 @@ public class InventoryEffectCoinFeature {
 		return item;
 	}
 	
-	public static boolean canApplyEffect(LivingEntity entity, SuspiciousStewEffectsComponent.StewEffect effect ) {
+	public static boolean canApplyEffect(LivingEntity entity, SuspiciousStewEffects.Entry effect ) {
 		return canApplyConstantEffect( entity, effect )
 				||
 				(
-					!entity.hasStatusEffect( effect.effect() )
-					&& entity.canHaveStatusEffect( effect.createStatusEffectInstance() )
+					!entity.hasEffect( effect.effect() )
+					&& entity.canBeAffected( effect.createEffectInstance() )
 					&& !IGNORE_EFFECTS.contains( effect )
 				);
 	}
 	
-	public static boolean canApplyConstantEffect(LivingEntity entity, SuspiciousStewEffectsComponent.StewEffect effect ) {
-		Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeEffects = entity.getActiveStatusEffects();
+	public static boolean canApplyConstantEffect(LivingEntity entity, SuspiciousStewEffects.Entry effect ) {
+		Map<Holder<MobEffect>, MobEffectInstance> activeEffects = entity.getActiveEffectsMap();
 		
 		if( CONSTANT_EFFECTS.contains( effect.effect() ) && activeEffects.containsKey( effect.effect() ) ) {
-			StatusEffectInstance activeEffect = activeEffects.get(effect.effect());
+			MobEffectInstance activeEffect = activeEffects.get(effect.effect());
 			return activeEffect.getDuration() <= EXTENDED_EFFECT_DURATION / EXTENDED_EFFECT_MODIFIER;
 		} // if
 		
 		return false;
 	}
 	
-	public static void applyStatusEffect( LivingEntity entity, SuspiciousStewEffectsComponent.StewEffect effect, Item coin ) {
-		CoinComponent coinComponent = coin.getComponents().get( COIN_COMPONENT );
+	public static void applyStatusEffect( LivingEntity entity, SuspiciousStewEffects.Entry effect, Item coin ) {
+		CoinComponent coinComponent = coin.components().get( COIN_COMPONENT );
 		
 		if( null != coinComponent ) {
 			int level = switch (coinComponent.rarity()) {

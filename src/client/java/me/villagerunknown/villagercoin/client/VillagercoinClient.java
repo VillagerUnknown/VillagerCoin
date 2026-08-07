@@ -8,10 +8,10 @@ import me.villagerunknown.villagercoin.item.AbstractReceiptItem;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.component.WritableBookContent;
 
 import java.text.NumberFormat;
 
@@ -29,8 +29,8 @@ public class VillagercoinClient implements ClientModInitializer {
 	}
 	
 	private static void registerCurrencyItemTooltips() {
-		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, list) -> {
-			if (!stack.getComponents().contains( CURRENCY_COMPONENT )) {
+		ItemTooltipCallback.EVENT.register((stack, tooltipConComponent, tooltipType, list) -> {
+			if (!stack.getComponents().has( CURRENCY_COMPONENT )) {
 				return;
 			} // if
 			
@@ -39,25 +39,25 @@ public class VillagercoinClient implements ClientModInitializer {
 			if( null != currencyComponent ) {
 				Long value = currencyComponent.value();
 				
-				if( stack.isIn( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
+				if( stack.is( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
 					value = currencyComponent.value() * stack.getCount();
 				} // if
 				
 				NumberFormat numberFormat = NumberFormat.getNumberInstance();
 				
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"block.villagerunknown-villagercoin.coin_bank.tooltip",
 								numberFormat.format( value ),
-								CoinItems.COPPER_COIN.getName().getString()
-						).formatted(Formatting.ITALIC, Formatting.GRAY)
+								CoinItems.COPPER_COIN.getDefaultInstance().getHoverName().getString()
+						).withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY)
 				);
 			} // if
 		});
 	}
 	
 	private static void registerReceiptItemTooltips() {
-		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, list) -> {
+		ItemTooltipCallback.EVENT.register((stack, tooltipConComponent, tooltipType, list) -> {
 			if (!(stack.getItem() instanceof AbstractReceiptItem)) {
 				return;
 			}
@@ -66,10 +66,10 @@ public class VillagercoinClient implements ClientModInitializer {
 			
 			if( null != dateComponent ) {
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"item.villagerunknown-villagercoin.receipt.tooltip.date",
 								dateComponent.date()
-						).formatted(Formatting.GRAY)
+						).withStyle(ChatFormatting.GRAY)
 				);
 			} // if
 			
@@ -79,11 +79,11 @@ public class VillagercoinClient implements ClientModInitializer {
 				NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 				
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"item.villagerunknown-villagercoin.receipt.tooltip.value",
 								numberFormat.format(receiptValueComponent.value() * stack.getCount() ),
-								CoinItems.COPPER_COIN.getName().getString()
-						).formatted(Formatting.GRAY)
+								CoinItems.COPPER_COIN.getDefaultInstance().getHoverName().getString()
+						).withStyle(ChatFormatting.GRAY)
 				);
 			} // if
 			
@@ -91,16 +91,16 @@ public class VillagercoinClient implements ClientModInitializer {
 			
 			if( null != receiptMessageComponent ) {
 				list.add(
-						Text.literal(
+						Component.literal(
 								receiptMessageComponent.message()
-						).formatted(Formatting.ITALIC, Formatting.GRAY)
+						).withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY)
 				);
 			} // if
 		});
 	}
 	
 	private static void registerLedgerItemTooltips() {
-		ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, list) -> {
+		ItemTooltipCallback.EVENT.register((stack, tooltipConComponent, tooltipType, list) -> {
 			if (!(stack.getItem() instanceof AbstractLedgerItem)) {
 				return;
 			}
@@ -111,10 +111,10 @@ public class VillagercoinClient implements ClientModInitializer {
 			
 			if( null != dateComponent ) {
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"item.villagerunknown-villagercoin.ledger.tooltip.date",
 								dateComponent.date()
-						).formatted(Formatting.GRAY)
+						).withStyle(ChatFormatting.GRAY)
 				);
 			} // if
 			
@@ -122,21 +122,21 @@ public class VillagercoinClient implements ClientModInitializer {
 			
 			if( null != updatedDateComponent ) {
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"item.villagerunknown-villagercoin.ledger.tooltip.updated",
 								updatedDateComponent.date()
-						).formatted(Formatting.GRAY)
+						).withStyle(ChatFormatting.GRAY)
 				);
 			} // if
 			
-			WritableBookContentComponent writableBookContentComponent = stack.get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
+			WritableBookContent writableBookContentComponent = stack.get(DataComponents.WRITABLE_BOOK_CONTENT);
 			
 			if( null != writableBookContentComponent ) {
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"item.villagerunknown-villagercoin.ledger.tooltip.pages",
 								numberFormat.format( writableBookContentComponent.pages().size() )
-						).formatted(Formatting.GRAY)
+						).withStyle(ChatFormatting.GRAY)
 				);
 			} // if
 			
@@ -144,11 +144,11 @@ public class VillagercoinClient implements ClientModInitializer {
 			
 			if( null != accumulatingValueComponent ) {
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"item.villagerunknown-villagercoin.ledger.tooltip.amount",
 								CoinFeature.humanReadableNumber( accumulatingValueComponent.value(), true ),
-								CoinItems.COPPER_COIN.getName().getString()
-						).formatted(Formatting.GRAY)
+								CoinItems.COPPER_COIN.getDefaultInstance().getHoverName().getString()
+						).withStyle(ChatFormatting.GRAY)
 				);
 			} // if
 			
@@ -158,30 +158,30 @@ public class VillagercoinClient implements ClientModInitializer {
 				int copyCount = copyCountComponent.count();
 				if ( copyCount == 0 ) {
 					list.add(
-							Text.translatable(
+							Component.translatable(
 									"item.villagerunknown-villagercoin.ledger.tooltip.original"
-							).formatted(Formatting.GRAY)
+							).withStyle(ChatFormatting.GRAY)
 					);
 				} else if ( copyCount == 1 ) {
 					list.add(
-							Text.translatable(
+							Component.translatable(
 									"item.villagerunknown-villagercoin.ledger.tooltip.copy",
 									CoinFeature.humanReadableNumber(copyCount, false)
-							).formatted(Formatting.GRAY)
+							).withStyle(ChatFormatting.GRAY)
 					);
 				} else if( copyCount > 1 ) {
 					list.add(
-							Text.translatable(
+							Component.translatable(
 									"item.villagerunknown-villagercoin.ledger.tooltip.copyOfCopy",
 									CoinFeature.humanReadableNumber(copyCount, false)
-							).formatted(Formatting.GRAY)
+							).withStyle(ChatFormatting.GRAY)
 					);
 				} // if, else if
 			} else {
 				list.add(
-						Text.translatable(
+						Component.translatable(
 								"item.villagerunknown-villagercoin.ledger.tooltip.original"
-						).formatted(Formatting.GRAY)
+						).withStyle(ChatFormatting.GRAY)
 				);
 			} // if, else
 		});

@@ -2,7 +2,7 @@ package me.villagerunknown.villagercoin.item;
 
 public class ReceiptItem extends AbstractReceiptItem {
 	
-	public ReceiptItem(Settings settings) {
+	public ReceiptItem(Properties settings) {
 		super(
 				settings
 		);

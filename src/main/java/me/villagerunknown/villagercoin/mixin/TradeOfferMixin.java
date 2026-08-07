@@ -4,12 +4,10 @@ import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.feature.MerchantCoinTradingFeature;
 import me.villagerunknown.villagercoin.item.CoinItems;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Pair;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradedItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -21,26 +19,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashMap;
 import java.util.Optional;
 
-@Mixin(TradeOffer.class)
+@Mixin(MerchantOffer.class)
 public class TradeOfferMixin {
 	
 	@Mutable
 	@Final
 	@Shadow
-	private TradedItem firstBuyItem;
+	private ItemCost baseCostA;
 	
 	@Mutable
 	@Final
 	@Shadow
-	private Optional<TradedItem> secondBuyItem;
+	private Optional<ItemCost> costB;
 	
 	@Mutable
 	@Final
 	@Shadow
-	private ItemStack sellItem;
+	private ItemStack result;
 	
-	@Inject(method = "<init>(Lnet/minecraft/village/TradedItem;Ljava/util/Optional;Lnet/minecraft/item/ItemStack;IIZIIFI)V", at = @At("TAIL"))
-	private void TradeOffer(TradedItem firstBuyItem, Optional secondBuyItem, ItemStack sellItem, int _uses, int maxUses, boolean rewardingPlayerExperience, int specialPrice, int demandBonus, float priceMultiplier, int merchantExperience, CallbackInfo ci) {
+	@Inject(method = "<init>(Lnet/minecraft/world/item/trading/ItemCost;Ljava/util/Optional;Lnet/minecraft/world/item/ItemStack;IIZIIFI)V", at = @At("TAIL"))
+	private void TradeOffer(ItemCost firstBuyItem, Optional secondBuyItem, ItemStack sellItem, int _uses, int maxUses, boolean rewardingPlayerExperience, int specialPrice, int demandBonus, float priceMultiplier, int merchantExperience, CallbackInfo ci) {
 		if( !MerchantCoinTradingFeature.shouldReplaceTrades( firstBuyItem, sellItem ) ) {
 			return;
 		} // if
@@ -49,9 +47,9 @@ public class TradeOfferMixin {
 		
 		MerchantCoinTradingFeature.ModifiedTrade modifiedTrade = MerchantCoinTradingFeature.modifyTrade( firstBuyItem, secondBuyItem, sellItem, coin );
 		
-		this.firstBuyItem = modifiedTrade.firstBuyItem;
-		this.secondBuyItem = modifiedTrade.secondBuyItem;
-		this.sellItem = modifiedTrade.sellItem;
+		this.baseCostA = modifiedTrade.firstBuyItem;
+		this.costB = modifiedTrade.secondBuyItem;
+		this.result = modifiedTrade.sellItem;
 	}
 	
 }

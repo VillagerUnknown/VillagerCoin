@@ -2,8 +2,8 @@ package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.block.entity.CoinBankBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class CoinBankBlockEntityFeature extends AbstractBlockEntityFeature {
 	

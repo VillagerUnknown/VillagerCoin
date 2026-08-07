@@ -1,36 +1,42 @@
 package me.villagerunknown.villagercoin.recipe;
 
+import com.mojang.serialization.MapCodec;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.AccumulatingValueComponent;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
 import me.villagerunknown.villagercoin.feature.LedgerCraftingFeature;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.WritableBookContent;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashSet;
 
 import static me.villagerunknown.villagercoin.component.Components.*;
 
-public class LedgerRecipe extends SpecialCraftingRecipe {
+public class LedgerRecipe extends CustomRecipe {
 	
-	public LedgerRecipe(CraftingRecipeCategory category) {
-		super(category);
+	public static final LedgerRecipe INSTANCE = new LedgerRecipe();
+	public static final MapCodec<LedgerRecipe> CODEC = MapCodec.unit(INSTANCE);
+	public static final StreamCodec<RegistryFriendlyByteBuf, LedgerRecipe> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	
+	public LedgerRecipe() {
+		super();
 	}
 	
 	@Override
-	public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
+	public boolean matches(CraftingInput craftingRecipeInput, Level world) {
 		int containsReceipts = 0;
 		int containsCarrier = 0;
 		
@@ -38,22 +44,22 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 		
 		ItemStack existingLedger = null;
 		
-		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
-			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
-				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
+		for(int i = 0; i < craftingRecipeInput.height(); ++i) {
+			for(int j = 0; j < craftingRecipeInput.width(); ++j) {
+				ItemStack itemStack = craftingRecipeInput.getItem(j, i);
 				if( !itemStack.isEmpty() ) {
 					if( LedgerCraftingFeature.isCraftingResultLedger( itemStack.getItem() ) ) {
 						existingLedger = itemStack;
-					} else if( itemStack.isOf( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+					} else if( itemStack.is( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 						containsCarrier++;
-					} else if( itemStack.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+					} else if( itemStack.is( Villagercoin.getItemTagKey( "receipt" ) ) ) {
 						ReceiptValueComponent receiptValueComponent = itemStack.get( RECEIPT_VALUE_COMPONENT );
 						
 						if( null != receiptValueComponent ) {
 							receiptsAccumulatedValue += receiptValueComponent.value();
 							containsReceipts++;
 						} // if
-					} else if( !itemStack.isOf( Items.AIR ) ) {
+					} else if( !itemStack.is( Items.AIR ) ) {
 						return false;
 					} // if, else
 				} // if
@@ -61,10 +67,10 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 		} // for
 		
 		if( null != existingLedger ) {
-			WritableBookContentComponent writableBookContentComponent = existingLedger.get( DataComponentTypes.WRITABLE_BOOK_CONTENT );
+			WritableBookContent writableBookContentComponent = existingLedger.get( DataComponents.WRITABLE_BOOK_CONTENT );
 			
 			if( null != writableBookContentComponent ) {
-				if( writableBookContentComponent.pages().size() < WritableBookContentComponent.MAX_PAGE_COUNT ) {
+				if( writableBookContentComponent.pages().size() < WritableBookContent.MAX_PAGES ) {
 					AccumulatingValueComponent accumulatingValueComponent = existingLedger.get( ACCUMULATING_VALUE_COMPONENT );
 					
 					if( null != accumulatingValueComponent && accumulatingValueComponent.value() + receiptsAccumulatedValue < Long.MAX_VALUE ) {
@@ -78,16 +84,16 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 	}
 	
 	@Override
-	public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup lookup) {
+	public @NonNull ItemStack assemble(CraftingInput craftingRecipeInput) {
 		long totalValue = 0;
 		
 		ItemStack carrierStack = null;
 		
 		for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-			ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
+			ItemStack itemStack = craftingRecipeInput.getItem(i);
 			
 			if( !itemStack.isEmpty() ) {
-				if( itemStack.isOf( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+				if( itemStack.is( LedgerCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 					carrierStack = itemStack;
 				} else {
 					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
@@ -108,10 +114,10 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 			returnStack = new ItemStack(ledgerItem, 1);
 			
 			if( null != carrierStack ) {
-				Text carrierCustomName = carrierStack.get( DataComponentTypes.CUSTOM_NAME );
+				Component carrierCustomName = carrierStack.get( DataComponents.CUSTOM_NAME );
 				
 				if( null != carrierCustomName ) {
-					returnStack.set(DataComponentTypes.CUSTOM_NAME, carrierCustomName);
+					returnStack.set(DataComponents.CUSTOM_NAME, carrierCustomName);
 				} // if
 			} // if
 		} // if
@@ -124,7 +130,7 @@ public class LedgerRecipe extends SpecialCraftingRecipe {
 	}
 	
 	@Override
-	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
+	public RecipeSerializer<? extends CustomRecipe> getSerializer() {
 		return LedgerCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

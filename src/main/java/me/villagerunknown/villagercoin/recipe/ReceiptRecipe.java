@@ -1,44 +1,50 @@
 package me.villagerunknown.villagercoin.recipe;
 
+import com.mojang.serialization.MapCodec;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.ReceiptCraftingFeature;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashSet;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
-public class ReceiptRecipe extends SpecialCraftingRecipe {
+public class ReceiptRecipe extends CustomRecipe {
 	
-	public ReceiptRecipe(CraftingRecipeCategory category) {
-		super(category);
+	public static final ReceiptRecipe INSTANCE = new ReceiptRecipe();
+	public static final MapCodec<ReceiptRecipe> CODEC = MapCodec.unit(INSTANCE);
+	public static final StreamCodec<RegistryFriendlyByteBuf, ReceiptRecipe> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	
+	public ReceiptRecipe() {
+		super();
 	}
 	
 	@Override
-	public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
+	public boolean matches(CraftingInput craftingRecipeInput, Level world) {
 		int containsCurrencyComponent = 0;
 		int containsCarrier = 0;
 		
-		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
-			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
-				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
+		for(int i = 0; i < craftingRecipeInput.height(); ++i) {
+			for(int j = 0; j < craftingRecipeInput.width(); ++j) {
+				ItemStack itemStack = craftingRecipeInput.getItem(j, i);
 				if( !itemStack.isEmpty() ) {
 					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 					
 					if( null != currencyComponent ) {
 						containsCurrencyComponent++;
-					} else if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+					} else if( itemStack.is( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 						containsCarrier++;
-					} else if( !itemStack.isOf( Items.AIR ) ) {
+					} else if( !itemStack.is( Items.AIR ) ) {
 						return false;
 					} // if, else
 				} // if
@@ -49,16 +55,16 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 	}
 	
 	@Override
-	public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup lookup) {
+	public @NonNull ItemStack assemble(CraftingInput craftingRecipeInput) {
 		long totalValue = 0;
 		
 		ItemStack carrierStack = null;
 		
 		for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-			ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
+			ItemStack itemStack = craftingRecipeInput.getItem(i);
 			
 			if( !itemStack.isEmpty() ) {
-				if( itemStack.isOf( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
+				if( itemStack.is( ReceiptCraftingFeature.RECIPE_CARRIER_ITEM ) ) {
 					carrierStack = itemStack;
 				} else {
 					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
@@ -92,7 +98,7 @@ public class ReceiptRecipe extends SpecialCraftingRecipe {
 	}
 	
 	@Override
-	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
+	public RecipeSerializer<? extends CustomRecipe> getSerializer() {
 		return ReceiptCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

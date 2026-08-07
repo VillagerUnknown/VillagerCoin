@@ -1,30 +1,30 @@
 package me.villagerunknown.villagercoin.item;
 
 import me.villagerunknown.villagercoin.component.CollectableComponent;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import static me.villagerunknown.villagercoin.component.Components.COLLECTABLE_COMPONENT;
 
 public abstract class AbstractCollectableCoinItem extends AbstractFlippableCoinItem {
 	
-	public AbstractCollectableCoinItem(Settings settings) {
+	public AbstractCollectableCoinItem(Properties settings) {
 		super(settings);
 	}
 	
 	@Override
-	public ActionResult use(World world, PlayerEntity user, Hand hand) {
+	public InteractionResult use(Level world, Player user, InteractionHand hand) {
 		playCoinSound( user );
 		return super.use( world, user, hand );
 	}
 	
-	public void onItemEntityDestroyed(ItemEntity entity) {
-		ItemStack itemStack = entity.getStack();
+	public void onDestroyed(ItemEntity entity) {
+		ItemStack itemStack = entity.getItem();
 		CollectableComponent collectableComponent = itemStack.get( COLLECTABLE_COMPONENT );
 		
 		if( null != collectableComponent ) {
@@ -35,7 +35,7 @@ public abstract class AbstractCollectableCoinItem extends AbstractFlippableCoinI
 			} // if
 		} // if
 		
-		super.onItemEntityDestroyed(entity);
+		super.onDestroyed(entity);
 	}
 	
 }

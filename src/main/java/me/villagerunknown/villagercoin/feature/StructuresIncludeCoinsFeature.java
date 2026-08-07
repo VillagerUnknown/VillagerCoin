@@ -6,20 +6,21 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CollectableComponent;
 import me.villagerunknown.villagercoin.component.DropComponent;
 import me.villagerunknown.villagercoin.component.LootTableComponent;
+import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
-import net.minecraft.item.Item;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.provider.number.UniformLootNumberProvider;
-import net.minecraft.registry.RegistryKey;
-
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import java.util.*;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.*;
-import static net.minecraft.loot.LootTables.*;
+import static net.minecraft.world.level.storage.loot.BuiltInLootTables.*;
 
 public class StructuresIncludeCoinsFeature {
 	
@@ -55,120 +56,126 @@ public class StructuresIncludeCoinsFeature {
 	public static final int EMERALD_LOOT_TABLE_WEIGHT = Villagercoin.CONFIG.emeraldLootTableWeight;
 	public static final int NETHERITE_LOOT_TABLE_WEIGHT = Villagercoin.CONFIG.netheriteLootTableWeight;
 	
-	public static Set<RegistryKey<LootTable>> NETHERITE_LOOT_TABLES = new HashSet<>(Arrays.asList(
-			END_CITY_TREASURE_CHEST
+	public static Set<ResourceKey<LootTable>> NETHERITE_LOOT_TABLES = new HashSet<>(Arrays.asList(
+			END_CITY_TREASURE
 	));
 	
-	public static Set<RegistryKey<LootTable>> EMERALD_LOOT_TABLES = NETHERITE_LOOT_TABLES;
+	public static Set<ResourceKey<LootTable>> EMERALD_LOOT_TABLES = NETHERITE_LOOT_TABLES;
 	
-	public static Set<RegistryKey<LootTable>> GOLD_LOOT_TABLES = combineLootTables( EMERALD_LOOT_TABLES, new HashSet<>(Arrays.asList(
-			BASTION_TREASURE_CHEST,
-			BASTION_HOGLIN_STABLE_CHEST,
-			BASTION_OTHER_CHEST,
-			BASTION_BRIDGE_CHEST,
-			JUNGLE_TEMPLE_CHEST,
-			TRAIL_RUINS_RARE_ARCHAEOLOGY,
-			TRIAL_CHAMBER_KEY_SPAWNER,
-			NETHER_BRIDGE_CHEST,
-			WOODLAND_MANSION_CHEST,
-			ANCIENT_CITY_CHEST,
-			TRIAL_CHAMBERS_REWARD_RARE_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_RARE_CHEST,
-			TRIAL_CHAMBERS_REWARD_UNIQUE_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_UNIQUE_CHEST,
-			TRIAL_CHAMBER_ITEMS_TO_DROP_WHEN_OMINOUS_SPAWNER,
-			TRIAL_CHAMBERS_REWARD_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_CHEST,
-			OMINOUS_TRIAL_CHAMBER_KEY_SPAWNER,
-			END_CITY_TREASURE_CHEST,
-			STRONGHOLD_LIBRARY_CHEST,
-			STRONGHOLD_CROSSING_CHEST,
-			STRONGHOLD_CORRIDOR_CHEST,
-			ANCIENT_CITY_ICE_BOX_CHEST,
-			BURIED_TREASURE_CHEST
+	public static Set<ResourceKey<LootTable>> GOLD_LOOT_TABLES = combineLootTables( EMERALD_LOOT_TABLES, new HashSet<>(Arrays.asList(
+			BASTION_TREASURE,
+			BASTION_HOGLIN_STABLE,
+			BASTION_OTHER,
+			BASTION_BRIDGE,
+			JUNGLE_TEMPLE,
+			TRAIL_RUINS_ARCHAEOLOGY_RARE,
+			SPAWNER_TRIAL_CHAMBER_KEY,
+			NETHER_BRIDGE,
+			WOODLAND_MANSION,
+			ANCIENT_CITY,
+			TRIAL_CHAMBERS_REWARD_RARE,
+			TRIAL_CHAMBERS_REWARD_OMINOUS_RARE,
+			TRIAL_CHAMBERS_REWARD_UNIQUE,
+			TRIAL_CHAMBERS_REWARD_OMINOUS_UNIQUE,
+			SPAWNER_TRIAL_ITEMS_TO_DROP_WHEN_OMINOUS,
+			TRIAL_CHAMBERS_REWARD,
+			TRIAL_CHAMBERS_REWARD_OMINOUS,
+			SPAWNER_OMINOUS_TRIAL_CHAMBER_KEY,
+			END_CITY_TREASURE,
+			STRONGHOLD_LIBRARY,
+			STRONGHOLD_CROSSING,
+			STRONGHOLD_CORRIDOR,
+			ANCIENT_CITY_ICE_BOX,
+			BURIED_TREASURE
 	)));
 	
-	public static Set<RegistryKey<LootTable>> IRON_LOOT_TABLES = combineLootTables( GOLD_LOOT_TABLES, new HashSet<>(Arrays.asList(
-			VILLAGE_WEAPONSMITH_CHEST,
-			VILLAGE_TOOLSMITH_CHEST,
-			VILLAGE_ARMORER_CHEST,
+	public static Set<ResourceKey<LootTable>> IRON_LOOT_TABLES = combineLootTables( GOLD_LOOT_TABLES, new HashSet<>(Arrays.asList(
+			VILLAGE_WEAPONSMITH,
+			VILLAGE_TOOLSMITH,
+			VILLAGE_ARMORER,
 			SPAWN_BONUS_CHEST,
-			SIMPLE_DUNGEON_CHEST,
-			ABANDONED_MINESHAFT_CHEST,
-			IGLOO_CHEST_CHEST,
-			SHIPWRECK_SUPPLY_CHEST,
-			SHIPWRECK_MAP_CHEST,
-			TRIAL_CHAMBERS_REWARD_COMMON_CHEST,
-			TRIAL_CHAMBERS_REWARD_OMINOUS_COMMON_CHEST,
-			HERO_OF_THE_VILLAGE_ARMORER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_BUTCHER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_CARTOGRAPHER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_CLERIC_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_FARMER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_FISHERMAN_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_FLETCHER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_LEATHERWORKER_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_LIBRARIAN_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_MASON_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_SHEPHERD_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_TOOLSMITH_GIFT_GAMEPLAY,
-			HERO_OF_THE_VILLAGE_WEAPONSMITH_GIFT_GAMEPLAY,
-			FISHING_TREASURE_GAMEPLAY,
+			SIMPLE_DUNGEON,
+			ABANDONED_MINESHAFT,
+			IGLOO_CHEST,
+			SHIPWRECK_SUPPLY,
+			SHIPWRECK_MAP,
+			TRIAL_CHAMBERS_REWARD_COMMON,
+			TRIAL_CHAMBERS_REWARD_OMINOUS_COMMON,
+			ARMORER_GIFT,
+			BUTCHER_GIFT,
+			CARTOGRAPHER_GIFT,
+			CLERIC_GIFT,
+			FARMER_GIFT,
+			FISHERMAN_GIFT,
+			FLETCHER_GIFT,
+			LEATHERWORKER_GIFT,
+			LIBRARIAN_GIFT,
+			MASON_GIFT,
+			SHEPHERD_GIFT,
+			TOOLSMITH_GIFT,
+			WEAPONSMITH_GIFT,
+			FISHING_TREASURE,
 			DESERT_WELL_ARCHAEOLOGY,
 			DESERT_PYRAMID_ARCHAEOLOGY,
-			TRAIL_RUINS_COMMON_ARCHAEOLOGY,
+			TRAIL_RUINS_ARCHAEOLOGY_COMMON,
 			OCEAN_RUIN_WARM_ARCHAEOLOGY,
 			OCEAN_RUIN_COLD_ARCHAEOLOGY,
 			TRIAL_CHAMBERS_CORRIDOR_POT,
-			TRIAL_CHAMBERS_SUPPLY_CHEST,
-			TRIAL_CHAMBERS_CORRIDOR_CHEST,
-			TRIAL_CHAMBERS_INTERSECTION_CHEST,
-			TRIAL_CHAMBERS_INTERSECTION_BARREL_CHEST,
-			TRIAL_CHAMBERS_ENTRANCE_CHEST,
-			SHIPWRECK_TREASURE_CHEST,
-			DESERT_PYRAMID_CHEST,
-			UNDERWATER_RUIN_SMALL_CHEST,
-			UNDERWATER_RUIN_BIG_CHEST,
-			RUINED_PORTAL_CHEST,
-			PILLAGER_OUTPOST_CHEST
+			TRIAL_CHAMBERS_SUPPLY,
+			TRIAL_CHAMBERS_CORRIDOR,
+			TRIAL_CHAMBERS_INTERSECTION,
+			TRIAL_CHAMBERS_INTERSECTION_BARREL,
+			TRIAL_CHAMBERS_ENTRANCE,
+			SHIPWRECK_TREASURE,
+			DESERT_PYRAMID,
+			UNDERWATER_RUIN_SMALL,
+			UNDERWATER_RUIN_BIG,
+			RUINED_PORTAL,
+			PILLAGER_OUTPOST
 	)));
 	
-	public static Set<RegistryKey<LootTable>> COPPER_LOOT_TABLES = combineLootTables( IRON_LOOT_TABLES, new HashSet<>(Arrays.asList(
-			FISHING_JUNK_GAMEPLAY,
-			VILLAGE_CARTOGRAPHER_CHEST,
-			VILLAGE_MASON_CHEST,
-			VILLAGE_SHEPARD_CHEST,
-			VILLAGE_BUTCHER_CHEST,
-			VILLAGE_FLETCHER_CHEST,
-			VILLAGE_FISHER_CHEST,
-			VILLAGE_TANNERY_CHEST,
-			VILLAGE_TEMPLE_CHEST,
-			VILLAGE_DESERT_HOUSE_CHEST,
-			VILLAGE_PLAINS_CHEST,
-			VILLAGE_TAIGA_HOUSE_CHEST,
-			VILLAGE_SNOWY_HOUSE_CHEST,
-			VILLAGE_SAVANNA_HOUSE_CHEST
+	public static Set<ResourceKey<LootTable>> COPPER_LOOT_TABLES = combineLootTables( IRON_LOOT_TABLES, new HashSet<>(Arrays.asList(
+			FISHING_JUNK,
+			VILLAGE_CARTOGRAPHER,
+			VILLAGE_MASON,
+			VILLAGE_SHEPHERD,
+			VILLAGE_BUTCHER,
+			VILLAGE_FLETCHER,
+			VILLAGE_FISHER,
+			VILLAGE_TANNERY,
+			VILLAGE_TEMPLE,
+			VILLAGE_DESERT_HOUSE,
+			VILLAGE_PLAINS_HOUSE,
+			VILLAGE_TAIGA_HOUSE,
+			VILLAGE_SNOWY_HOUSE,
+			VILLAGE_SAVANNA_HOUSE
 	)));
 	
-	public static HashMap<RegistryKey<LootTable>, Set<Item>> LOOT_TABLES = new HashMap<>();
+	public static HashMap<ResourceKey<LootTable>, Set<Item>> LOOT_TABLES = new HashMap<>();
+	
+	public static HashMap<Item, LootTableComponent> LOOT_TABLE_COMPONENTS = new HashMap<>();
 	
 	public static void execute(){
 		registerLootTableEvent();
 	}
 	
 	@SafeVarargs
-	private static Set<RegistryKey<LootTable>> combineLootTables(Set<RegistryKey<LootTable>>... lootTableCollections ) {
-		Set<RegistryKey<LootTable>> combinedLootTables = new HashSet<>();
+	private static Set<ResourceKey<LootTable>> combineLootTables(Set<ResourceKey<LootTable>>... lootTableCollections ) {
+		Set<ResourceKey<LootTable>> combinedLootTables = new HashSet<>();
 		
-		for( Set<RegistryKey<LootTable>> lootTables : lootTableCollections) {
+		for( Set<ResourceKey<LootTable>> lootTables : lootTableCollections) {
 			combinedLootTables.addAll( lootTables );
 		} // for
 		
 		return combinedLootTables;
 	}
 	
-	public static void addCoinToLootTables(Item coin, Set<RegistryKey<LootTable>> lootTables ) {
-		for (RegistryKey<LootTable> lootTable : lootTables) {
+	public static void addCoinToLootTableComponents(Item item, LootTableComponent lootTableComponent){
+		LOOT_TABLE_COMPONENTS.put( item, lootTableComponent );
+	}
+	
+	public static void addCoinToLootTables(Item coin, Set<ResourceKey<LootTable>> lootTables ) {
+		for (ResourceKey<LootTable> lootTable : lootTables) {
 			if( !LOOT_TABLES.containsKey( lootTable ) ) {
 				LOOT_TABLES.put( lootTable, new HashSet<>() );
 			} // if
@@ -183,12 +190,12 @@ public class StructuresIncludeCoinsFeature {
 	private static void registerLootTableEvent() {
 		LootTableEvents.MODIFY.register((registryKey, lootBuilder, lootTableSource, registryWrapper) -> {
 			if( lootTableSource.isBuiltin() ) {
-				String namespace = registryKey.getValue().getNamespace();
+				String namespace = registryKey.identifier().getNamespace();
 				boolean isVillagerCoin = namespace.equals( MOD_ID );
 				
 				if( Villagercoin.CONFIG.addCoinsToStructureLootTables && LOOT_TABLES.containsKey( registryKey ) ) {
 					// Included Vanilla Loot Table
-					LootPool.Builder poolBuilder = LootPool.builder();
+					LootPool.Builder poolBuilder = LootPool.lootPool();
 					
 					Set<Item> items = LOOT_TABLES.get( registryKey );
 					
@@ -196,11 +203,11 @@ public class StructuresIncludeCoinsFeature {
 						buildLootPool(poolBuilder, item);
 					} // for
 					
-					lootBuilder.pool(poolBuilder);
+					lootBuilder.withPool(poolBuilder);
 				} else if( Villagercoin.CONFIG.addCoinsToModdedStructureLootTables && lootTableSource != LootTableSource.VANILLA && !isVillagerCoin ) {
 					// Modded Loot Table
-					LootPool.Builder poolBuilder = LootPool.builder();
-					String path = registryKey.getValue().getPath();
+					LootPool.Builder poolBuilder = LootPool.lootPool();
+					String path = registryKey.identifier().getPath();
 					
 					boolean includeCoins = true;
 					
@@ -214,13 +221,13 @@ public class StructuresIncludeCoinsFeature {
 					if( includeCoins && moddedLootTableContainsKeyword( path ) ) {
 						Set<Item> items = new HashSet<>();
 						
-						Optional<RegistryKey<LootTable>> commonLootTable = IRON_LOOT_TABLES.stream().findAny();
+						Optional<ResourceKey<LootTable>> commonLootTable = IRON_LOOT_TABLES.stream().findAny();
 						
 						if (commonLootTable.isPresent()) {
 							items = LOOT_TABLES.get(commonLootTable.get());
 						} // if
 						
-						Optional<RegistryKey<LootTable>> rareLootTable = GOLD_LOOT_TABLES.stream().findAny();
+						Optional<ResourceKey<LootTable>> rareLootTable = GOLD_LOOT_TABLES.stream().findAny();
 						
 						if (rareLootTable.isPresent()) {
 							for (String goldCoinKeyword : highValueCoinKeywords.getList()) {
@@ -236,7 +243,7 @@ public class StructuresIncludeCoinsFeature {
 								buildLootPool(poolBuilder, item);
 							} // for
 							
-							lootBuilder.pool(poolBuilder);
+							lootBuilder.withPool(poolBuilder);
 						} // if
 					} // if
 				} // if
@@ -255,11 +262,11 @@ public class StructuresIncludeCoinsFeature {
 	}
 	
 	private static void buildLootPool( LootPool.Builder poolBuilder, Item item ) {
-		LootTableComponent lootTableComponent = item.getComponents().get( LOOT_TABLE_COMPONENT );
+		LootTableComponent lootTableComponent = LOOT_TABLE_COMPONENTS.get( item );
 		
 		if( null != lootTableComponent ) {
-			CollectableComponent collectableComponent = item.getComponents().get( COLLECTABLE_COMPONENT );
-			DropComponent dropComponent = item.getComponents().get( DROP_COMPONENT );
+			CollectableComponent collectableComponent = CollectableCoinFeature.COLLECTABLE_COMPONENTS.get( item );
+			DropComponent dropComponent = MobsDropCoinsFeature.MOB_DROP_COMPONENTS.get( item );
 			
 			int lootTableWeight = lootTableComponent.lootTableWeight();
 			int lootTableRolls = lootTableComponent.lootTableRolls();
@@ -272,21 +279,21 @@ public class StructuresIncludeCoinsFeature {
 									&& collectableComponent.canAddToCirculation( item )
 					) {
 						// Every collectable coin has a minimum roll of 1 after passing the drop chance check
-						poolBuilder.with(ItemEntry.builder(item).weight( lootTableWeight ));
-						poolBuilder.rolls( UniformLootNumberProvider.create( lootTableRolls, lootTableRolls ) );
+						poolBuilder.add(LootItem.lootTableItem(item).setWeight( lootTableWeight ));
+						poolBuilder.setRolls( UniformGenerator.between( lootTableRolls, lootTableRolls ) );
 					} // if
 				} else {
 					// Coins
 					// Every coin has a minimum roll equal to lootTableRolls divided by COPPER_LOOT_TABLE_ROLLS
 					// with the larger number dividing into the smaller number.
-					poolBuilder.with( ItemEntry.builder( item ).weight( lootTableWeight ) );
-					poolBuilder.rolls( UniformLootNumberProvider.create( getMinimumLootTableRolls( lootTableRolls ), lootTableRolls ) );
+					poolBuilder.add( LootItem.lootTableItem( item ).setWeight( lootTableWeight ) );
+					poolBuilder.setRolls( UniformGenerator.between( getMinimumLootTableRolls( lootTableRolls ), lootTableRolls ) );
 				} // if, else
 			} // if
 		} // if
 	}
 	
-	public static int getLootTableWeight( RegistryKey<LootTable> registryKey ) {
+	public static int getLootTableWeight( ResourceKey<LootTable> registryKey ) {
 		int lootTableWeight = COPPER_LOOT_TABLE_WEIGHT;
 		
 		if( NETHERITE_LOOT_TABLES.contains(registryKey) ) {
@@ -302,7 +309,7 @@ public class StructuresIncludeCoinsFeature {
 		return lootTableWeight;
 	}
 	
-	public static int getLootTableRolls( RegistryKey<LootTable> registryKey ) {
+	public static int getLootTableRolls( ResourceKey<LootTable> registryKey ) {
 		int lootTableRolls = COPPER_LOOT_TABLE_ROLLS;
 		
 		if( NETHERITE_LOOT_TABLES.contains(registryKey) ) {

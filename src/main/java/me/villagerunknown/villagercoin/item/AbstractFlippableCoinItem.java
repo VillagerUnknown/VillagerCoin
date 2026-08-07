@@ -6,19 +6,18 @@ import me.villagerunknown.platform.util.MessageUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CoinComponent;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import java.util.List;
 
 import static me.villagerunknown.villagercoin.component.Components.COIN_COMPONENT;
@@ -28,19 +27,19 @@ public abstract class AbstractFlippableCoinItem extends AbstractCoinItem {
 	
 	public static int COOLDOWN_TIME = 100;
 	
-	public AbstractFlippableCoinItem(Settings settings) {
+	public AbstractFlippableCoinItem(Properties settings) {
 		super(settings);
 	}
 	
 	@Override
-	public ActionResult use(World world, PlayerEntity user, Hand hand) {
-		ItemStack itemStack = user.getStackInHand( hand );
+	public InteractionResult use(Level world, Player user, InteractionHand hand) {
+		ItemStack itemStack = user.getItemInHand( hand );
 		
-		if( !world.isClient() && !user.isSpectator() && Villagercoin.CONFIG.enableCoinFlipping ) {
+		if( !world.isClientSide() && !user.isSpectator() && Villagercoin.CONFIG.enableCoinFlipping ) {
 			if( null != itemStack && 1 == itemStack.getCount() ) {
 				CoinFeature.playCoinFlipSound( user );
 				
-				world.emitGameEvent(user, GameEvent.ENTITY_ACTION, user.getBlockPos());
+				world.gameEvent(user, GameEvent.ENTITY_ACTION, user.blockPosition());
 				
 				CoinComponent coinComponent = itemStack.get( COIN_COMPONENT );
 				
@@ -51,41 +50,41 @@ public abstract class AbstractFlippableCoinItem extends AbstractCoinItem {
 				} // if
 				
 				boolean flip = MathUtil.hasChance( flipChance );
-				Text result;
+				Component result;
 				SoundEvent sound;
 				
 				if( flip ) {
-					result = Text.translatable( "item." + MOD_ID + ".villager_coin.flip.heads", user.getNameForScoreboard() );
+					result = Component.translatable( "item." + MOD_ID + ".villager_coin.flip.heads", user.getScoreboardName() );
 					
-					sound = SoundEvents.ENTITY_VILLAGER_YES;
+					sound = SoundEvents.VILLAGER_YES;
 				} else {
-					result = Text.translatable( "item." + MOD_ID + ".villager_coin.flip.tails", user.getNameForScoreboard() );
+					result = Component.translatable( "item." + MOD_ID + ".villager_coin.flip.tails", user.getScoreboardName() );
 					
-					sound = SoundEvents.ENTITY_VILLAGER_NO;
+					sound = SoundEvents.VILLAGER_NO;
 				} // if, else
 				
-				EntityUtil.playSound( user, sound, SoundCategory.PLAYERS, 0.33F, 1F, false );
+				EntityUtil.playSound( user, sound, SoundSource.PLAYERS, 0.33F, 1F, false );
 				
 				MessageUtil.sendChatMessage( user, result.getString());
 				
-				user.getItemCooldownManager().set( itemStack, COOLDOWN_TIME );
-				user.incrementStat(Stats.USED.getOrCreateStat(this));
+				user.getCooldowns().addCooldown( itemStack, COOLDOWN_TIME );
+				user.awardStat(Stats.ITEM_USED.get(this));
 				
-				List<Entity> nearbyEntities = world.getOtherEntities(user, user.getBoundingBox().expand(16));
+				List<Entity> nearbyEntities = world.getEntities(user, user.getBoundingBox().inflate(16));
 				
 				if( !nearbyEntities.isEmpty() ) {
 					for (Entity nearbyEntity : nearbyEntities) {
-						if (nearbyEntity instanceof PlayerEntity nearbyPlayer) {
+						if (nearbyEntity instanceof Player nearbyPlayer) {
 							MessageUtil.sendChatMessage(nearbyPlayer, result.getString());
 						} // if
 					} // for
 				} // if
 				
-				return ActionResult.SUCCESS;
+				return InteractionResult.SUCCESS;
 			} // if
 		} // if
 		
-		return ActionResult.PASS;
+		return InteractionResult.PASS;
 	}
 	
 }

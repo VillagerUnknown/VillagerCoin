@@ -1,32 +1,31 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WrittenBookContentComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.WrittenBookItem;
-import net.minecraft.network.packet.s2c.play.OpenWrittenBookS2CPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.ResolutionContext;
+import net.minecraft.network.protocol.game.ClientboundOpenBookPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.WrittenBookContent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerPlayerEntity.class)
+@Mixin(ServerPlayer.class)
 public class ServerPlayerEntityMixin {
 	
-	@Inject( method = "useBook", at = @At("HEAD") )
-	public void useBook(ItemStack book, Hand hand, CallbackInfo ci) {
-		if( book.contains(DataComponentTypes.WRITTEN_BOOK_CONTENT) || book.isIn(Villagercoin.getItemTagKey( "ledger" )) ) {
-			ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+	@Inject( method = "openItemGui", at = @At("HEAD") )
+	public void openItemGui(ItemStack book, InteractionHand hand, CallbackInfo ci) {
+		if( book.has(DataComponents.WRITTEN_BOOK_CONTENT) || book.is(Villagercoin.getItemTagKey( "ledger" )) ) {
+			ServerPlayer player = (ServerPlayer) (Object) this;
 			
-			if (WrittenBookContentComponent.resolveInStack(book, player.getCommandSource(), player)) {
-				player.currentScreenHandler.sendContentUpdates();
+			if (WrittenBookContent.resolveForItem(book, ResolutionContext.create(player.createCommandSourceStack()), player.registryAccess())) {
+				player.containerMenu.broadcastChanges();
 			}
 			
-			player.networkHandler.sendPacket(new OpenWrittenBookS2CPacket(hand));
+			player.connection.send(new ClientboundOpenBookPacket(hand));
 		}
 	}
 	

@@ -1,8 +1,8 @@
 package me.villagerunknown.villagercoin.feature;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 public class CustomItemGroupFeature {
 	
@@ -11,7 +11,7 @@ public class CustomItemGroupFeature {
 	}
 	
 	private static void registerItemGroup() {
-		Registry.register(Registries.ITEM_GROUP, Villagercoin.ITEM_GROUP_KEY, Villagercoin.ITEM_GROUP);
+		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Villagercoin.ITEM_GROUP_KEY, Villagercoin.ITEM_GROUP);
 	}
 	
 }

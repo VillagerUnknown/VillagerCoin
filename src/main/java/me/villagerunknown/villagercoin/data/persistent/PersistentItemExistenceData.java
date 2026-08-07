@@ -5,20 +5,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.villagerunknown.platform.Platform;
 import me.villagerunknown.platform.adapter.ItemCountMapTypeAdapter;
 import me.villagerunknown.platform.data.persistent.AbstractPersistentData;
 import me.villagerunknown.villagercoin.data.ItemExistenceData;
 import net.fabricmc.fabric.impl.transfer.VariantCodecs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateManager;
-import net.minecraft.world.PersistentStateType;
-import net.minecraft.world.World;
-
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedDataType;
+import net.minecraft.world.level.storage.SavedDataStorage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +31,8 @@ public class PersistentItemExistenceData extends AbstractPersistentData {
 			).fieldOf("itemsInExistence").forGetter( PersistentItemExistenceData::getItemsInExistence )
 	).apply( instance, PersistentItemExistenceData::new ));
 	
-	private static PersistentStateType<PersistentItemExistenceData> type = new PersistentStateType<>(
-			MOD_ID,
+	private static SavedDataType<PersistentItemExistenceData> type = new SavedDataType<>(
+			Identifier.fromNamespaceAndPath( Platform.MOD_ID, "item_existence_data" ),
 			PersistentItemExistenceData::new,
 			CODEC,
 			null
@@ -63,11 +59,11 @@ public class PersistentItemExistenceData extends AbstractPersistentData {
 	}
 	
 	public static PersistentItemExistenceData getServerState(MinecraftServer server) {
-		PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
+		SavedDataStorage persistentStateManager = server.getLevel(Level.OVERWORLD).getDataStorage();
 		
-		PersistentItemExistenceData state = persistentStateManager.getOrCreate(type);
+		PersistentItemExistenceData state = persistentStateManager.computeIfAbsent(type);
 		
-		state.markDirty();
+		state.setDirty();
 		
 		return state;
 	}

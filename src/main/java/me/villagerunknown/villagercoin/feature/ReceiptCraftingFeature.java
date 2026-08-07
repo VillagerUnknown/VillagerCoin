@@ -4,22 +4,22 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.DateComponent;
 import me.villagerunknown.villagercoin.component.ReceiptMessageComponent;
 import me.villagerunknown.villagercoin.component.ReceiptValueComponent;
+import me.villagerunknown.villagercoin.recipe.LedgerRecipe;
 import me.villagerunknown.villagercoin.recipe.ReceiptRecipe;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import java.time.LocalDate;
 import java.util.HashSet;
 
@@ -54,7 +54,7 @@ public class ReceiptCraftingFeature {
 	}
 	
 	public static ItemStack setReceiptMessage( ItemStack itemStack, ItemStack ingredientStack ) {
-		Text customNameComponent = ingredientStack.get(DataComponentTypes.CUSTOM_NAME);
+		Component customNameComponent = ingredientStack.get(DataComponents.CUSTOM_NAME);
 		String message = "";
 		
 		if( null != customNameComponent ) {
@@ -68,8 +68,8 @@ public class ReceiptCraftingFeature {
 		return itemStack;
 	}
 	
-	public static ItemStack setCustomName( PlayerEntity player, ItemStack itemStack ) {
-		itemStack.set( DataComponentTypes.ITEM_NAME, Text.translatable( "item.villagerunknown-villagercoin.receipt.tooltip.merchant", player.getNameForScoreboard() ) );
+	public static ItemStack setCustomName( Player player, ItemStack itemStack ) {
+		itemStack.set( DataComponents.ITEM_NAME, Component.translatable( "item.villagerunknown-villagercoin.receipt.tooltip.merchant", player.getScoreboardName() ) );
 		return itemStack;
 	}
 	
@@ -78,38 +78,42 @@ public class ReceiptCraftingFeature {
 		return itemStack;
 	}
 	
-	public static void subtractCarrierFromIngredients(RecipeInputInventory craftingInput, long amount ) {
-		CraftingRecipeInput.Positioned positioned = craftingInput.createPositionedRecipeInput();
-		CraftingRecipeInput craftingRecipeInput = positioned.input();
+	public static void subtractCarrierFromIngredients(CraftingContainer craftingInput, long amount ) {
+		CraftingInput.Positioned positioned = craftingInput.asPositionedCraftInput();
+		CraftingInput craftingRecipeInput = positioned.input();
 		int left = positioned.left();
 		int top = positioned.top();
 		
-		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
-			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
+		for(int y = 0; y < craftingRecipeInput.height(); ++y) {
+			for (int x = 0; x < craftingRecipeInput.width(); ++x) {
 				int m = x + left + (y + top) * craftingInput.getWidth();
-				ItemStack ingredientStack = craftingInput.getStack(m);
+				ItemStack ingredientStack = craftingInput.getItem(m);
 				
-				if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) ) {
+				if( ingredientStack.is( RECIPE_CARRIER_ITEM ) ) {
 					if( amount > Integer.MAX_VALUE ) {
 						amount = Integer.MAX_VALUE;
 					} // if
 					
-					craftingInput.removeStack( m, CoinCraftingFeature.toIntSafely(amount) );
+					craftingInput.removeItem( m, CoinCraftingFeature.toIntSafely(amount) );
 				} // if
 			} // for
 		} // for
 	}
 	
-	public static void subtractCarrierFromIngredients(DefaultedList<ItemStack> ingredients, int amount ) {
+	public static void subtractCarrierFromIngredients(NonNullList<ItemStack> ingredients, int amount ) {
 		for (ItemStack ingredientStack : ingredients) {
-			if( ingredientStack.isOf( RECIPE_CARRIER_ITEM ) ) {
-				ingredientStack.decrement( amount );
+			if( ingredientStack.is( RECIPE_CARRIER_ITEM ) ) {
+				ingredientStack.shrink( amount );
 			} // if
 		} // for
 	}
 	
 	static {
-		RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_receipt" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(ReceiptRecipe::new));
+		RECIPE_SERIALIZER = Registry.register(
+				BuiltInRegistries.RECIPE_SERIALIZER,
+				Identifier.fromNamespaceAndPath( MOD_ID, "crafting_special_receipt" ),
+				new RecipeSerializer<>(ReceiptRecipe.CODEC, ReceiptRecipe.STREAM_CODEC)
+		);
 	}
 	
 }

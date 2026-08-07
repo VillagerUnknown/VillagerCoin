@@ -4,18 +4,15 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CopyCountComponent;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.*;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.screen.slot.CraftingResultSlot;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,45 +29,45 @@ import java.util.concurrent.atomic.AtomicReference;
 import static me.villagerunknown.villagercoin.component.Components.COPY_COUNT_COMPONENT;
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
-@Mixin(CraftingResultSlot.class)
+@Mixin(ResultSlot.class)
 public class CraftingResultSlotMixin {
 	
 	@Final
 	@Shadow
-	private RecipeInputInventory input;
+	private CraftingContainer craftSlots;
 	
 	@Final
 	@Shadow
-	private PlayerEntity player;
+	private Player player;
 	
 	@Shadow
-	private int amount;
+	private int removeCount;
 	
-	@Inject(method = "onTakeItem", at = @At("HEAD"), cancellable = true)
-	private void onTakeItem(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
-		if( player.getEntityWorld().isClient() ) {
+	@Inject(method = "onTake", at = @At("HEAD"), cancellable = true)
+	private void onTakeItem(Player player, ItemStack stack, CallbackInfo ci) {
+		if( player.level().isClientSide() ) {
 			return;
 		} // if
 		
 		if( ReceiptCraftingFeature.isCraftingResultReceipt( stack.getItem() ) ) {
 			// # Receipts - Remove the paper
 			
-			ReceiptCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
+			ReceiptCraftingFeature.subtractCarrierFromIngredients( this.craftSlots, 1 );
 			ReceiptCraftingFeature.setCustomName( player, stack );
 			
-			this.onCrafted(stack);
+			this.checkTakeAchievements(stack);
 			
 			ci.cancel();
 			
 		} else {
-			CraftingRecipeInput.Positioned positioned = this.input.createPositionedRecipeInput();
-			CraftingRecipeInput craftingRecipeInput = positioned.input();
-			DefaultedList<ItemStack> defaultedList;
+			CraftingInput.Positioned positioned = this.craftSlots.asPositionedCraftInput();
+			CraftingInput craftingRecipeInput = positioned.input();
+			NonNullList<ItemStack> defaultedList;
 			
-			if( player.getEntityWorld() instanceof ServerWorld serverWorld ) {
-				defaultedList = serverWorld.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingRecipeInput, serverWorld).map((recipe) -> ((CraftingRecipe)recipe.value()).getRecipeRemainders(craftingRecipeInput)).orElseGet(() -> copyInput(craftingRecipeInput));
+			if( player.level() instanceof ServerLevel serverWorld ) {
+				defaultedList = serverWorld.recipeAccess().getRecipeFor(RecipeType.CRAFTING, craftingRecipeInput, serverWorld).map((recipe) -> ((CraftingRecipe)recipe.value()).getRemainingItems(craftingRecipeInput)).orElseGet(() -> copyInput(craftingRecipeInput));
 			} else {
-				defaultedList = CraftingRecipe.collectRecipeRemainders(craftingRecipeInput);
+				defaultedList = CraftingRecipe.defaultCraftingReminder(craftingRecipeInput);
 			} // if, else
 			
 			if( LedgerCraftingFeature.isCraftingResultLedger( stack.getItem() ) ) {
@@ -85,16 +82,16 @@ public class CraftingResultSlotMixin {
 				
 				int receipts = 0;
 				
-				for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
-					for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
-						int m = x + left + (y + top) * input.getWidth();
+				for(int y = 0; y < craftingRecipeInput.height(); ++y) {
+					for (int x = 0; x < craftingRecipeInput.width(); ++x) {
+						int m = x + left + (y + top) * craftSlots.getWidth();
 						
-						ItemStack ingredient = this.input.getStack( m );
+						ItemStack ingredient = this.craftSlots.getItem( m );
 						
-						if( ingredient.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+						if( ingredient.is( Villagercoin.getItemTagKey( "receipt" ) ) ) {
 							receipts++;
 							ingredientsMap.set( LedgerCraftingFeature.updateIngredientsMap( ingredientsMap, ingredient, m, x, y ) );
-						}  else if( ingredient.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
+						}  else if( ingredient.is( Villagercoin.getItemTagKey( "ledger" ) ) ) {
 							existingLedger = ingredient;
 						} // if, else if
 					} // for
@@ -103,13 +100,13 @@ public class CraftingResultSlotMixin {
 				LedgerCraftingFeature.updateLedgerFromSlot( stack, ingredientsMap.get(), existingLedger, (receipts == 0) );
 				
 				if( receipts > 0 ) {
-					LedgerCraftingFeature.subtractLedgerFromIngredients( this.input, 1 );
+					LedgerCraftingFeature.subtractLedgerFromIngredients( this.craftSlots, 1 );
 				}  // if
 				
-				LedgerCraftingFeature.subtractCarrierFromIngredients( this.input, 1 );
-				LedgerCraftingFeature.removeReceiptsFromIngredients( this.input.getHeldStacks() );
+				LedgerCraftingFeature.subtractCarrierFromIngredients( this.craftSlots, 1 );
+				LedgerCraftingFeature.removeReceiptsFromIngredients( this.craftSlots.getItems() );
 				
-				this.onCrafted(stack);
+				this.checkTakeAchievements(stack);
 				
 				ci.cancel();
 				
@@ -117,7 +114,7 @@ public class CraftingResultSlotMixin {
 				// # Coin Banks - Receive the currency value of the ingredients
 				
 				AtomicLong totalCost = new AtomicLong(0);
-				TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap(this.input);
+				TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap(this.craftSlots);
 				
 				ingredientsMap.forEach((order, coinIngredient) -> {
 					ItemStack ingredient = coinIngredient.stack;
@@ -141,32 +138,32 @@ public class CraftingResultSlotMixin {
 				
 				if (null != currencyComponent) {
 					if (CoinStackCraftingFeature.isCraftingResultCoinStack(stack.getItem())) {
-						CoinStackCraftingFeature.subtractCarrierFromIngredients(this.input, 1);
+						CoinStackCraftingFeature.subtractCarrierFromIngredients(this.craftSlots, 1);
 					}
 					
 					AtomicLong totalCost = new AtomicLong((long) stack.getCount() * currencyComponent.value());
-					TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap(this.input);
+					TreeMap<Long, CoinCraftingFeature.CoinIngredient> ingredientsMap = CoinCraftingFeature.getCoinIngredientsMap(this.craftSlots);
 					
 					ingredientsMap.forEach((order, coinIngredient) -> {
 						int ingredientSlot = coinIngredient.slot;
 						ItemStack ingredient = coinIngredient.stack;
-						ItemStack itemStack2 = (ItemStack) defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.getWidth());
+						ItemStack itemStack2 = (ItemStack) defaultedList.get(coinIngredient.x + coinIngredient.y * craftingRecipeInput.width());
 						
-						totalCost.set(CoinCraftingFeature.subtractCoinValueFromTotalCost(ingredient, totalCost, this.input, ingredientSlot));
+						totalCost.set(CoinCraftingFeature.subtractCoinValueFromTotalCost(ingredient, totalCost, this.craftSlots, ingredientSlot));
 						
 						if (!itemStack2.isEmpty()) {
 							if (ingredient.isEmpty()) {
-								this.input.setStack(ingredientSlot, itemStack2);
-							} else if (ItemStack.areItemsAndComponentsEqual(ingredient, itemStack2)) {
-								itemStack2.increment(ingredient.getCount());
-								this.input.setStack(ingredientSlot, itemStack2);
-							} else if (!this.player.getInventory().insertStack(itemStack2)) {
-								this.player.dropItem(itemStack2, false);
+								this.craftSlots.setItem(ingredientSlot, itemStack2);
+							} else if (ItemStack.isSameItemSameComponents(ingredient, itemStack2)) {
+								itemStack2.grow(ingredient.getCount());
+								this.craftSlots.setItem(ingredientSlot, itemStack2);
+							} else if (!this.player.getInventory().add(itemStack2)) {
+								this.player.drop(itemStack2, false);
 							}
 						}
 					});
 					
-					this.onCrafted(stack);
+					this.checkTakeAchievements(stack);
 					
 					ci.cancel();
 					
@@ -176,14 +173,14 @@ public class CraftingResultSlotMixin {
 	}
 	
 	@Shadow
-	protected void onCrafted(ItemStack stack) {}
+	protected void checkTakeAchievements(ItemStack stack) {}
 	
 	@Unique
-	private static DefaultedList<ItemStack> copyInput(CraftingRecipeInput input) {
-		DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(input.size(), ItemStack.EMPTY);
+	private static NonNullList<ItemStack> copyInput(CraftingInput input) {
+		NonNullList<ItemStack> defaultedList = NonNullList.withSize(input.size(), ItemStack.EMPTY);
 		
 		for(int i = 0; i < defaultedList.size(); ++i) {
-			defaultedList.set(i, input.getStackInSlot(i));
+			defaultedList.set(i, input.getItem(i));
 		}
 		
 		return defaultedList;

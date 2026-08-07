@@ -1,30 +1,36 @@
 package me.villagerunknown.villagercoin.recipe;
 
+import com.mojang.serialization.MapCodec;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinCraftingFeature;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
-public class VillagerCoinRecipe extends SpecialCraftingRecipe {
+public class VillagerCoinRecipe extends CustomRecipe {
 	
-	public VillagerCoinRecipe(CraftingRecipeCategory category) {
-		super(category);
+	public static final VillagerCoinRecipe INSTANCE = new VillagerCoinRecipe();
+	public static final MapCodec<VillagerCoinRecipe> CODEC = MapCodec.unit(INSTANCE);
+	public static final StreamCodec<RegistryFriendlyByteBuf, VillagerCoinRecipe> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	
+	public VillagerCoinRecipe() {
+		super();
 	}
 	
 	@Override
-	public boolean matches(CraftingRecipeInput craftingRecipeInput, World world) {
+	public boolean matches(CraftingInput craftingRecipeInput, Level world) {
 		boolean containsOnlyCoins = false;
 		
-		for(int i = 0; i < craftingRecipeInput.getHeight(); ++i) {
-			for(int j = 0; j < craftingRecipeInput.getWidth(); ++j) {
-				ItemStack itemStack = craftingRecipeInput.getStackInSlot(j, i);
+		for(int i = 0; i < craftingRecipeInput.height(); ++i) {
+			for(int j = 0; j < craftingRecipeInput.width(); ++j) {
+				ItemStack itemStack = craftingRecipeInput.getItem(j, i);
 				if( !itemStack.isEmpty() ) {
 					if( CoinCraftingFeature.canCraftResult( itemStack.getItem() ) ) {
 						containsOnlyCoins = true;
@@ -39,15 +45,15 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 	}
 	
 	@Override
-	public ItemStack craft(CraftingRecipeInput craftingRecipeInput, RegistryWrapper.WrapperLookup lookup) {
+	public @NonNull ItemStack assemble(CraftingInput craftingRecipeInput) {
 		long totalValue = 0;
 		ItemStack returnStack = ItemStack.EMPTY;
 		
-		if( craftingRecipeInput.getStackCount() > 1 ) {
+		if( craftingRecipeInput.ingredientCount() > 1 ) {
 			// # Combine Multiple Coins to the Highest Coin Value
 			
 			for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-				ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
+				ItemStack itemStack = craftingRecipeInput.getItem(i);
 				
 				if( !itemStack.isEmpty() ) {
 					CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
@@ -68,7 +74,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 			// # Convert a Single Coin to a Higher or Lower Valued Coin
 			
 			for(int i = 0; i < craftingRecipeInput.size(); ++i) {
-				ItemStack itemStack = craftingRecipeInput.getStackInSlot(i);
+				ItemStack itemStack = craftingRecipeInput.getItem(i);
 				
 				if( !itemStack.isEmpty() ) {
 					CurrencyComponent currencyComponent = itemStack.get(CURRENCY_COMPONENT);
@@ -110,7 +116,7 @@ public class VillagerCoinRecipe extends SpecialCraftingRecipe {
 	}
 	
 	@Override
-	public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
+	public @NonNull RecipeSerializer<? extends CustomRecipe> getSerializer() {
 		return CoinCraftingFeature.RECIPE_SERIALIZER;
 	}
 }

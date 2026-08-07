@@ -3,12 +3,15 @@ package me.villagerunknown.villagercoin.mixin;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.*;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.CraftingMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,35 +26,35 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
-@Mixin(CraftingScreenHandler.class)
-public abstract class CraftingScreenHandlerMixinMixin extends ScreenHandler {
+@Mixin(CraftingMenu.class)
+public abstract class CraftingScreenHandlerMixinMixin extends AbstractContainerMenu {
 	
 	@Unique
-	protected RecipeInputInventory craftingInventory = ((CraftingScreenHandlerAccessor) (Object) this).getCraftingInventory();
+	protected CraftingContainer craftingInventory = ((CraftingScreenHandlerAccessor) (Object) this).getCraftingInventory();
 	
 	@Unique
-	protected CraftingResultInventory craftingResultInventory = ((CraftingScreenHandlerAccessor) (Object) this).getCraftingResultInventory();
+	protected ResultContainer craftingResultInventory = ((CraftingScreenHandlerAccessor) (Object) this).getCraftingResultInventory();
 	
 	@Final
 	@Shadow
-	private ScreenHandlerContext context;
+	private ContainerLevelAccess access;
 	
 	@Final
 	@Shadow
-	private PlayerEntity player;
+	private Player player;
 	
-	protected CraftingScreenHandlerMixinMixin(ScreenHandlerType<?> type, int syncId) {
+	protected CraftingScreenHandlerMixinMixin(MenuType<?> type, int syncId) {
 		super(type, syncId);
 	}
 	
-	@Inject(method = "quickMove", at = @At("HEAD"), cancellable = true)
-	public void quickMove(PlayerEntity player, int slot, CallbackInfoReturnable<ItemStack> cir) {
+	@Inject(method = "quickMoveStack", at = @At("HEAD"), cancellable = true)
+	public void quickMove(Player player, int slot, CallbackInfoReturnable<ItemStack> cir) {
 		if( 0 == slot ) {
 			Slot slot2 = (Slot)this.slots.get(slot);
 			
-			if( slot2 != null && slot2.hasStack() ) {
+			if( slot2 != null && slot2.hasItem() ) {
 				
-				ItemStack craftedItemStack = slot2.getStack();
+				ItemStack craftedItemStack = slot2.getItem();
 				
 				if( !craftedItemStack.isEmpty() ) {
 					if( ReceiptCraftingFeature.isCraftingResultReceipt( craftedItemStack.getItem() ) ) {
@@ -60,15 +63,15 @@ public abstract class CraftingScreenHandlerMixinMixin extends ScreenHandler {
 						ReceiptCraftingFeature.subtractCarrierFromIngredients( this.craftingInventory, 1 );
 						ReceiptCraftingFeature.setCustomName( player, craftedItemStack );
 						
-						this.context.run((world, pos) -> craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player));
+						this.access.execute((world, pos) -> craftedItemStack.getItem().onCraftedBy(craftedItemStack, player));
 						
-						if (!this.insertItem(craftedItemStack, 10, 46, true)) {
-							player.dropItem(craftedItemStack, true);
+						if (!this.moveItemStackTo(craftedItemStack, 10, 46, true)) {
+							player.drop(craftedItemStack, true);
 						} // if
 						
-						slot2.onQuickTransfer(craftedItemStack, this.craftingResultInventory.getStack( slot ));
+						slot2.onQuickCraft(craftedItemStack, this.craftingResultInventory.getItem( slot ));
 						
-						slot2.markDirty();
+						slot2.setChanged();
 						
 						cir.setReturnValue( craftedItemStack );
 						
@@ -82,11 +85,11 @@ public abstract class CraftingScreenHandlerMixinMixin extends ScreenHandler {
 							
 							int receipts = 0;
 							
-							for(ItemStack ingredient : this.craftingInventory.getHeldStacks()) {
-								if( ingredient.isIn( Villagercoin.getItemTagKey( "receipt" ) ) ) {
+							for(ItemStack ingredient : this.craftingInventory.getItems()) {
+								if( ingredient.is( Villagercoin.getItemTagKey( "receipt" ) ) ) {
 									receipts++;
 									ingredientsMap.set( LedgerCraftingFeature.updateIngredientsMap( ingredientsMap, ingredient ) );
-								} else if( ingredient.isIn( Villagercoin.getItemTagKey( "ledger" ) ) ) {
+								} else if( ingredient.is( Villagercoin.getItemTagKey( "ledger" ) ) ) {
 									existingLedger = ingredient;
 								} // if, else if
 							} // for
@@ -98,17 +101,17 @@ public abstract class CraftingScreenHandlerMixinMixin extends ScreenHandler {
 							}  // if
 							
 							LedgerCraftingFeature.subtractCarrierFromIngredients( this.craftingInventory, 1 );
-							LedgerCraftingFeature.removeReceiptsFromIngredients( this.craftingInventory.getHeldStacks() );
+							LedgerCraftingFeature.removeReceiptsFromIngredients( this.craftingInventory.getItems() );
 							
-							this.context.run((world, pos) -> craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player));
+							this.access.execute((world, pos) -> craftedItemStack.getItem().onCraftedBy(craftedItemStack, player));
 							
-							if (!this.insertItem(craftedItemStack, 10, 46, true)) {
-								player.dropItem(craftedItemStack, true);
+							if (!this.moveItemStackTo(craftedItemStack, 10, 46, true)) {
+								player.drop(craftedItemStack, true);
 							} // if
 							
-							slot2.onQuickTransfer(craftedItemStack, this.craftingResultInventory.getStack( slot ));
+							slot2.onQuickCraft(craftedItemStack, this.craftingResultInventory.getItem( slot ));
 							
-							slot2.markDirty();
+							slot2.setChanged();
 							
 							cir.setReturnValue( craftedItemStack );
 							
@@ -153,15 +156,15 @@ public abstract class CraftingScreenHandlerMixinMixin extends ScreenHandler {
 									totalCost.set( CoinCraftingFeature.subtractCoinValueFromTotalCost( ingredient, totalCost, this.craftingInventory, ingredientSlot ) );
 								});
 								
-								this.context.run((world, pos) -> craftedItemStack.getItem().onCraftByPlayer(craftedItemStack, player));
+								this.access.execute((world, pos) -> craftedItemStack.getItem().onCraftedBy(craftedItemStack, player));
 								
-								if (!this.insertItem(craftedItemStack, 10, 46, true)) {
-									player.dropItem(craftedItemStack, true);
+								if (!this.moveItemStackTo(craftedItemStack, 10, 46, true)) {
+									player.drop(craftedItemStack, true);
 								}
 								
-								slot2.onQuickTransfer(craftedItemStack, this.craftingResultInventory.getStack( slot ));
+								slot2.onQuickCraft(craftedItemStack, this.craftingResultInventory.getItem( slot ));
 								
-								slot2.markDirty();
+								slot2.setChanged();
 								
 								cir.setReturnValue( craftedItemStack );
 							} // if

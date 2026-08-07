@@ -4,13 +4,13 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.block.entity.CoinBankBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
-import net.minecraft.block.HopperBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.HopperBlockEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.HopperBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,25 +21,25 @@ import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMP
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperBlockEntityMixin {
 	
-	@Inject(method = "insert", at = @At("HEAD"), cancellable = true)
-	private static void insert(World world, BlockPos pos, HopperBlockEntity hopperBlockEntity, CallbackInfoReturnable<Boolean> cir) {
-		Direction direction = world.getBlockState( pos ).get(HopperBlock.FACING);
+	@Inject(method = "ejectItems", at = @At("HEAD"), cancellable = true)
+	private static void insert(Level world, BlockPos pos, HopperBlockEntity hopperBlockEntity, CallbackInfoReturnable<Boolean> cir) {
+		Direction direction = world.getBlockState( pos ).getValue(HopperBlock.FACING);
 		
 		if( Direction.DOWN == direction || Direction.UP == direction ) {
-			BlockEntity be = world.getBlockEntity( pos.down() );
+			BlockEntity be = world.getBlockEntity( pos.below() );
 			if( be instanceof CoinBankBlockEntity coinBankBlockEntity ) {
 				if( coinBankBlockEntity.canIncrementCurrencyValue( 1 ) ) {
-					for (int i = 0; i < hopperBlockEntity.size(); i++) {
+					for (int i = 0; i < hopperBlockEntity.getContainerSize(); i++) {
 						if( !((HopperBlockEntityAccessor) hopperBlockEntity).invokeIsDisabled() ) {
-							ItemStack itemStack = hopperBlockEntity.getStack(i);
-							if (!itemStack.isEmpty() && itemStack.isIn(Villagercoin.getItemTagKey( "currency_coin" ))) {
+							ItemStack itemStack = hopperBlockEntity.getItem(i);
+							if (!itemStack.isEmpty() && itemStack.is(Villagercoin.getItemTagKey( "currency_coin" ))) {
 								CurrencyComponent currencyComponent = itemStack.get(CURRENCY_COMPONENT);
 								
 								if (null != currencyComponent) {
 									long currencyValue = currencyComponent.value();
 									
 									if (coinBankBlockEntity.canIncrementCurrencyValue(currencyValue)) {
-										itemStack.decrement(1);
+										itemStack.shrink(1);
 										coinBankBlockEntity.incrementCurrencyValueAndSetComponent(currencyValue);
 										
 										((HopperBlockEntityAccessor) hopperBlockEntity).invokeSetTransferCooldown(8);

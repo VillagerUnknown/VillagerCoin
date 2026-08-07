@@ -4,68 +4,65 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.Optional;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock {
 	
-	public AbstractCoinStackBlock(Settings settings) {
+	public AbstractCoinStackBlock(Properties settings) {
 		super(
 				( Villagercoin.CONFIG.enableCoinStacksBreakOnCollision ) ? settings.noCollision() : settings
 		);
 	}
 	
 	@Override
-	public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-		if( !world.isClient() && Villagercoin.CONFIG.enableCoinStacksBreakOnCollision && entity instanceof PlayerEntity playerEntity && !playerEntity.isInCreativeMode() && !playerEntity.isSneaking() ) {
+	public void stepOn(Level world, BlockPos pos, BlockState state, Entity entity) {
+		if( !world.isClientSide() && Villagercoin.CONFIG.enableCoinStacksBreakOnCollision && entity instanceof Player playerEntity && !playerEntity.hasInfiniteMaterials() && !playerEntity.isShiftKeyDown() ) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			
 			if (blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity) {
-				CurrencyComponent currencyComponent = currencyValueBlockEntity.getComponents().get(CURRENCY_COMPONENT);
+				CurrencyComponent currencyComponent = currencyValueBlockEntity.components().get(CURRENCY_COMPONENT);
 				
 				if (null != currencyComponent) {
-					world.breakBlock(pos, true);
+					world.destroyBlock(pos, true);
 					CoinFeature.playCoinSound(playerEntity);
 				} // if
 			} // if
 		} // if
 		
-		super.onSteppedOn(world, pos, state, entity);
+		super.stepOn(world, pos, state, entity);
 	}
 	
 	@Override
-	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		MinecraftServer server = world.getServer();
 		
 		if( null != server ) {
-			ServerWorld serverWorld = server.getWorld( world.getRegistryKey() );
+			ServerLevel serverWorld = server.getLevel( world.dimension() );
 			
-			if( null != serverWorld && !player.isInCreativeMode() ) {
-				DynamicRegistryManager drm =serverWorld.getRegistryManager();
-				Registry<Enchantment> reg = drm.getOrThrow(RegistryKeys.ENCHANTMENT);
+			if( null != serverWorld && !player.hasInfiniteMaterials() ) {
+				RegistryAccess drm =serverWorld.registryAccess();
+				Registry<Enchantment> reg = drm.lookupOrThrow(Registries.ENCHANTMENT);
 				
-				Enchantment silkTouchEnchantmentEntry = reg.get( Enchantments.SILK_TOUCH );
-				RegistryEntry<Enchantment> regEntry = reg.getEntry( silkTouchEnchantmentEntry );
+				Enchantment silkTouchEnchantmentEntry = reg.getValue( Enchantments.SILK_TOUCH );
+				Holder<Enchantment> regEntry = reg.wrapAsHolder( silkTouchEnchantmentEntry );
 				
-				if( !player.getStackInHand( player.getActiveHand() ).getEnchantments().getEnchantments().contains( regEntry ) ) {
+				if( !player.getItemInHand( player.getUsedItemHand() ).getEnchantments().keySet().contains( regEntry ) ) {
 					BlockEntity blockEntity = world.getBlockEntity( pos );
 					
 					if( blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity ) {
@@ -75,7 +72,7 @@ public abstract class AbstractCoinStackBlock extends AbstractCoinCollectionBlock
 			} // if
 		} // if
 		
-		return super.onBreak(world, pos, state, player);
+		return super.playerWillDestroy(world, pos, state, player);
 	}
 	
 }

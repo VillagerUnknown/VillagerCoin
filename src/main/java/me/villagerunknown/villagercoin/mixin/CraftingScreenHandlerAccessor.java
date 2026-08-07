@@ -1,18 +1,18 @@
 package me.villagerunknown.villagercoin.mixin;
 
-import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.screen.AbstractCraftingScreenHandler;
+import net.minecraft.world.inventory.AbstractCraftingMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(AbstractCraftingScreenHandler.class)
+@Mixin(AbstractCraftingMenu.class)
 public interface CraftingScreenHandlerAccessor {
 	
-	@Accessor("craftingInventory")
-	RecipeInputInventory getCraftingInventory();
+	@Accessor("craftSlots")
+	CraftingContainer getCraftingInventory();
 	
-	@Accessor("craftingResultInventory")
-	CraftingResultInventory getCraftingResultInventory();
+	@Accessor("resultSlots")
+	ResultContainer getCraftingResultInventory();
 	
 }

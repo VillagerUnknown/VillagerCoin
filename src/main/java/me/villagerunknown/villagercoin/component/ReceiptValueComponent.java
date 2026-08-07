@@ -2,9 +2,9 @@ package me.villagerunknown.villagercoin.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public record ReceiptValueComponent(long value) {
 	
@@ -13,7 +13,7 @@ public record ReceiptValueComponent(long value) {
 				Codec.LONG.fieldOf( "value" ).forGetter(ReceiptValueComponent::value)
 		).apply(instance, ReceiptValueComponent::new);
 	});
-	public static final PacketCodec<RegistryByteBuf, ReceiptValueComponent> PACKET_CODEC;
+	public static final StreamCodec<RegistryFriendlyByteBuf, ReceiptValueComponent> PACKET_CODEC;
 	
 	public ReceiptValueComponent(long value) {
 		this.value = value;
@@ -24,8 +24,8 @@ public record ReceiptValueComponent(long value) {
 	}
 	
 	static {
-		PACKET_CODEC = PacketCodec.tuple(
-				PacketCodecs.VAR_LONG, ReceiptValueComponent::value,
+		PACKET_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_LONG, ReceiptValueComponent::value,
 				ReceiptValueComponent::new
 		);
 	}

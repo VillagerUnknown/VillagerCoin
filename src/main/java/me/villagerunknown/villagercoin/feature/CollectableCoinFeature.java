@@ -1,19 +1,21 @@
 package me.villagerunknown.villagercoin.feature;
 
+import me.villagerunknown.villagercoin.component.CollectableComponent;
+import me.villagerunknown.villagercoin.component.DropComponent;
+import me.villagerunknown.villagercoin.component.LootTableComponent;
 import me.villagerunknown.villagercoin.data.persistent.PersistentItemExistenceData;
 import me.villagerunknown.villagercoin.item.CollectableCoinItem;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.loot.LootTable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
-
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.storage.loot.LootTable;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -39,6 +41,8 @@ public class CollectableCoinFeature {
 	public static float EMERALD_DROP_CHANCE = Villagercoin.CONFIG.emeraldCollectableDropChance;
 	public static float NETHERITE_DROP_CHANCE = Villagercoin.CONFIG.netheriteCollectableDropChance;
 	
+	public static HashMap<Item, CollectableComponent> COLLECTABLE_COMPONENTS = new HashMap<>();
+	
 	private static MinecraftServer server = null;
 	
 	public static void execute() {
@@ -51,16 +55,20 @@ public class CollectableCoinFeature {
 		});
 	}
 	
+	public static void addCoinToCollectableComponents( Item item, CollectableComponent collectableComponent ) {
+		COLLECTABLE_COMPONENTS.put( item, collectableComponent );
+	}
+	
 	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer ) {
-		return registerCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, new Item.Settings() );
+		return registerCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, new Item.Properties() );
 	}
 	
-	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
-		return registerCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, new Item.Settings() );
+	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
+		return registerCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, new Item.Properties() );
 	}
 	
-	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
-		settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Properties settings ) {
+		settings.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID,id)));
 		
 		Item item = RegistryUtil.registerItem( id, new CollectableCoinItem( settings, value, rarity, 1, 1, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer ), namespace );
 		
@@ -69,8 +77,15 @@ public class CollectableCoinFeature {
 		return item;
 	}
 	
-	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+	public static Item registerCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Properties settings ) {
 		Item item = registerCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, settings );
+		
+		CoinFeature.addComponents(
+				item,
+				new LootTableComponent( lootTableWeight, lootTableRolls ),
+				new DropComponent( 1, 1, dropChance, dropChanceMultiplier ),
+				new CollectableComponent( maximumAllowedInServer )
+		);
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
@@ -79,19 +94,26 @@ public class CollectableCoinFeature {
 	}
 	
 	public static Item registerCraftableCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer ) {
-		return registerCraftableCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, new Item.Settings() );
+		return registerCraftableCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, new Item.Properties() );
 	}
 	
-	public static Item registerCraftableCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
-		return registerCraftableCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, new Item.Settings() );
+	public static Item registerCraftableCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops ) {
+		return registerCraftableCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, lootTables, entityDrops, new Item.Properties() );
 	}
 	
-	public static Item registerCraftableCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Settings settings ) {
+	public static Item registerCraftableCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Item.Properties settings ) {
 		return registerCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, settings );
 	}
 	
-	public static Item registerCraftableCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<RegistryKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Settings settings ) {
+	public static Item registerCraftableCollectableCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, Item.Properties settings ) {
 		Item item = registerCraftableCollectableCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, settings );
+		
+		CoinFeature.addComponents(
+				item,
+				new LootTableComponent( lootTableWeight, lootTableRolls ),
+				new DropComponent( 1, 1, dropChance, dropChanceMultiplier ),
+				new CollectableComponent( maximumAllowedInServer )
+		);
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
@@ -121,14 +143,14 @@ public class CollectableCoinFeature {
 	}
 	
 	public static boolean isInCirculation( Item item ) {
-		return getItemsInExistence().containsKey( item.getTranslationKey() );
+		return getItemsInExistence().containsKey( item.getDescriptionId() );
 	}
 	
 	public static boolean canAddToCirculation( Item item, int maximumAllowedInServer ) {
 		HashMap<String, Integer> itemsInExistence = getItemsInExistence();
 		
-		if( itemsInExistence.containsKey( item.getTranslationKey() ) ) {
-			return itemsInExistence.get(item.getTranslationKey()) < maximumAllowedInServer;
+		if( itemsInExistence.containsKey( item.getDescriptionId() ) ) {
+			return itemsInExistence.get(item.getDescriptionId()) < maximumAllowedInServer;
 		} // if
 		
 		return maximumAllowedInServer >= 1;
@@ -141,11 +163,11 @@ public class CollectableCoinFeature {
 	public static void addToCirculation( Item item, int amount ) {
 		HashMap<String, Integer> itemsInExistence = getItemsInExistence();
 		
-		if( itemsInExistence.containsKey( item.getTranslationKey() ) ) {
-			amount = itemsInExistence.get( item.getTranslationKey() ) + amount;
+		if( itemsInExistence.containsKey( item.getDescriptionId() ) ) {
+			amount = itemsInExistence.get( item.getDescriptionId() ) + amount;
 		} // if
 		
-		itemsInExistence.put( item.getTranslationKey(), amount );
+		itemsInExistence.put( item.getDescriptionId(), amount );
 		
 		setItemsInExistence( itemsInExistence );
 	}
@@ -165,16 +187,16 @@ public class CollectableCoinFeature {
 	public static void removeFromCirculation( Item item, int amount ) {
 		HashMap<String, Integer> itemsInExistence = getItemsInExistence();
 		
-		if( !itemsInExistence.containsKey( item.getTranslationKey() ) ) {
+		if( !itemsInExistence.containsKey( item.getDescriptionId() ) ) {
 			return;
 		} // if
 		
-		int newAmount = itemsInExistence.get( item.getTranslationKey() ) - amount;
+		int newAmount = itemsInExistence.get( item.getDescriptionId() ) - amount;
 		
 		if( newAmount <= 0 ) {
-			itemsInExistence.remove( item.getTranslationKey() );
+			itemsInExistence.remove( item.getDescriptionId() );
 		} else {
-			itemsInExistence.put( item.getTranslationKey(), newAmount );
+			itemsInExistence.put( item.getDescriptionId(), newAmount );
 		} // if, else
 		
 		setItemsInExistence( itemsInExistence );

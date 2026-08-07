@@ -2,17 +2,11 @@ package me.villagerunknown.villagercoin.item;
 
 import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.WritableBookContentComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.WritableBookItem;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
-
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.WritableBookItem;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Objects;
@@ -21,26 +15,26 @@ import static me.villagerunknown.villagercoin.component.Components.*;
 
 public class AbstractLedgerItem extends WritableBookItem {
 	
-	public AbstractLedgerItem(Settings settings) {
+	public AbstractLedgerItem(Properties settings) {
 		super(settings);
 	}
 	
 	@Override
-	public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
-		Text nameComponent = stack.get(DataComponentTypes.ITEM_NAME);
-		Text customNameComponent = stack.get(DataComponentTypes.CUSTOM_NAME);
+	public void onCraftedBy(ItemStack stack, Player player) {
+		Component nameComponent = stack.get(DataComponents.ITEM_NAME);
+		Component customNameComponent = stack.get(DataComponents.CUSTOM_NAME);
 		
 		if(
-			(null == nameComponent || Objects.equals( nameComponent, Text.translatable(stack.getItem().getTranslationKey()) ))
+			(null == nameComponent || Objects.equals( nameComponent, Component.translatable(stack.getItem().getDescriptionId()) ))
 			&& null == customNameComponent
 		) {
-			stack.set(DataComponentTypes.ITEM_NAME, Text.translatable(
+			stack.set(DataComponents.ITEM_NAME, Component.translatable(
 					"item.villagerunknown-villagercoin.ledger.name",
-					player.getNameForScoreboard()
+					player.getScoreboardName()
 			));
 		} // if
 		
-		super.onCraftByPlayer(stack, player);
+		super.onCraftedBy(stack, player);
 	}
 	
 }

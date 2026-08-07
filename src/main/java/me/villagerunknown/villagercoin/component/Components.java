@@ -1,76 +1,75 @@
 package me.villagerunknown.villagercoin.component;
 
-import net.minecraft.component.ComponentType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-
 import java.util.function.UnaryOperator;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD;
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 
 public class Components {
 	
-	public static final ComponentType<CoinComponent> COIN_COMPONENT;
+	public static final DataComponentType<CoinComponent> COIN_COMPONENT;
 	
-	public static final ComponentType<DropComponent> DROP_COMPONENT;
+	public static final DataComponentType<DropComponent> DROP_COMPONENT;
 	
-	public static final ComponentType<LootTableComponent> LOOT_TABLE_COMPONENT;
+	public static final DataComponentType<LootTableComponent> LOOT_TABLE_COMPONENT;
 	
-	public static final ComponentType<CurrencyComponent> CURRENCY_COMPONENT;
+	public static final DataComponentType<CurrencyComponent> CURRENCY_COMPONENT;
 	
-	public static final ComponentType<CollectableComponent> COLLECTABLE_COMPONENT;
+	public static final DataComponentType<CollectableComponent> COLLECTABLE_COMPONENT;
 	
-	public static final ComponentType<ReceiptValueComponent> RECEIPT_VALUE_COMPONENT;
+	public static final DataComponentType<ReceiptValueComponent> RECEIPT_VALUE_COMPONENT;
 	
-	public static final ComponentType<ReceiptMessageComponent> RECEIPT_MESSAGE_COMPONENT;
+	public static final DataComponentType<ReceiptMessageComponent> RECEIPT_MESSAGE_COMPONENT;
 	
-	public static final ComponentType<DateComponent> DATE_COMPONENT;
+	public static final DataComponentType<DateComponent> DATE_COMPONENT;
 	
-	public static final ComponentType<UpdatedDateComponent> UPDATED_DATE_COMPONENT;
+	public static final DataComponentType<UpdatedDateComponent> UPDATED_DATE_COMPONENT;
 	
-	public static final ComponentType<AccumulatingValueComponent> ACCUMULATING_VALUE_COMPONENT;
+	public static final DataComponentType<AccumulatingValueComponent> ACCUMULATING_VALUE_COMPONENT;
 	
-	public static final ComponentType<CopyCountComponent> COPY_COUNT_COMPONENT;
+	public static final DataComponentType<CopyCountComponent> COPY_COUNT_COMPONENT;
 	
-	public static <T> ComponentType<T> registerComponentType(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-		return (ComponentType) Registry.register(Registries.DATA_COMPONENT_TYPE, Identifier.of(MOD_ID, id), ((ComponentType.Builder)builderOperator.apply(ComponentType.builder())).build());
+	public static <T> DataComponentType<T> registerComponentType(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+		return (DataComponentType) Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, id), ((DataComponentType.Builder)builderOperator.apply(DataComponentType.builder())).build());
 	}
 	
 	static{
 		COIN_COMPONENT = registerComponentType("coin", (builder) -> {
-			return builder.codec(CoinComponent.CODEC).packetCodec(CoinComponent.PACKET_CODEC).cache();
+			return builder.persistent(CoinComponent.CODEC).networkSynchronized(CoinComponent.PACKET_CODEC).cacheEncoding();
 		});
 		DROP_COMPONENT = registerComponentType("drop", (builder) -> {
-			return builder.codec(DropComponent.CODEC).packetCodec(DropComponent.PACKET_CODEC).cache();
+			return builder.persistent(DropComponent.CODEC).networkSynchronized(DropComponent.PACKET_CODEC).cacheEncoding();
 		});
 		LOOT_TABLE_COMPONENT = registerComponentType("loot_table", (builder) -> {
-			return builder.codec(LootTableComponent.CODEC).packetCodec(LootTableComponent.PACKET_CODEC).cache();
+			return builder.persistent(LootTableComponent.CODEC).networkSynchronized(LootTableComponent.PACKET_CODEC).cacheEncoding();
 		});
 		CURRENCY_COMPONENT = registerComponentType("currency", (builder) -> {
-			return builder.codec(CurrencyComponent.CODEC).packetCodec(CurrencyComponent.PACKET_CODEC).cache();
+			return builder.persistent(CurrencyComponent.CODEC).networkSynchronized(CurrencyComponent.PACKET_CODEC).cacheEncoding();
 		});
 		COLLECTABLE_COMPONENT = registerComponentType("collectable", (builder) -> {
-			return builder.codec(CollectableComponent.CODEC).packetCodec(CollectableComponent.PACKET_CODEC).cache();
+			return builder.persistent(CollectableComponent.CODEC).networkSynchronized(CollectableComponent.PACKET_CODEC).cacheEncoding();
 		});
 		RECEIPT_VALUE_COMPONENT = registerComponentType("receipt_value", (builder) -> {
-			return builder.codec(ReceiptValueComponent.CODEC).packetCodec(ReceiptValueComponent.PACKET_CODEC).cache();
+			return builder.persistent(ReceiptValueComponent.CODEC).networkSynchronized(ReceiptValueComponent.PACKET_CODEC).cacheEncoding();
 		});
 		RECEIPT_MESSAGE_COMPONENT = registerComponentType("receipt_message", (builder) -> {
-			return builder.codec(ReceiptMessageComponent.CODEC).packetCodec(ReceiptMessageComponent.PACKET_CODEC).cache();
+			return builder.persistent(ReceiptMessageComponent.CODEC).networkSynchronized(ReceiptMessageComponent.PACKET_CODEC).cacheEncoding();
 		});
 		DATE_COMPONENT = registerComponentType("date", (builder) -> {
-			return builder.codec(DateComponent.CODEC).packetCodec(DateComponent.PACKET_CODEC).cache();
+			return builder.persistent(DateComponent.CODEC).networkSynchronized(DateComponent.PACKET_CODEC).cacheEncoding();
 		});
 		UPDATED_DATE_COMPONENT = registerComponentType("updated_date", (builder) -> {
-			return builder.codec(UpdatedDateComponent.CODEC).packetCodec(UpdatedDateComponent.PACKET_CODEC).cache();
+			return builder.persistent(UpdatedDateComponent.CODEC).networkSynchronized(UpdatedDateComponent.PACKET_CODEC).cacheEncoding();
 		});
 		ACCUMULATING_VALUE_COMPONENT = registerComponentType("accumulating_value", (builder) -> {
-			return builder.codec(AccumulatingValueComponent.CODEC).packetCodec(AccumulatingValueComponent.PACKET_CODEC).cache();
+			return builder.persistent(AccumulatingValueComponent.CODEC).networkSynchronized(AccumulatingValueComponent.PACKET_CODEC).cacheEncoding();
 		});
 		COPY_COUNT_COMPONENT = registerComponentType("copy_count", (builder) -> {
-			return builder.codec(CopyCountComponent.CODEC).packetCodec(CopyCountComponent.PACKET_CODEC).cache();
+			return builder.persistent(CopyCountComponent.CODEC).networkSynchronized(CopyCountComponent.PACKET_CODEC).cacheEncoding();
 		});
 	}
 	

@@ -8,18 +8,17 @@ import me.villagerunknown.villagercoin.component.*;
 import me.villagerunknown.villagercoin.feature.*;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 
 import java.util.Comparator;
@@ -37,11 +36,11 @@ public class Villagercoin implements ModInitializer {
 	
 	private static boolean loaded = false;
 	
-	public static final RegistryKey<ItemGroup> ITEM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), Identifier.of(MOD_ID, "item_group"));
+	public static final ResourceKey<CreativeModeTab> ITEM_GROUP_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), Identifier.fromNamespaceAndPath(MOD_ID, "item_group"));
 	
-	public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder()
+	public static final CreativeModeTab ITEM_GROUP = FabricCreativeModeTab.builder()
 			.icon(() -> new ItemStack(CoinItems.EMERALD_COIN))
-			.displayName(Text.translatable("itemGroup." + MOD_ID))
+			.title(Component.translatable("itemGroup." + MOD_ID))
 			.build();
 	
 	@Override
@@ -88,14 +87,14 @@ public class Villagercoin implements ModInitializer {
 		featureManager.addFeature( "coin-bank-crafting", CoinBankCraftingFeature::execute );
 		featureManager.addFeature( "coin-stack-crafting", CoinStackCraftingFeature::execute );
 		
-		// # Activate Supporting Features
-		featureManager.addFeature( "structures-include-coins", StructuresIncludeCoinsFeature::execute );
-		featureManager.addFeature( "mobs-drop-coins", MobsDropCoinsFeature::execute );
-		featureManager.addFeature( "merchant-coin-trading", MerchantCoinTradingFeature::execute );
-		
 		// # Activate Block Entity Loaders
 		featureManager.addFeatureLast( "coin-bank-block-entities", CoinBankBlockEntityFeature::execute );
 		featureManager.addFeatureLast( "coin-stack-block-entities", CoinStackBlockEntityFeature::execute );
+		
+		// # Activate Supporting Features
+		featureManager.addFeatureLast( "structures-include-coins", StructuresIncludeCoinsFeature::execute );
+		featureManager.addFeatureLast( "mobs-drop-coins", MobsDropCoinsFeature::execute );
+		featureManager.addFeatureLast( "merchant-coin-trading", MerchantCoinTradingFeature::execute );
 		
 		// # Load Features
 		featureManager.loadFeatures();
@@ -120,11 +119,11 @@ public class Villagercoin implements ModInitializer {
 	}
 	
 	public static TagKey<Item> getItemTagKey(String id ) {
-		return TagKey.of( RegistryKeys.ITEM, Identifier.of(MOD_ID, id) );
+		return TagKey.create( Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, id) );
 	}
 	
 	public static TagKey<Block> getBlockTagKey(String id ) {
-		return TagKey.of( RegistryKeys.BLOCK, Identifier.of(MOD_ID, id) );
+		return TagKey.create( Registries.BLOCK, Identifier.fromNamespaceAndPath(MOD_ID, id) );
 	}
 	
 	public static void addItemToGroup( Item item ) {

@@ -3,11 +3,11 @@ package me.villagerunknown.villagercoin.mixin;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import me.villagerunknown.villagercoin.component.CollectableComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootTable;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,8 +21,8 @@ import static me.villagerunknown.villagercoin.component.Components.COLLECTABLE_C
 @Mixin(LootTable.class)
 public class LootTableMixin {
 	
-	@Inject(method = "spreadStacks", at = @At("HEAD"), cancellable = true)
-	public void spreadStacks(ObjectArrayList<ItemStack> stacks, int freeSlots, Random random, CallbackInfo ci) {
+	@Inject(method = "shuffleAndSplitItems", at = @At("HEAD"), cancellable = true)
+	public void spreadStacks(ObjectArrayList<ItemStack> stacks, int freeSlots, RandomSource random, CallbackInfo ci) {
 		List<ItemStack> list = Lists.newArrayList();
 		Iterator<ItemStack> iterator = stacks.iterator();
 		

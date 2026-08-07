@@ -1,15 +1,15 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(PlayerInventory.class)
-public abstract class PlayerInventoryMixin implements Inventory {
+@Mixin(Inventory.class)
+public abstract class PlayerInventoryMixin implements Container {
 	
 	@Override
-	public int getMaxCountPerStack() {
+	public int getMaxStackSize() {
 		return Villagercoin.MAX_STACK_COUNT;
 	}
 	

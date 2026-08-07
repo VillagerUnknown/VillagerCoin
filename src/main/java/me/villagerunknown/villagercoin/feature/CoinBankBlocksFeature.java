@@ -5,17 +5,17 @@ import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEntity;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.stat.StatFormatter;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.stats.StatFormatter;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
@@ -37,10 +37,10 @@ public class CoinBankBlocksFeature {
 	public static Block registerCoinBankBlock( String namespace, String id, Block block) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item.Settings settings = new Item.Settings()
-				.useBlockPrefixedTranslationKey()
+		Item.Properties settings = new Item.Properties()
+				.useBlockDescriptionPrefix()
 				.component(CURRENCY_COMPONENT, new CurrencyComponent(0))
-				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+				.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID,id)));
 		
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, settings), namespace);
 		
@@ -54,11 +54,11 @@ public class CoinBankBlocksFeature {
 	public static Block registerFireproofCoinBankBlock( String namespace, String id, Block block) {
 		Block registeredBlock = RegistryUtil.registerBlock( id, block, namespace );
 		
-		Item.Settings settings = new Item.Settings()
-				.useBlockPrefixedTranslationKey()
+		Item.Properties settings = new Item.Properties()
+				.useBlockDescriptionPrefix()
 				.component(CURRENCY_COMPONENT, new CurrencyComponent(0))
-				.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)))
-				.fireproof();
+				.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID,id)))
+				.fireResistant();
 		
 		Item item = RegistryUtil.registerItem(id, new BlockItem(registeredBlock, settings), namespace);
 		
@@ -69,7 +69,7 @@ public class CoinBankBlocksFeature {
 		return block;
 	}
 	
-	public static int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+	public static int getComparatorOutput(BlockState state, Level world, BlockPos pos) {
 		BlockEntity blockEntity = world.getBlockEntity( pos );
 		
 		if( blockEntity instanceof AbstractCurrencyValueBlockEntity coinBankBlockEntity ) {

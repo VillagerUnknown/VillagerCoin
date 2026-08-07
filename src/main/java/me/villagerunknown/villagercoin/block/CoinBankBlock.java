@@ -2,39 +2,39 @@ package me.villagerunknown.villagercoin.block;
 
 import com.mojang.serialization.MapCodec;
 import me.villagerunknown.villagercoin.block.entity.CoinBankBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 
 public class CoinBankBlock extends AbstractCoinBankBlock {
 	
-	public static final MapCodec<CoinBankBlock> CODEC = createCodec(CoinBankBlock::new);
+	public static final MapCodec<CoinBankBlock> CODEC = simpleCodec(CoinBankBlock::new);
 
-	public CoinBankBlock(Settings settings) {
+	public CoinBankBlock(Properties settings) {
 		super(settings);
 	}
 	
 	@Override
-	protected MapCodec<CoinBankBlock> getCodec() {
+	protected MapCodec<CoinBankBlock> codec() {
 		return CODEC;
 	}
 	
-	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new CoinBankBlockEntity(pos, state);
 	}
 	
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-		return (BlockState)this.getDefaultState().with(WATERLOGGED, Boolean.valueOf(fluidState.getFluid() == Fluids.WATER));
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
+		return (BlockState)this.defaultBlockState().setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
 	}
 	
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(new Property[]{WATERLOGGED});
 	}
 	

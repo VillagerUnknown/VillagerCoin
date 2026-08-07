@@ -4,20 +4,17 @@ import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import me.villagerunknown.villagercoin.recipe.VillagerCoinRecipe;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import java.util.Collection;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static me.villagerunknown.villagercoin.Villagercoin.MOD_ID;
@@ -40,7 +37,7 @@ public class CoinCraftingFeature {
 	}
 	
 	public static boolean canCraftResult(Item item ) {
-		return item.getComponents().contains( CURRENCY_COMPONENT );
+		return item.components().has( CURRENCY_COMPONENT );
 	}
 	
 	public static Collection<Item> getCraftingResultCoins() {
@@ -55,14 +52,14 @@ public class CoinCraftingFeature {
 			if( coinValue >= value ) {
 				Item item = CRAFTING_RESULT_COINS.get( value );
 				
-				if( !item.getComponents().contains( COLLECTABLE_COMPONENT ) ) {
+				if( !item.components().has( COLLECTABLE_COMPONENT ) ) {
 					coin = item;
 				} // if
 			} // if
 		} // for
 		
 		if( null != coin ) {
-			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
+			CurrencyComponent currencyComponent = coin.components().get( CURRENCY_COMPONENT );
 			
 			returnStack = new ItemStack(coin, 1);
 			
@@ -82,7 +79,7 @@ public class CoinCraftingFeature {
 			if( value > coinValue ) {
 				Item item = CRAFTING_RESULT_COINS.get( value );
 				
-				if( !item.getComponents().contains( COLLECTABLE_COMPONENT ) ) {
+				if( !item.components().has( COLLECTABLE_COMPONENT ) ) {
 					coin = item;
 					break;
 				} // if
@@ -90,7 +87,7 @@ public class CoinCraftingFeature {
 		} // for
 		
 		if( null != coin ) {
-			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
+			CurrencyComponent currencyComponent = coin.components().get( CURRENCY_COMPONENT );
 			
 			returnStack = new ItemStack(coin, getConversionValueSafelyFromLong(coinValue, 1));
 			
@@ -110,14 +107,14 @@ public class CoinCraftingFeature {
 			if( value < coinValue ) {
 				Item item = CRAFTING_RESULT_COINS.get( value );
 				
-				if( !item.getComponents().contains( COLLECTABLE_COMPONENT ) ) {
+				if( !item.components().has( COLLECTABLE_COMPONENT ) ) {
 					coin = item;
 				} // if
 			} // if
 		} // for
 		
 		if( null != coin ) {
-			CurrencyComponent currencyComponent = coin.getComponents().get( CURRENCY_COMPONENT );
+			CurrencyComponent currencyComponent = coin.components().get( CURRENCY_COMPONENT );
 			
 			if( null != currencyComponent ) {
 				if( getConversionValue( coinValue, currencyComponent.value() ) > 1 ) {
@@ -187,19 +184,19 @@ public class CoinCraftingFeature {
 		return toIntSafely( result );
 	}
 	
-	public static TreeMap<Long, CoinIngredient> getCoinIngredientsMap( RecipeInputInventory input ) {
-		CraftingRecipeInput.Positioned positioned = input.createPositionedRecipeInput();
-		CraftingRecipeInput craftingRecipeInput = positioned.input();
+	public static TreeMap<Long, CoinIngredient> getCoinIngredientsMap( CraftingContainer input ) {
+		CraftingInput.Positioned positioned = input.asPositionedCraftInput();
+		CraftingInput craftingRecipeInput = positioned.input();
 		int left = positioned.left();
 		int top = positioned.top();
 		
 		TreeMap<Long, CoinIngredient> ingredientsMap = new TreeMap<>(Villagercoin.reverseSortLong);
 		
-		for(int y = 0; y < craftingRecipeInput.getHeight(); ++y) {
-			for (int x = 0; x < craftingRecipeInput.getWidth(); ++x) {
+		for(int y = 0; y < craftingRecipeInput.height(); ++y) {
+			for (int x = 0; x < craftingRecipeInput.width(); ++x) {
 				int m = x + left + (y + top) * input.getWidth();
 				
-				ingredientsMap = updateCoinIngredientsMap( ingredientsMap, input.getStack(m), m, x, y );
+				ingredientsMap = updateCoinIngredientsMap( ingredientsMap, input.getItem(m), m, x, y );
 			} // for
 		} // for
 		
@@ -253,7 +250,7 @@ public class CoinCraftingFeature {
 	 * @param ingredientSlot
 	 * @return long - Total Cost
 	 */
-	public static long subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicLong totalCost, RecipeInputInventory craftingInput, int ingredientSlot ) {
+	public static long subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicLong totalCost, CraftingContainer craftingInput, int ingredientSlot ) {
 		CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
 		
 		if( null != currencyComponent ) {
@@ -261,19 +258,19 @@ public class CoinCraftingFeature {
 			long ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
 			
 			if( ingredientCoinValue == totalCost.get()) {
-				craftingInput.removeStack(ingredientSlot, 1 );
+				craftingInput.removeItem(ingredientSlot, 1 );
 				totalCost.addAndGet(-ingredientCoinValue);
 			} else if( ingredientCoinStackValue <= totalCost.get()) {
-				craftingInput.removeStack(ingredientSlot, ingredient.getCount());
+				craftingInput.removeItem(ingredientSlot, ingredient.getCount());
 				totalCost.addAndGet(-ingredientCoinStackValue);
 			} else if( ingredientCoinValue < totalCost.get()) {
 				int amount = CoinCraftingFeature.getConversionValueSafelyFromLong( totalCost.get(), ingredientCoinValue );
 				
 				if( amount >= ingredient.getCount() ) {
-					craftingInput.removeStack(ingredientSlot, ingredient.getCount());
+					craftingInput.removeItem(ingredientSlot, ingredient.getCount());
 					totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
 				} else {
-					craftingInput.removeStack(ingredientSlot, amount);
+					craftingInput.removeItem(ingredientSlot, amount);
 					totalCost.addAndGet(-(ingredientCoinValue * amount));
 				} // if, else
 			} // if, else
@@ -292,7 +289,7 @@ public class CoinCraftingFeature {
 	 * @param ingredients
 	 * @return long - Total Cost
 	 */
-	public static long subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicLong totalCost, DefaultedList<ItemStack> ingredients ) {
+	public static long subtractCoinValueFromTotalCost(ItemStack ingredient, AtomicLong totalCost, NonNullList<ItemStack> ingredients ) {
 		for( ItemStack stack : ingredients ) {
 			if( stack.equals(ingredient) ) {
 				CurrencyComponent currencyComponent = ingredient.get( CURRENCY_COMPONENT );
@@ -302,19 +299,19 @@ public class CoinCraftingFeature {
 					long ingredientCoinStackValue = ingredient.getCount() * ingredientCoinValue;
 					
 					if (ingredientCoinValue == totalCost.get()) {
-						stack.decrement(1);
+						stack.shrink(1);
 						totalCost.addAndGet(-ingredientCoinValue);
 					} else if (ingredientCoinStackValue <= totalCost.get()) {
-						stack.decrement(ingredient.getCount());
+						stack.shrink(ingredient.getCount());
 						totalCost.addAndGet(-ingredientCoinStackValue);
 					} else if (ingredientCoinValue < totalCost.get()) {
 						int amount = CoinCraftingFeature.getConversionValueSafelyFromLong( totalCost.get(), ingredientCoinValue );
 						
 						if (amount >= ingredient.getCount()) {
-							stack.decrement(ingredient.getCount());
+							stack.shrink(ingredient.getCount());
 							totalCost.addAndGet(-(ingredientCoinValue * ingredient.getCount()));
 						} else {
-							stack.decrement(amount);
+							stack.shrink(amount);
 							totalCost.addAndGet(-(ingredientCoinValue * amount));
 						} // if, else
 					} // if, else
@@ -326,7 +323,11 @@ public class CoinCraftingFeature {
 	}
 	
 	static {
-		RECIPE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of( MOD_ID, "crafting_special_villager_coin" ), new SpecialCraftingRecipe.SpecialRecipeSerializer(VillagerCoinRecipe::new));
+		RECIPE_SERIALIZER = Registry.register(
+				BuiltInRegistries.RECIPE_SERIALIZER,
+				Identifier.fromNamespaceAndPath( MOD_ID, "crafting_special_villager_coin" ),
+				new RecipeSerializer<>(VillagerCoinRecipe.CODEC, VillagerCoinRecipe.STREAM_CODEC)
+		);
 	}
 	
 	public static class CoinIngredient {

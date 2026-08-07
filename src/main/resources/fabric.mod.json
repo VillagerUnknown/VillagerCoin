@@ -33,8 +33,8 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric": "*",
+    "fabric-api": "*",
     "minecraft": ">=${minecraft_version}",
-    "villagerunknown-platform": ">=1.3.3+1.21.11"
+    "villagerunknown-platform": ">=1.3.3+26.1"
   }
 }

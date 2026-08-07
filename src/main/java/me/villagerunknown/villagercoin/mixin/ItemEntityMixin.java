@@ -1,11 +1,11 @@
 package me.villagerunknown.villagercoin.mixin;
 
 import me.villagerunknown.villagercoin.Villagercoin;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,23 +15,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin extends Entity {
 	
-	public ItemEntityMixin(EntityType<?> type, World world) {
+	public ItemEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
 	}
 	
-	@Shadow public abstract ItemStack getStack();
+	@Shadow public abstract ItemStack getItem();
 	
-	@Inject(method = "applyWaterBuoyancy", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "setUnderwaterMovement", at = @At("HEAD"), cancellable = true)
 	private void applyWaterBuoyancy(CallbackInfo ci) {
-		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getStack().isIn( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
+		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getItem().is( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
 			this.applyGravity();
 			ci.cancel();
 		} // if
 	}
 	
-	@Inject(method = "applyLavaBuoyancy", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "setUnderLavaMovement", at = @At("HEAD"), cancellable = true)
 	private void applyLavaBuoyancy(CallbackInfo ci) {
-		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getStack().isIn( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
+		if( Villagercoin.CONFIG.coinsSinkInLiquids && this.getItem().is( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
 			this.applyGravity();
 			ci.cancel();
 		} // if

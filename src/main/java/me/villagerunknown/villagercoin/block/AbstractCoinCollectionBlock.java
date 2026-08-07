@@ -5,36 +5,35 @@ import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinBankBlocksFeature;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
 import me.villagerunknown.villagercoin.item.CoinItems;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.world.level.block.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.NumberFormat;
@@ -42,38 +41,38 @@ import java.util.List;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
-public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implements Waterloggable {
+public abstract class AbstractCoinCollectionBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 	
-	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
-	protected AbstractCoinCollectionBlock(Settings settings) {
+	protected AbstractCoinCollectionBlock(Properties settings) {
 		super(
 				settings
-						.pistonBehavior(PistonBehavior.DESTROY)
-						.sounds( CoinFeature.COIN )
+						.pushReaction(PushReaction.DESTROY)
+						.sound( CoinFeature.COIN )
 		);
 	}
 	
-	protected BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
+	protected RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
 	}
 	
 	@Override
-	protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+	protected boolean isPathfindable(BlockState state, PathComputationType type) {
 		return false;
 	}
 	
 	@Override
-	public boolean canMobSpawnInside(BlockState state) { return false; }
+	public boolean isPossibleToRespawnInThis(BlockState state) { return false; }
 	
 	@Override
-	protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+	protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
 		CoinFeature.playCoinSound( player );
-		return super.onUse(state, world, pos, player, hit);
+		return super.useWithoutItem(state, world, pos, player, hit);
 	}
 	
 	@Override
-	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+	public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		CurrencyComponent currencyComponent = itemStack.get( CURRENCY_COMPONENT );
 		
 		if( null != currencyComponent ) {
@@ -84,65 +83,65 @@ public abstract class AbstractCoinCollectionBlock extends BlockWithEntity implem
 			} // if
 		} // if
 		
-		super.onPlaced(world, pos, state, placer, itemStack);
+		super.setPlacedBy(world, pos, state, placer, itemStack);
 	}
 	
 	@Override
-	protected void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
+	protected void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
 		BlockPos blockPos = hit.getBlockPos();
 		MinecraftServer server = world.getServer();
 		if( null != server ) {
-			ServerWorld serverWorld = server.getWorld(world.getRegistryKey());
+			ServerLevel serverWorld = server.getLevel(world.dimension());
 			if( null != serverWorld ) {
-				if (!world.isClient() && projectile.canModifyAt(serverWorld, blockPos) && projectile.canBreakBlocks(serverWorld)) {
-					world.breakBlock(blockPos, true, projectile);
+				if (!world.isClientSide() && projectile.mayInteract(serverWorld, blockPos) && projectile.mayBreak(serverWorld)) {
+					world.destroyBlock(blockPos, true, projectile);
 				}
 			}
 		}
 	}
 	
 	@Override
-	protected void onStacksDropped(BlockState state, ServerWorld world, BlockPos pos, ItemStack tool, boolean dropExperience) {
+	protected void spawnAfterBreak(BlockState state, ServerLevel world, BlockPos pos, ItemStack tool, boolean dropExperience) {
 		BlockEntity blockEntity = world.getBlockEntity( pos );
 		
 		if( blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity ) {
 			currencyValueBlockEntity.dropTotalValueAsCoins();
 		} // if
 		
-		super.onStacksDropped(state, world, pos, tool, dropExperience);
+		super.spawnAfterBreak(state, world, pos, tool, dropExperience);
 	}
 	
-	protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+	protected int getComparatorOutput(BlockState state, Level world, BlockPos pos) {
 		return CoinBankBlocksFeature.getComparatorOutput(state, world, pos);
 	}
 	
 	@Override
-	protected boolean hasComparatorOutput(BlockState state) {
+	protected boolean hasAnalogOutputSignal(BlockState state) {
 		return true;
 	}
 	
-	protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-		if (state.get(WATERLOGGED)) {
-			tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	protected BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+		if (state.getValue(WATERLOGGED)) {
+			tickView.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 		
-		return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+		return super.updateShape(state, world, tickView, pos, direction, neighborPos, neighborState, random);
 	}
 	
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
 		
-		return this.getDefaultState().with(WATERLOGGED, Boolean.valueOf(fluidState.getFluid() == Fluids.WATER));
+		return this.defaultBlockState().setValue(WATERLOGGED, Boolean.valueOf(fluidState.getType() == Fluids.WATER));
 	}
 	
 	@Override
 	protected FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 	
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(WATERLOGGED);
 	}
 	

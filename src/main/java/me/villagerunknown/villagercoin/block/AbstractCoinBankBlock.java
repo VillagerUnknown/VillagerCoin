@@ -5,76 +5,77 @@ import me.villagerunknown.villagercoin.block.entity.AbstractCurrencyValueBlockEn
 import me.villagerunknown.villagercoin.component.CurrencyComponent;
 import me.villagerunknown.villagercoin.feature.CoinBankBlocksFeature;
 import me.villagerunknown.villagercoin.feature.CoinFeature;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.world.level.block.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.Stats;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.*;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
 import java.util.Optional;
 
 import static me.villagerunknown.villagercoin.component.Components.CURRENCY_COMPONENT;
 
 public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock {
 	
-	public AbstractCoinBankBlock(Settings settings) {
+	public AbstractCoinBankBlock(Properties settings) {
 		super(settings);
 	}
 	
 	@Override
-	protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if( world.isClient() ) {
-			return ActionResult.SUCCESS;
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		if( world.isClientSide() ) {
+			return InteractionResult.SUCCESS;
 		} // if
 		
-		world.emitGameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+		world.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
 		
 		CurrencyComponent currencyComponent = stack.get(CURRENCY_COMPONENT);
 		
-		if( null != currencyComponent && stack.isIn( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
+		if( null != currencyComponent && stack.is( Villagercoin.getItemTagKey( "currency_coin" ) ) ) {
 			BlockEntity blockEntity = world.getBlockEntity( pos );
 			
 			if( blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity && currencyValueBlockEntity.incrementBlockEntityCurrencyValue( blockEntity, currencyComponent ) ) {
 				CoinFeature.playCoinSound( player );
-				stack.decrementUnlessCreative(1, player);
+				stack.consume(1, player);
 				
-				player.incrementStat( CoinBankBlocksFeature.COINS_INSERTED_STAT_ID );
+				player.awardStat( CoinBankBlocksFeature.COINS_INSERTED_STAT_ID );
 				
-				return ActionResult.CONSUME;
+				return InteractionResult.CONSUME;
 			} // if
 		} // if
 		
-		return ActionResult.FAIL;
+		return InteractionResult.FAIL;
 	}
 	
 	@Override
-	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		MinecraftServer server = world.getServer();
 
 		if( null != server ) {
-			ServerWorld serverWorld = server.getWorld( world.getRegistryKey() );
+			ServerLevel serverWorld = server.getLevel( world.dimension() );
 
 			if( null != serverWorld ) {
-				DynamicRegistryManager drm =serverWorld.getRegistryManager();
-				Registry<Enchantment> reg = drm.getOrThrow(RegistryKeys.ENCHANTMENT);
+				RegistryAccess drm =serverWorld.registryAccess();
+				Registry<Enchantment> reg = drm.lookupOrThrow(Registries.ENCHANTMENT);
 				
-				Enchantment silkTouchEnchantmentEntry = reg.get( Enchantments.SILK_TOUCH );
-				RegistryEntry<Enchantment> regEntry = reg.getEntry( silkTouchEnchantmentEntry );
+				Enchantment silkTouchEnchantmentEntry = reg.getValue( Enchantments.SILK_TOUCH );
+				Holder<Enchantment> regEntry = reg.wrapAsHolder( silkTouchEnchantmentEntry );
 
-				if( !player.getStackInHand( player.getActiveHand() ).getEnchantments().getEnchantments().contains( regEntry ) ) {
+				if( !player.getItemInHand( player.getUsedItemHand() ).getEnchantments().keySet().contains( regEntry ) ) {
 					BlockEntity blockEntity = world.getBlockEntity( pos );
 
 					if( blockEntity instanceof AbstractCurrencyValueBlockEntity currencyValueBlockEntity ) {
@@ -84,7 +85,7 @@ public abstract class AbstractCoinBankBlock extends AbstractCoinCollectionBlock 
 			} // if
 		} // if
 
-		return super.onBreak(world, pos, state, player);
+		return super.playerWillDestroy(world, pos, state, player);
 	}
 	
 }

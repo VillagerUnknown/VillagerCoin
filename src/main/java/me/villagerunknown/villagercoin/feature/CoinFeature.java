@@ -3,18 +3,23 @@ package me.villagerunknown.villagercoin.feature;
 import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
+import me.villagerunknown.villagercoin.component.CollectableComponent;
+import me.villagerunknown.villagercoin.component.DropComponent;
+import me.villagerunknown.villagercoin.component.LootTableComponent;
 import me.villagerunknown.villagercoin.item.CoinItems;
 import me.villagerunknown.villagercoin.item.CoinItem;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.loot.LootTable;
-import net.minecraft.registry.*;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.*;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.storage.loot.LootTable;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.Set;
@@ -29,7 +34,7 @@ public class CoinFeature {
 	public static final SoundEvent COIN_LIGHT_SOUND = RegistryUtil.registerSound( "coin_light", MOD_ID );
 	public static final SoundEvent COIN_FLIP_SOUND = RegistryUtil.registerSound( "coin_flip", MOD_ID );
 	
-	public static final BlockSoundGroup COIN = new BlockSoundGroup(
+	public static final SoundType COIN = new SoundType(
 			1.0F,
 			1.0F,
 			COIN_HEAVY_SOUND,
@@ -106,12 +111,24 @@ public class CoinFeature {
 		return scale;
 	}
 	
-	public static Item registerCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance ) {
-		return registerCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, new Item.Settings() );
+	public static void addComponents(Item item, LootTableComponent lootTableComponent, @Nullable DropComponent dropComponent, @Nullable CollectableComponent collectableComponent) {
+		StructuresIncludeCoinsFeature.addCoinToLootTableComponents( item, lootTableComponent );
+		
+		if( null != dropComponent ) {
+			MobsDropCoinsFeature.addCointToMobDropComponents(item, dropComponent);
+		} // if
+		
+		if( null != collectableComponent ) {
+			CollectableCoinFeature.addCoinToCollectableComponents(item, collectableComponent);
+		} // if
 	}
 	
-	public static Item registerCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Item.Settings settings ) {
-		settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID,id)));
+	public static Item registerCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance ) {
+		return registerCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, new Item.Properties() );
+	}
+	
+	public static Item registerCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Item.Properties settings ) {
+		settings.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID,id)));
 		
 		Item item = RegistryUtil.registerItem( id, new CoinItem( settings, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance ), namespace );
 		
@@ -120,23 +137,29 @@ public class CoinFeature {
 		return item;
 	}
 	
-	public static Item registerCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables, Item.Settings settings ) {
+	public static Item registerCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<ResourceKey<LootTable>> lootTables, Item.Properties settings ) {
 		Item item = registerCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, settings );
 		
+		addComponents(
+				item,
+				new LootTableComponent( lootTableWeight, lootTableRolls ),
+				new DropComponent( dropMinimum, dropMaximum, dropChance, dropChanceMultiplier ),
+				null
+		);
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		
 		return item;
 	}
 	
 	public static Item registerCraftableCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float dropChance, float flipChance ) {
-		return registerCraftableCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, new Item.Settings() );
+		return registerCraftableCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, new Item.Properties() );
 	}
 	
-	public static Item registerCraftableCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables ) {
-		return registerCraftableCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, lootTables, new Item.Settings() );
+	public static Item registerCraftableCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<ResourceKey<LootTable>> lootTables ) {
+		return registerCraftableCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, lootTables, new Item.Properties() );
 	}
 	
-	public static Item registerCraftableCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Item.Settings settings ) {
+	public static Item registerCraftableCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Item.Properties settings ) {
 		Item item = registerCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, settings );
 		
 		CoinCraftingFeature.registerCraftingResultCoin( item, value );
@@ -144,27 +167,33 @@ public class CoinFeature {
 		return item;
 	}
 	
-	public static Item registerCraftableCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<RegistryKey<LootTable>> lootTables, Item.Settings settings ) {
+	public static Item registerCraftableCoinItem( String namespace, String id, long value, Rarity rarity, int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, Set<ResourceKey<LootTable>> lootTables, Item.Properties settings ) {
 		Item item = registerCraftableCoinItem( namespace, id, value, rarity, dropMinimum, dropMaximum, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, settings );
 		
+		addComponents(
+				item,
+				new LootTableComponent( lootTableWeight, lootTableRolls ),
+				new DropComponent( dropMinimum, dropMaximum, dropChance, dropChanceMultiplier ),
+				null
+		);
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		
 		return item;
 	}
 	
-	public static void playSound( PlayerEntity player, SoundEvent sound ) {
-		EntityUtil.playSound(player, sound, SoundCategory.PLAYERS, 0.5F, 1F, false);
+	public static void playSound( Player player, SoundEvent sound ) {
+		EntityUtil.playSound(player, sound, SoundSource.PLAYERS, 0.5F, 1F, false);
 	}
 	
-	public static void playCoinSound( PlayerEntity player ) {
+	public static void playCoinSound( Player player ) {
 		playSound( player, COIN_LIGHT_SOUND );
 	}
 	
-	public static void playHeavyCoinSound( PlayerEntity player ) {
+	public static void playHeavyCoinSound( Player player ) {
 		playSound( player, COIN_HEAVY_SOUND );
 	}
 	
-	public static void playCoinFlipSound( PlayerEntity player ) {
+	public static void playCoinFlipSound( Player player ) {
 		playSound( player, COIN_FLIP_SOUND );
 	}
 	

@@ -2,11 +2,10 @@ package me.villagerunknown.villagercoin.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-
 import java.time.LocalDate;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public record DateComponent(String date) {
 	
@@ -15,7 +14,7 @@ public record DateComponent(String date) {
 				Codec.STRING.fieldOf( "date" ).forGetter(DateComponent::date)
 		).apply(instance, DateComponent::new);
 	});
-	public static final PacketCodec<RegistryByteBuf, DateComponent> PACKET_CODEC;
+	public static final StreamCodec<RegistryFriendlyByteBuf, DateComponent> PACKET_CODEC;
 	
 	public DateComponent(String date) {
 		this.date = date;
@@ -26,8 +25,8 @@ public record DateComponent(String date) {
 	}
 	
 	static {
-		PACKET_CODEC = PacketCodec.tuple(
-				PacketCodecs.STRING, DateComponent::date,
+		PACKET_CODEC = StreamCodec.composite(
+				ByteBufCodecs.STRING_UTF8, DateComponent::date,
 				DateComponent::new
 		);
 	}

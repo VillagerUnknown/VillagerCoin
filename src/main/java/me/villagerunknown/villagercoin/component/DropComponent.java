@@ -3,8 +3,8 @@ package me.villagerunknown.villagercoin.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public record DropComponent(int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier ) {
 	
@@ -16,7 +16,7 @@ public record DropComponent(int dropMinimum, int dropMaximum, float dropChance, 
 				Codec.INT.fieldOf( "dropChanceMultiplier" ).forGetter(DropComponent::dropChanceMultiplier)
 		).apply(instance, DropComponent::new);
 	});
-	public static final PacketCodec<ByteBuf, DropComponent> PACKET_CODEC;
+	public static final StreamCodec<ByteBuf, DropComponent> PACKET_CODEC;
 	
 	public DropComponent( int dropMinimum, int dropMaximum, float dropChance, int dropChanceMultiplier ) {
 		this.dropMinimum = dropMinimum;
@@ -42,11 +42,11 @@ public record DropComponent(int dropMinimum, int dropMaximum, float dropChance, 
 	}
 	
 	static {
-		PACKET_CODEC = PacketCodec.tuple(
-				PacketCodecs.INTEGER, DropComponent::dropMinimum,
-				PacketCodecs.INTEGER, DropComponent::dropMaximum,
-				PacketCodecs.FLOAT, DropComponent::dropChance,
-				PacketCodecs.INTEGER, DropComponent::dropChanceMultiplier,
+		PACKET_CODEC = StreamCodec.composite(
+				ByteBufCodecs.INT, DropComponent::dropMinimum,
+				ByteBufCodecs.INT, DropComponent::dropMaximum,
+				ByteBufCodecs.FLOAT, DropComponent::dropChance,
+				ByteBufCodecs.INT, DropComponent::dropChanceMultiplier,
 				DropComponent::new
 		);
 	}
