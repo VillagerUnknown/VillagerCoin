@@ -4,6 +4,9 @@ import me.villagerunknown.platform.util.EntityUtil;
 import me.villagerunknown.platform.util.RegistryUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.component.CoinComponent;
+import me.villagerunknown.villagercoin.component.CollectableComponent;
+import me.villagerunknown.villagercoin.component.DropComponent;
+import me.villagerunknown.villagercoin.component.LootTableComponent;
 import me.villagerunknown.villagercoin.effect.StewEffects;
 import me.villagerunknown.villagercoin.item.InventoryEffectCoinItem;
 import net.minecraft.core.Holder;
@@ -70,6 +73,13 @@ public class InventoryEffectCoinFeature {
 	public static Item registerInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffects.Entry> statusEffects, Item.Properties settings ) {
 		Item item = registerInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, settings );
 		
+		CoinFeature.addComponents(
+				item,
+				new LootTableComponent( lootTableWeight, lootTableRolls ),
+				new DropComponent( 1, 1, dropChance, dropChanceMultiplier ),
+				new CollectableComponent( maximumAllowedInServer )
+		);
+		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
 		
@@ -90,6 +100,13 @@ public class InventoryEffectCoinFeature {
 	
 	public static Item registerCraftableInventoryEffectCoinItem( String namespace, String id, long value, Rarity rarity, float dropChance, int dropChanceMultiplier, int lootTableWeight, int lootTableRolls, float flipChance, int maximumAllowedInServer, Set<ResourceKey<LootTable>> lootTables, Set<EntityType<?>> entityDrops, List<SuspiciousStewEffects.Entry> statusEffects, Item.Properties settings ) {
 		Item item = registerCraftableInventoryEffectCoinItem( namespace, id, value, rarity, dropChance, dropChanceMultiplier, lootTableWeight, lootTableRolls, flipChance, maximumAllowedInServer, statusEffects, settings );
+		
+		CoinFeature.addComponents(
+				item,
+				new LootTableComponent( lootTableWeight, lootTableRolls ),
+				new DropComponent( 1, 1, dropChance, dropChanceMultiplier ),
+				new CollectableComponent( maximumAllowedInServer )
+		);
 		
 		StructuresIncludeCoinsFeature.addCoinToLootTables( item, lootTables );
 		MobsDropCoinsFeature.addCoinToMobDrops( item, entityDrops );
