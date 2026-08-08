@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Updated supported Minecraft version to 26.1.
+- Balanced coin trades to remove trade exploit loops.
 
 ## [1.0.11+1.21.11]
 
