@@ -389,7 +389,7 @@ public class LedgerCraftingFeature {
 				Component valueText = Component.translatable(
 						"item.villagerunknown-villagercoin.ledger.content.total",
 						numberFormat.format( value ),
-						CoinItems.COPPER_COIN.getDefaultInstance().getDisplayName().getString()
+						CoinItems.COPPER_COIN.getDefaultInstance().getItemName().getString()
 				);
 				
 				ReceiptMessageComponent receiptMessageComponent = ingredient.get( RECEIPT_MESSAGE_COMPONENT );
