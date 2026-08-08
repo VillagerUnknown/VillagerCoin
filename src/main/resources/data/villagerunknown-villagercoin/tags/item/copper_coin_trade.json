@@ -3,6 +3,14 @@
     "minecraft:leather_boots",
     "minecraft:leather_helmet",
     "minecraft:leather_chestplate",
-    "minecraft:leather_leggings"
+    "minecraft:leather_leggings",
+    "minecraft:book",
+    "minecraft:glass_pane",
+    "minecraft:glass_bottle",
+    "minecraft:stick",
+    "minecraft:paper",
+    "minecraft:sweet_berries",
+    "minecraft:string",
+    "minecraft:coal"
   ]
 }
