@@ -19,6 +19,7 @@
     "minecraft:small_dripleaf",
     "minecraft:gunpowder",
     "minecraft:moss_block",
+    "minecraft:pale_moss_block",
     "minecraft:podzol",
     "minecraft:rooted_dirt",
     "minecraft:sand",
@@ -30,7 +31,10 @@
     "minecraft:cherry_sapling",
     "minecraft:dark_oak_sapling",
     "minecraft:jungle_sapling",
+    "minecraft:pale_oak_sapling",
     "minecraft:mangrove_propagule",
+    "minecraft:red_mushroom",
+    "minecraft:brown_mushroom",
     "minecraft:iron_hoe",
     "minecraft:iron_shovel",
     "minecraft:iron_pickaxe",
@@ -71,6 +75,16 @@
     "minecraft:blue_banner",
     "minecraft:purple_banner",
     "minecraft:magenta_banner",
-    "minecraft:pink_banner"
+    "minecraft:pink_banner",
+    "minecraft:tube_coral_block",
+    "minecraft:brain_coral_block",
+    "minecraft:bubble_coral_block",
+    "minecraft:fire_coral_block",
+    "minecraft:horn_coral_block",
+    "minecraft:hay_block",
+    "minecraft:baked_potato",
+    "minecraft:milk_bucket",
+    "minecraft:water_bucket",
+    "minecraft:potion"
   ]
 }

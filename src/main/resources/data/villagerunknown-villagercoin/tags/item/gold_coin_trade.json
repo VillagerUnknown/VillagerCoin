@@ -27,6 +27,8 @@
     "minecraft:quartz",
     "minecraft:nether_wart",
     "minecraft:blaze_rod",
-    "minecraft:blaze_powder"
+    "minecraft:blaze_powder",
+    "minecraft:fermented_spider_eye",
+    "minecraft:golden_dandelion"
   ]
 }
