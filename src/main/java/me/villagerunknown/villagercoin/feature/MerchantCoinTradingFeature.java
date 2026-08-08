@@ -1,10 +1,10 @@
 package me.villagerunknown.villagercoin.feature;
 
+import com.mojang.datafixers.util.Pair;
 import me.villagerunknown.platform.util.MathUtil;
 import me.villagerunknown.platform.util.VillagerUtil;
 import me.villagerunknown.villagercoin.Villagercoin;
 import me.villagerunknown.villagercoin.item.CoinItems;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -88,7 +88,7 @@ public class MerchantCoinTradingFeature {
 		return itemStack;
 	}
 	
-	public static Tuple<ItemCost, ItemStack> modifyDiamondTrade( ItemCost firstBuyItem, ItemStack sellItem ) {
+	public static Pair<ItemCost, ItemStack> modifyDiamondTrade(ItemCost firstBuyItem, ItemStack sellItem ) {
 		if( firstBuyItem.itemStack().getItem().equals( Items.DIAMOND ) ) {
 			int sellAmount = Villagercoin.CONFIG.goldForDiamond;
 			
@@ -100,7 +100,7 @@ public class MerchantCoinTradingFeature {
 			sellItem = new ItemStack( CoinItems.GOLD_COIN, sellAmount );
 		} // if
 		
-		return new Tuple<>( firstBuyItem, sellItem );
+		return new Pair<>( firstBuyItem, sellItem );
 	}
 	
 	public static ModifiedTrade modifyTrade( ItemCost firstBuyItem, Optional<ItemCost> secondBuyItem, ItemStack sellItem, Item coin ) {
@@ -112,10 +112,10 @@ public class MerchantCoinTradingFeature {
 		
 		sellItem = replaceEmeraldsInItemStack( sellItem, coin );
 		
-		Tuple<ItemCost, ItemStack> modifiedDiamondTrade = modifyDiamondTrade( firstBuyItem, sellItem );
+		Pair<ItemCost, ItemStack> modifiedDiamondTrade = modifyDiamondTrade( firstBuyItem, sellItem );
 		
-		firstBuyItem = modifiedDiamondTrade.getA();
-		sellItem = modifiedDiamondTrade.getB();
+		firstBuyItem = modifiedDiamondTrade.getFirst();
+		sellItem = modifiedDiamondTrade.getSecond();
 		
 		return new ModifiedTrade(firstBuyItem, secondBuyItem, sellItem);
 	}
