@@ -85,6 +85,8 @@
     "minecraft:baked_potato",
     "minecraft:milk_bucket",
     "minecraft:water_bucket",
-    "minecraft:potion"
+    "minecraft:potion",
+    "minecraft:sweet_berries",
+    "minecraft:bookshelf"
   ]
 }
