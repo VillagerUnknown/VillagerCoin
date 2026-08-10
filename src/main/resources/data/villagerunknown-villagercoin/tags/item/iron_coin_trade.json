@@ -58,7 +58,6 @@
     "minecraft:mangrove_boat",
     "minecraft:cherry_boat",
     "minecraft:pale_oak_boat",
-    "minecraft:feather",
     "minecraft:painting",
     "minecraft:white_banner",
     "minecraft:light_gray_banner",
@@ -87,6 +86,9 @@
     "minecraft:water_bucket",
     "minecraft:potion",
     "minecraft:sweet_berries",
-    "minecraft:bookshelf"
+    "minecraft:bookshelf",
+    "minecraft:rabbit",
+    "minecraft:rabbit_stew",
+    "minecraft:leather"
   ]
 }

@@ -24,12 +24,7 @@ public class MerchantCoinTradingFeature {
 	public static Item getCoinForTrade(ItemCost firstBuyItem, ItemStack sellItem, int maxUses, boolean rewardingPlayerExperience, int specialPrice, int demandBonus, float priceMultiplier, int merchantExperience ) {
 		Item coin = CoinItems.COPPER_COIN;
 		
-		// Netherite and Emerald trade checks implemented for modded trades
-		if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "netherite_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "netherite_coin_trade" ) ) ) {
-			coin = CoinItems.NETHERITE_COIN;
-		} else if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "emerald_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "emerald_coin_trade" ) ) ) {
-			coin = CoinItems.EMERALD_COIN;
-		} else if(
+		if(
 			(
 				merchantExperience >= VillagerUtil.JOURNEYMAN_BUY_XP
 				&&
@@ -40,21 +35,26 @@ public class MerchantCoinTradingFeature {
 				)
 			)
 			|| (sellItem.isEnchanted() && merchantExperience >= VillagerUtil.JOURNEYMAN_SELL_XP)
-			|| firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "gold_coin_trade" ) )
-			|| sellItem.is( Villagercoin.getItemTagKey( "gold_coin_trade" ) )
 		) {
 			coin = CoinItems.GOLD_COIN;
 		} else if(
 			merchantExperience > VillagerUtil.NOVICE_BUY_XP
 			|| sellItem.isEnchanted()
-			|| firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "iron_coin_trade" ) )
-					|| sellItem.is( Villagercoin.getItemTagKey( "iron_coin_trade" ) )
 		) {
 			coin = CoinItems.IRON_COIN;
 		} // if
 		
-		// Force to Copper Coins
-		if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "copper_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "copper_coin_trade" ) ) ) {
+		// Override and force to coin specified in Tags.
+		// Netherite and Emerald trade checks implemented for modded trades
+		if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "netherite_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "netherite_coin_trade" ) ) ) {
+			coin = CoinItems.NETHERITE_COIN;
+		} else if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "emerald_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "emerald_coin_trade" ) ) ) {
+			coin = CoinItems.EMERALD_COIN;
+		} else if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "gold_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "gold_coin_trade" ) ) ) {
+			coin = CoinItems.GOLD_COIN;
+		} else if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "iron_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "iron_coin_trade" ) ) ) {
+			coin = CoinItems.IRON_COIN;
+		} else if( firstBuyItem.itemStack().is( Villagercoin.getItemTagKey( "copper_coin_trade" ) ) || sellItem.is( Villagercoin.getItemTagKey( "copper_coin_trade" ) ) ) {
 			coin = CoinItems.COPPER_COIN;
 		} // if
 		

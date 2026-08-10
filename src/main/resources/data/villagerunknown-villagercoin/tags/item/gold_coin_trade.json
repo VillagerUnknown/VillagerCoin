@@ -1,6 +1,7 @@
 {
   "values": [
     "minecraft:saddle",
+    "minecraft:leather_horse_armor",
     "minecraft:enchanted_book",
     "minecraft:gold_ingot",
     "minecraft:glowstone",
@@ -46,6 +47,8 @@
     "minecraft:blue_glazed_terracotta",
     "minecraft:purple_glazed_terracotta",
     "minecraft:magenta_glazed_terracotta",
-    "minecraft:pink_glazed_terracotta"
+    "minecraft:pink_glazed_terracotta",
+    "minecraft:turtle_scute",
+    "minecraft:tripwire_hook"
   ]
 }

@@ -155,7 +155,7 @@ public class VillagercoinConfigData implements me.shedaniel.autoconfig.ConfigDat
 	public int goldForDiamond = 16;
 	
 	@ConfigEntry.Category("Trades")
-	public int goldForEmerald = 8;
+	public int goldForEmerald = 1;
 	
 	@ConfigEntry.Category("Trades")
 	public float chanceDiamondBecomesEmeraldTrade = 0.5F;
