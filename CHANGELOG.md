@@ -12,9 +12,20 @@ _This update changes some Villager trades. Only newly rolled Villager trades in 
 
 ### Changed
 
+- Changed how coins are selected for trades with the trade changes enabled. Items in tags are now forced.
 - Changed Bookshelf Librarian trade to Iron Coin from Copper Coin.
+- Changed Raw Rabbit Butcher trade to Iron Coin from Copper Coin.
+- Changed Rabbit Stew Butcher trade to Iron Coin from Copper Coin.
 - Changed Sweet Berries Butcher trade to Iron Coin from Copper Coin.
 - Changed Glazed Terracotta Mason trades to Gold Coin from Iron Coin.
+- Changed Rabbit Foot Cleric trade to Gold Coin from Iron Coin.
+- Changed Colored Dye Shepherd trades to Copper Coin from Iron Coin.
+- Changed Turtle Scute Leatherworker trade to Gold Coin from Iron Coin.
+- Changed Leather Horse Armor Leatherworker trade to Gold Coin from Iron Coin.
+- Changed Leather Leatherworker trade to Iron Coin from Copper Coin.
+- Changed Feather Fletcher trade to Copper Coin from Iron Coin.
+- Changed Tripwire Hook Fletcher trade to Gold Coin from Iron Coin.
+- Changed default `goldForEmerald` config value from 8 to 1.
 
 ## [1.0.11+26.2]
 
