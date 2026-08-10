@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.12+26.2]
+
+_This update changes some Villager trades. Only newly rolled Villager trades in your world will reflect these changes._
+
+### Added
+
+- Added `villagercoin` command that provides a link to the Github issues page.
+
+### Changed
+
+- Changed Bookshelf Librarian trade to Iron Coin from Copper Coin.
+- Changed Sweet Berries Butcher trade to Iron Coin from Copper Coin.
+- Changed Glazed Terracotta Mason trades to Gold Coin from Iron Coin.
+
 ## [1.0.11+26.2]
 
 ### Changed
