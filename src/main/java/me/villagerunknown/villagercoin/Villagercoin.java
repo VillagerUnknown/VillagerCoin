@@ -68,6 +68,8 @@ public class Villagercoin implements ModInitializer {
 		new Components();
 		
 		// # Activate Primary Features
+		featureManager.addFeatureFirst( "villagercoin-command", CommandFeature::execute );
+		
 		featureManager.addFeature( "villagercoin-item-group", CustomItemGroupFeature::execute );
 		
 		featureManager.addFeature( "coin", CoinFeature::execute );
